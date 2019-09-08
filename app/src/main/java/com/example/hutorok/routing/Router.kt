@@ -48,6 +48,7 @@ class Router : IRouter {
     private fun getPreviousScreen(nowScreen: NowScreen): NowScreen {
         return when (nowScreen) {
             START_SCREEN -> CLOSE_SCREEN
+            WORKER_INFO_SCREEN -> WORKERS_SCREEN
             else -> START_SCREEN
         }
     }

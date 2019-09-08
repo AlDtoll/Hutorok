@@ -3,11 +3,13 @@ package com.example.hutorok.screen.workers
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import com.example.hutorok.domain.model.Worker
+import com.example.hutorok.domain.storage.IWorkerInteractor
 import com.example.hutorok.domain.storage.IWorkersListInteractor
 import io.reactivex.BackpressureStrategy
 
 class WorkersViewModel(
-    private val workersListInteractor: IWorkersListInteractor
+    private val workersListInteractor: IWorkersListInteractor,
+    private val workerInteractor: IWorkerInteractor
 ) : IWorkersViewModel {
 
     override fun workersData(): LiveData<List<Worker>> {
@@ -17,7 +19,7 @@ class WorkersViewModel(
     }
 
     override fun clickWorker(worker: Worker) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        workerInteractor.update(worker)
     }
 
 }
