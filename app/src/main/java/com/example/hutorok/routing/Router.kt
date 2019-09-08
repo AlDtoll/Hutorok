@@ -37,7 +37,7 @@ class Router : IRouter {
         nowScreen.onNext(TASKS_SCREEN)
     }
 
-    override fun routeToWorkersSccreen() {
+    override fun routeToWorkersScreen() {
         nowScreen.onNext(WORKERS_SCREEN)
     }
 

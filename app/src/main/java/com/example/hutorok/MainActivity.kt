@@ -21,6 +21,8 @@ class MainActivity : AppCompatActivity() {
                 NowScreen.START_SCREEN -> showStartScreen()
                 NowScreen.BUILDS_SCREEN -> TODO()
                 NowScreen.TASKS_SCREEN -> TODO()
+                NowScreen.WORKERS_SCREEN -> TODO()
+                NowScreen.CLOSE_SCREEN -> finish()
             }
         })
     }

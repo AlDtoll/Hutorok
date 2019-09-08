@@ -13,7 +13,7 @@ interface IRouter {
 
     fun routeToTasksScreen()
 
-    fun routeToWorkersSccreen()
+    fun routeToWorkersScreen()
 
     fun onBackPressed()
 
