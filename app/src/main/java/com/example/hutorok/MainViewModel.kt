@@ -2,6 +2,7 @@ package com.example.hutorok
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
+import com.example.hutorok.routing.IGetNowScreenInteractor
 import io.reactivex.BackpressureStrategy
 
 class MainViewModel(

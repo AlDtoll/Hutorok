@@ -1,8 +1,6 @@
 package com.example.hutorok
 
-import com.example.hutorok.routing.IRouter
-import com.example.hutorok.routing.RouteToStartScreenInteractor
-import com.example.hutorok.routing.Router
+import com.example.hutorok.routing.*
 import com.example.hutorok.screen.IStartViewModel
 import com.example.hutorok.screen.StartViewModel
 import org.koin.dsl.module.module
@@ -14,6 +12,9 @@ val appModule = module {
     single { Router() as IRouter }
     single { GetNowScreenInteractor(get()) as IGetNowScreenInteractor }
     single { RouteToStartScreenInteractor(get()) }
+    single { RouteToWorkersScreenInteractor(get()) }
+    single { RouteToBuildsScreenInteractor(get()) }
+    single { RouteToTasksScreenInteractor(get()) }
 
-    single { StartViewModel() as IStartViewModel }
+    single { StartViewModel(get(), get(), get()) as IStartViewModel }
 }

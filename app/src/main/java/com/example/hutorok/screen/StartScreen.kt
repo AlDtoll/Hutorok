@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.hutorok.R
+import com.example.hutorok.ext.onClick
+import kotlinx.android.synthetic.main.fragment_start.*
 import org.koin.android.ext.android.inject
 
 class StartScreen : Fragment() {
@@ -29,6 +31,21 @@ class StartScreen : Fragment() {
     private fun initUi() {
         initToolbar()
 
+        workersButton.onClick {
+            startViewModel.clickWorkersButton()
+        }
+
+        buildsButton.onClick {
+            startViewModel.clickBuildsButton()
+        }
+
+        tasksButton.onClick {
+            startViewModel.clickTasksButton()
+        }
+
+        endTurnButton.onClick {
+            startViewModel.clickEndTurnButton()
+        }
     }
 
     private fun initToolbar() {
