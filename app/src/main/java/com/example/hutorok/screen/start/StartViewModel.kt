@@ -1,4 +1,4 @@
-package com.example.hutorok.screen
+package com.example.hutorok.screen.start
 
 import com.example.hutorok.routing.RouteToBuildsScreenInteractor
 import com.example.hutorok.routing.RouteToTasksScreenInteractor

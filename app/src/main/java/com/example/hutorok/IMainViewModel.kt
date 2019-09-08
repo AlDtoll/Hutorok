@@ -6,4 +6,6 @@ interface IMainViewModel {
 
     fun nowScreen(): LiveData<NowScreen>
 
+    fun onBackPressed()
+
 }

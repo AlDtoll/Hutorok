@@ -1,10 +1,12 @@
 package com.example.hutorok
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.hutorok.ext.replaceFragment
-import com.example.hutorok.screen.StartScreen
+import com.example.hutorok.screen.start.StartScreen
+import com.example.hutorok.screen.workers.WorkersScreen
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 
@@ -21,7 +23,7 @@ class MainActivity : AppCompatActivity() {
                 NowScreen.START_SCREEN -> showStartScreen()
                 NowScreen.BUILDS_SCREEN -> TODO()
                 NowScreen.TASKS_SCREEN -> TODO()
-                NowScreen.WORKERS_SCREEN -> TODO()
+                NowScreen.WORKERS_SCREEN -> showWorkersScreen()
                 NowScreen.CLOSE_SCREEN -> finish()
             }
         })
@@ -33,5 +35,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun showStartScreen() {
         replaceFragment(StartScreen.newInstance())
+    }
+
+    private fun showWorkersScreen() {
+        replaceFragment(WorkersScreen.newInstance())
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == android.R.id.home) mainViewModel.onBackPressed()
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        mainViewModel.onBackPressed()
     }
 }

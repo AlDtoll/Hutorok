@@ -1,4 +1,4 @@
-package com.example.hutorok.screen
+package com.example.hutorok.screen.start
 
 interface IStartViewModel {
 
