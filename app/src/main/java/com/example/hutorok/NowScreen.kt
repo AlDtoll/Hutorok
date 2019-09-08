@@ -5,5 +5,6 @@ enum class NowScreen {
     BUILDS_SCREEN,
     TASKS_SCREEN,
     WORKERS_SCREEN,
-    CLOSE_SCREEN
+    CLOSE_SCREEN,
+    WORKER_INFO_SCREEN
 }

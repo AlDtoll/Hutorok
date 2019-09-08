@@ -1,5 +1,7 @@
 package com.example.hutorok
 
+import com.example.hutorok.domain.storage.IWorkersListInteractor
+import com.example.hutorok.domain.storage.WorkersListInteractor
 import com.example.hutorok.routing.*
 import com.example.hutorok.screen.start.IStartViewModel
 import com.example.hutorok.screen.start.StartViewModel
@@ -21,4 +23,6 @@ val appModule = module {
 
     single { StartViewModel(get(), get(), get()) as IStartViewModel }
     single { WorkersViewModel() as IWorkersViewModel }
+
+    single { WorkersListInteractor() as IWorkersListInteractor }
 }
