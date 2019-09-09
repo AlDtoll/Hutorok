@@ -5,11 +5,13 @@ import androidx.lifecycle.LiveDataReactiveStreams
 import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.domain.storage.IWorkerInteractor
 import com.example.hutorok.domain.storage.IWorkersListInteractor
+import com.example.hutorok.routing.RouteToWorkerInfoScreenInteractor
 import io.reactivex.BackpressureStrategy
 
 class WorkersViewModel(
     private val workersListInteractor: IWorkersListInteractor,
-    private val workerInteractor: IWorkerInteractor
+    private val workerInteractor: IWorkerInteractor,
+    private val routeToWorkerInfoScreenInteractor: RouteToWorkerInfoScreenInteractor
 ) : IWorkersViewModel {
 
     override fun workersData(): LiveData<List<Worker>> {
@@ -20,6 +22,7 @@ class WorkersViewModel(
 
     override fun clickWorker(worker: Worker) {
         workerInteractor.update(worker)
+        routeToWorkerInfoScreenInteractor.execute()
     }
 
 }

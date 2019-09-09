@@ -8,7 +8,6 @@ import com.example.hutorok.ext.replaceFragment
 import com.example.hutorok.screen.start.StartScreen
 import com.example.hutorok.screen.worker_info.WorkerInfoScreen
 import com.example.hutorok.screen.workers.WorkersScreen
-import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
@@ -41,7 +40,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initToolbar() {
-        setSupportActionBar(toolbar)
+//        setSupportActionBar(toolbar)
     }
 
     private fun showStartScreen() {

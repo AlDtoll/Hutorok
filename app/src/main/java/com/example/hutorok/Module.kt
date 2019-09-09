@@ -2,8 +2,8 @@ package com.example.hutorok
 
 import com.example.hutorok.domain.storage.IWorkerInteractor
 import com.example.hutorok.domain.storage.IWorkersListInteractor
+import com.example.hutorok.domain.storage.MockWorkersListInteractor
 import com.example.hutorok.domain.storage.WorkerInteractor
-import com.example.hutorok.domain.storage.WorkersListInteractor
 import com.example.hutorok.routing.*
 import com.example.hutorok.screen.start.IStartViewModel
 import com.example.hutorok.screen.start.StartViewModel
@@ -23,10 +23,11 @@ val appModule = module {
     single { RouteToWorkersScreenInteractor(get()) }
     single { RouteToBuildsScreenInteractor(get()) }
     single { RouteToTasksScreenInteractor(get()) }
+    single { RouteToWorkerInfoScreenInteractor(get()) }
     single { OnBackPressedInteractor(get()) }
 
     single { StartViewModel(get(), get(), get()) as IStartViewModel }
-    single { WorkersViewModel(get(), get()) as IWorkersViewModel }
+    single { WorkersViewModel(get(), get(), get()) as IWorkersViewModel }
     single { WorkerInfoViewModel(get()) as IWorkerInfoViewModel }
 
     single { WorkersListInteractor() as IWorkersListInteractor }

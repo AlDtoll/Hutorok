@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.hutorok.R
 import com.example.hutorok.domain.model.Status
 import com.example.hutorok.screen.StatusAdapter
-import kotlinx.android.synthetic.main.fragment_workers.*
+import kotlinx.android.synthetic.main.fragment_worker_info.*
 import org.koin.android.ext.android.inject
 
 class WorkerInfoScreen : Fragment() {
@@ -25,7 +25,7 @@ class WorkerInfoScreen : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_start, container, false)
+        return inflater.inflate(R.layout.fragment_worker_info, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,10 +58,10 @@ class WorkerInfoScreen : Fragment() {
 
     private fun initRecyclerView() {
         statusAdapter = StatusAdapter()
-        workersList.adapter = statusAdapter
-        workersList.itemAnimator = DefaultItemAnimator()
+        statusesList.adapter = statusAdapter
+        statusesList.itemAnimator = DefaultItemAnimator()
         context?.run {
-            workersList.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+            statusesList.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         }
     }
 

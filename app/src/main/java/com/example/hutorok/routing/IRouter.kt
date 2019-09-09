@@ -17,4 +17,5 @@ interface IRouter {
 
     fun onBackPressed()
 
+    fun routeToWorkerInfoScreen()
 }

@@ -41,6 +41,10 @@ class Router : IRouter {
         nowScreen.onNext(WORKERS_SCREEN)
     }
 
+    override fun routeToWorkerInfoScreen() {
+        nowScreen.onNext(WORKER_INFO_SCREEN)
+    }
+
     override fun onBackPressed() {
         pressBackButtonEvents.onNext(Unit)
     }
