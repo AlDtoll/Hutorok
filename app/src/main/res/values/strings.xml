@@ -6,4 +6,6 @@
     <string name="end_turn_button_text">Закончить ход</string>
 
     <string name="workers_screen_toolbar_title">Хуторяне</string>
+    <string name="tasks_screen_toolbar_title">Делишечки</string>
+    <string name="execute_task_button_text">Отправить работников</string>
 </resources>

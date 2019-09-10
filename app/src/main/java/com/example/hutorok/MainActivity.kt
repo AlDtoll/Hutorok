@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.hutorok.ext.replaceFragment
 import com.example.hutorok.screen.start.StartScreen
+import com.example.hutorok.screen.tasks_screen.TasksScreen
 import com.example.hutorok.screen.worker_info.WorkerInfoScreen
 import com.example.hutorok.screen.workers.WorkersScreen
 import org.koin.android.ext.android.inject
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity() {
             when (it) {
                 NowScreen.START_SCREEN -> showStartScreen()
                 NowScreen.BUILDS_SCREEN -> TODO()
-                NowScreen.TASKS_SCREEN -> TODO()
+                NowScreen.TASKS_SCREEN -> showTasksScreen()
                 NowScreen.WORKERS_SCREEN -> showWorkersScreen()
                 NowScreen.CLOSE_SCREEN -> finish()
                 NowScreen.WORKER_INFO_SCREEN -> showWorkerInfoScreen()
@@ -53,5 +54,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun showWorkerInfoScreen() {
         replaceFragment(WorkerInfoScreen.newInstance())
+    }
+
+    private fun showTasksScreen() {
+        replaceFragment(TasksScreen.newInstance())
     }
 }
