@@ -4,6 +4,8 @@ import com.example.hutorok.domain.ILoadDataInteractor
 import com.example.hutorok.domain.MockLoadDataInteractor
 import com.example.hutorok.domain.storage.*
 import com.example.hutorok.routing.*
+import com.example.hutorok.screen.builds_screen.BuildsViewModel
+import com.example.hutorok.screen.builds_screen.IBuildsViewModel
 import com.example.hutorok.screen.start.IStartViewModel
 import com.example.hutorok.screen.start.StartViewModel
 import com.example.hutorok.screen.tasks_screen.ITasksViewModel
@@ -28,15 +30,17 @@ val appModule = module {
     single { RouteToTaskInfoInteractor(get()) }
     single { OnBackPressedInteractor(get()) }
 
-    single { MockLoadDataInteractor(get(), get()) as ILoadDataInteractor }
+    single { MockLoadDataInteractor(get(), get(), get()) as ILoadDataInteractor }
 
     single { StartViewModel(get(), get(), get()) as IStartViewModel }
     single { WorkersViewModel(get(), get(), get()) as IWorkersViewModel }
     single { WorkerInfoViewModel(get()) as IWorkerInfoViewModel }
     single { TasksViewModel(get(), get(), get()) as ITasksViewModel }
+    single { BuildsViewModel(get()) as IBuildsViewModel }
 
     single { WorkersListInteractor() as IWorkersListInteractor }
     single { WorkerInteractor() as IWorkerInteractor }
     single { TasksListInteractor() as ITasksListInteractor }
     single { TaskInteractor() as ITaskInteractor }
+    single { HutorStatusesListInteractor() as IHutorStatusesListInteractor }
 }

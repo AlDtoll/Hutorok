@@ -1,12 +1,14 @@
 package com.example.hutorok.domain
 
 import com.example.hutorok.domain.model.*
+import com.example.hutorok.domain.storage.IHutorStatusesListInteractor
 import com.example.hutorok.domain.storage.ITasksListInteractor
 import com.example.hutorok.domain.storage.IWorkersListInteractor
 
 class MockLoadDataInteractor(
     private val workersListInteractor: IWorkersListInteractor,
-    private val tasksListInteractor: ITasksListInteractor
+    private val tasksListInteractor: ITasksListInteractor,
+    private val hutorStatusesListInteractor: IHutorStatusesListInteractor
 ) : ILoadDataInteractor {
 
     override fun update() {
@@ -93,6 +95,31 @@ class MockLoadDataInteractor(
             )
         )
         tasksListInteractor.update(tasks)
+
+        val statuses = listOf(
+            Status(
+                "houseBuild",
+                "Жилой дом",
+                "Тут живут люди",
+                1.0,
+                true
+            ),
+            Status(
+                "houseBuild",
+                "Жилой дом",
+                "Тут живут люди",
+                1.0,
+                true
+            ),
+            Status(
+                "forest",
+                "Лес",
+                "Хутор окружен деревьями",
+                1.0,
+                true
+            )
+        )
+        hutorStatusesListInteractor.update(statuses)
     }
 
 }

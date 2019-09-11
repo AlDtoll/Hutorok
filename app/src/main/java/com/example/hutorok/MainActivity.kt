@@ -5,6 +5,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.hutorok.ext.replaceFragment
+import com.example.hutorok.screen.builds_screen.BuildsScreen
 import com.example.hutorok.screen.start.StartScreen
 import com.example.hutorok.screen.tasks_screen.TasksScreen
 import com.example.hutorok.screen.worker_info.WorkerInfoScreen
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.nowScreen().observe(this, Observer {
             when (it) {
                 NowScreen.START_SCREEN -> showStartScreen()
-                NowScreen.BUILDS_SCREEN -> TODO()
+                NowScreen.BUILDS_SCREEN -> showBuildsScreen()
                 NowScreen.TASKS_SCREEN -> showTasksScreen()
                 NowScreen.WORKERS_SCREEN -> showWorkersScreen()
                 NowScreen.CLOSE_SCREEN -> finish()
@@ -61,4 +62,10 @@ class MainActivity : AppCompatActivity() {
     private fun showTasksScreen() {
         replaceFragment(TasksScreen.newInstance())
     }
+
+    private fun showBuildsScreen() {
+        replaceFragment(BuildsScreen.newInstance())
+    }
+
+
 }

@@ -11,9 +11,10 @@ class WorkerInfoViewModel(
     private val workerInteractor: IWorkerInteractor
 ) : IWorkerInfoViewModel {
 
-    override fun workerData(): LiveData<Worker> = LiveDataReactiveStreams.fromPublisher(
-        workerInteractor.get().toFlowable(BackpressureStrategy.LATEST)
-    )
+    override fun workerData(): LiveData<Worker> =
+        LiveDataReactiveStreams.fromPublisher(
+            workerInteractor.get().toFlowable(BackpressureStrategy.LATEST)
+        )
 
     override fun statusesData(): LiveData<List<Status>> {
         val observable = workerInteractor.get().map {

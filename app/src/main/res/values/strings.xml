@@ -7,5 +7,6 @@
 
     <string name="workers_screen_toolbar_title">Хуторяне</string>
     <string name="tasks_screen_toolbar_title">Делишечки</string>
+    <string name="builds_screen_toolbar_title">Хуторок</string>
     <string name="execute_task_button_text">Отправить работников</string>
 </resources>
