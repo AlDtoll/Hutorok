@@ -29,6 +29,8 @@ class MainActivity : AppCompatActivity() {
                 NowScreen.WORKER_INFO_SCREEN -> showWorkerInfoScreen()
             }
         })
+
+        mainViewModel.loadData()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

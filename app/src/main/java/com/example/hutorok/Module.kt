@@ -1,5 +1,7 @@
 package com.example.hutorok
 
+import com.example.hutorok.domain.ILoadDataInteractor
+import com.example.hutorok.domain.MockLoadDataInteractor
 import com.example.hutorok.domain.storage.*
 import com.example.hutorok.routing.*
 import com.example.hutorok.screen.start.IStartViewModel
@@ -14,7 +16,7 @@ import org.koin.dsl.module.module
 
 val appModule = module {
     single { this }
-    single { MainViewModel(get(), get()) as IMainViewModel }
+    single { MainViewModel(get(), get(), get()) as IMainViewModel }
 
     single { Router() as IRouter }
     single { GetNowScreenInteractor(get()) as IGetNowScreenInteractor }
@@ -25,6 +27,8 @@ val appModule = module {
     single { RouteToWorkerInfoScreenInteractor(get()) }
     single { RouteToTaskInfoInteractor(get()) }
     single { OnBackPressedInteractor(get()) }
+
+    single { MockLoadDataInteractor(get(), get()) as ILoadDataInteractor }
 
     single { StartViewModel(get(), get(), get()) as IStartViewModel }
     single { WorkersViewModel(get(), get(), get()) as IWorkersViewModel }

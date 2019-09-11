@@ -8,4 +8,6 @@ interface IMainViewModel {
 
     fun onBackPressed()
 
+    fun loadData()
+
 }
