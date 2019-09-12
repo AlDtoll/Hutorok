@@ -14,4 +14,12 @@ class HutorStatusesListInteractor : IHutorStatusesListInteractor {
 
     override fun get(): Observable<List<Status>> = list
 
+    override fun add(status: Status) {
+        val mutableList = list.value?.toMutableList()
+        mutableList?.add(status)
+        mutableList?.toList()?.run {
+            list.onNext(this)
+        }
+    }
+
 }

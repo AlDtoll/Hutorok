@@ -1,6 +1,8 @@
 package com.example.hutorok
 
+import com.example.hutorok.domain.IExecuteTaskInteractor
 import com.example.hutorok.domain.ILoadDataInteractor
+import com.example.hutorok.domain.MockExecuteTaskInteractor
 import com.example.hutorok.domain.MockLoadDataInteractor
 import com.example.hutorok.domain.storage.*
 import com.example.hutorok.routing.*
@@ -23,17 +25,19 @@ val appModule = module {
     single { Router() as IRouter }
     single { GetNowScreenInteractor(get()) as IGetNowScreenInteractor }
     single { RouteToStartScreenInteractor(get()) }
-    single { RouteToWorkersScreenInteractor(get()) }
+    single { RouteToWorkersScreenInteractor(get(), get()) }
     single { RouteToBuildsScreenInteractor(get()) }
     single { RouteToTasksScreenInteractor(get()) }
     single { RouteToWorkerInfoScreenInteractor(get()) }
-    single { RouteToTaskInfoInteractor(get()) }
+    single { RouteToTaskInfoInteractor(get(), get()) }
     single { OnBackPressedInteractor(get()) }
 
     single { MockLoadDataInteractor(get(), get(), get()) as ILoadDataInteractor }
+    single { ScenarioInteractor() as IScenarioInteractor }
+    single { MockExecuteTaskInteractor(get()) as IExecuteTaskInteractor }
 
     single { StartViewModel(get(), get(), get()) as IStartViewModel }
-    single { WorkersViewModel(get(), get(), get()) as IWorkersViewModel }
+    single { WorkersViewModel(get(), get(), get(), get(), get()) as IWorkersViewModel }
     single { WorkerInfoViewModel(get()) as IWorkerInfoViewModel }
     single { TasksViewModel(get(), get(), get()) as ITasksViewModel }
     single { BuildsViewModel(get()) as IBuildsViewModel }

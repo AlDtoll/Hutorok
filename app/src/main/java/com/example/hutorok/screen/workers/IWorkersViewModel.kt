@@ -9,4 +9,8 @@ interface IWorkersViewModel {
 
     fun clickWorker(worker: Worker)
 
+    fun isOrderScenario(): LiveData<Boolean>
+
+    fun clickExecute()
+
 }

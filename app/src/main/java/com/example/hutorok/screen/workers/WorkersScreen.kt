@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hutorok.R
 import com.example.hutorok.domain.model.Worker
+import com.example.hutorok.ext.onClick
 import com.example.hutorok.screen.WorkerAdapter
 import kotlinx.android.synthetic.main.fragment_workers.*
 import org.koin.android.ext.android.inject
@@ -44,6 +45,22 @@ class WorkersScreen : Fragment() {
         })
 
         initRecyclerView()
+
+        workersViewModel.isOrderScenario().observe(this, Observer {
+            it?.run {
+                if (it) {
+                    workerAdapter.isOrder = true
+                    executeTaskButton.visibility = View.VISIBLE
+                } else {
+                    workerAdapter.isOrder = false
+                    executeTaskButton.visibility = View.GONE
+                }
+            }
+        })
+
+        executeTaskButton.onClick {
+            workersViewModel.clickExecute()
+        }
     }
 
     private fun initToolbar() {

@@ -24,6 +24,8 @@ class WorkerAdapter(
         notifyDataSetChanged()
     }
 
+    var isOrder = false
+
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): RecyclerView.ViewHolder =
         WorkerHolder(
             LayoutInflater.from(parent.context)
@@ -43,6 +45,14 @@ class WorkerAdapter(
             nickname.text = item.nickname
             val workersAge = "Возраст: " + item.age.code
             age.text = workersAge
+            if (isOrder) {
+                checkbox.visibility = View.VISIBLE
+            } else {
+                checkbox.visibility = View.GONE
+            }
+            checkbox.setOnCheckedChangeListener { _, b ->
+                item.isChecked = b
+            }
         }
     }
 
