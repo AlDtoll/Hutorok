@@ -1,8 +1,8 @@
 package com.example.hutorok
 
+import com.example.hutorok.domain.ExecuteTaskInteractor
 import com.example.hutorok.domain.IExecuteTaskInteractor
 import com.example.hutorok.domain.ILoadDataInteractor
-import com.example.hutorok.domain.MockExecuteTaskInteractor
 import com.example.hutorok.domain.MockLoadDataInteractor
 import com.example.hutorok.domain.storage.*
 import com.example.hutorok.routing.*
@@ -20,7 +20,7 @@ import org.koin.dsl.module.module
 
 val appModule = module {
     single { this }
-    single { MainViewModel(get(), get(), get()) as IMainViewModel }
+    single { MainViewModel(get(), get(), get(), get()) as IMainViewModel }
 
     single { Router() as IRouter }
     single { GetNowScreenInteractor(get()) as IGetNowScreenInteractor }
@@ -34,7 +34,7 @@ val appModule = module {
 
     single { MockLoadDataInteractor(get(), get(), get()) as ILoadDataInteractor }
     single { ScenarioInteractor() as IScenarioInteractor }
-    single { MockExecuteTaskInteractor(get()) as IExecuteTaskInteractor }
+    single { ExecuteTaskInteractor(get(), get(), get(), get()) as IExecuteTaskInteractor }
 
     single { StartViewModel(get(), get(), get()) as IStartViewModel }
     single { WorkersViewModel(get(), get(), get(), get(), get()) as IWorkersViewModel }
@@ -47,4 +47,5 @@ val appModule = module {
     single { TasksListInteractor() as ITasksListInteractor }
     single { TaskInteractor() as ITaskInteractor }
     single { HutorStatusesListInteractor() as IHutorStatusesListInteractor }
+    single { MessageInteractor() as IMessageInteractor }
 }

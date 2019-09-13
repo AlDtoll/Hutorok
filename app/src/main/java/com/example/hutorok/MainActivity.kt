@@ -2,6 +2,7 @@ package com.example.hutorok
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.hutorok.ext.replaceFragment
@@ -32,6 +33,12 @@ class MainActivity : AppCompatActivity() {
         })
 
         mainViewModel.loadData()
+
+        mainViewModel.messageData().observe(this, Observer {
+            it?.run {
+                Toast.makeText(this@MainActivity, it, Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

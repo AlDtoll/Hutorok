@@ -75,6 +75,20 @@ class MockLoadDataInteractor(
                         Pair("wasteland", -3.0)
                     ),
                     0
+                ),
+                listOf(
+                    TaskResult(
+                        TaskTarget.HUTOR,
+                        TaskAction.CHANGE_STATUS_VALUE,
+                        Status(
+                            "woods",
+                            "Строительная древесина",
+                            "",
+                            0.0,
+                            true
+                        ),
+                        "Удалось добыть N дерева"
+                    )
                 )
             ),
             Task(
@@ -91,6 +105,20 @@ class MockLoadDataInteractor(
                 TaskFunction(
                     emptyList(),
                     0
+                ),
+                listOf(
+                    TaskResult(
+                        TaskTarget.HUTOR,
+                        TaskAction.CHANGE_STATUS_VALUE,
+                        Status(
+                            "foods",
+                            "Пища",
+                            "",
+                            0.0,
+                            true
+                        ),
+                        "Удалось добыть N дерева"
+                    )
                 )
             )
         )

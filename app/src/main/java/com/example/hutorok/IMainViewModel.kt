@@ -10,4 +10,6 @@ interface IMainViewModel {
 
     fun loadData()
 
+    fun messageData(): LiveData<String>
+
 }
