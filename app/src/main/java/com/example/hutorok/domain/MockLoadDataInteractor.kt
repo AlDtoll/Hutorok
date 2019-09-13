@@ -81,13 +81,25 @@ class MockLoadDataInteractor(
                         TaskTarget.HUTOR,
                         TaskAction.CHANGE_STATUS_VALUE,
                         Status(
-                            "woods",
+                            "woodsRES",
                             "Строительная древесина",
                             "",
                             0.0,
                             true
                         ),
                         "Удалось добыть N дерева"
+                    ),
+                    TaskResult(
+                        TaskTarget.HUTOR,
+                        TaskAction.CHANGE_STATUS_VALUE,
+                        Status(
+                            "felling",
+                            "Вырубка",
+                            "Когда-то здесь был лес, а теперь только пни",
+                            1.0,
+                            true
+                        ),
+                        "Возле селения образовалась вырубка"
                     )
                 )
             ),
@@ -111,7 +123,7 @@ class MockLoadDataInteractor(
                         TaskTarget.HUTOR,
                         TaskAction.CHANGE_STATUS_VALUE,
                         Status(
-                            "foods",
+                            "foodsRES",
                             "Пища",
                             "",
                             0.0,

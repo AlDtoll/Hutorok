@@ -34,7 +34,11 @@ class StatusAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val item = items[position]
         holder.itemView.run {
             name.text = item.name
-            description.text = item.description
+            if (item.code.contains("RES")) {
+                description.text = item.value.toString()
+            } else {
+                description.text = item.description
+            }
         }
     }
 

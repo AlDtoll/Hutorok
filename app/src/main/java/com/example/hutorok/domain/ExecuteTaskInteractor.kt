@@ -1,9 +1,6 @@
 package com.example.hutorok.domain
 
-import com.example.hutorok.domain.model.Status
-import com.example.hutorok.domain.model.Task
-import com.example.hutorok.domain.model.TaskTarget
-import com.example.hutorok.domain.model.Worker
+import com.example.hutorok.domain.model.*
 import com.example.hutorok.domain.storage.IHutorStatusesListInteractor
 import com.example.hutorok.domain.storage.IMessageInteractor
 import com.example.hutorok.domain.storage.ITaskInteractor
@@ -52,19 +49,51 @@ class ExecuteTaskInteractor(
                 }
                 val point = usualWorkerPoint + specialWorkerPoint + usualHutorPoint + specialHutorPoint
                 var message = ""
-                task.results.forEach {
-                    when (it.target) {
+                val newStatusesList = statusesList.toMutableList()
+                task.results.forEach { taskResult ->
+                    when (taskResult.target) {
                         TaskTarget.HUTOR -> {
-                            val newStatusesList = statusesList.toMutableList()
-                            if (it.status.value == 0.0) {
-                                it.status.value = point
+                            var isStatusChanged = false
+                            newStatusesList.forEach { status ->
+                                if (status.code == taskResult.status.code) {
+                                    isStatusChanged = true
+                                    when (taskResult.action) {
+                                        TaskAction.CHANGE_STATUS_VALUE -> status.value = status.value + point
+                                        TaskAction.SET_STATUS_VALUE -> status.value = taskResult.status.value
+                                    }
+                                }
                             }
-                            newStatusesList.add(it.status)
-                            hutorStatusesListInteractor.update(newStatusesList)
-                            message = message + it.describe.replace("N", point.toString()) + "\n"
+                            if (!isStatusChanged) {
+                                taskResult.status.value = point
+                                newStatusesList.add(taskResult.status)
+                            }
+                            message = message + taskResult.describe.replace("N", point.toString()) + "\n"
                         }
                     }
                 }
+                workers.forEach { worker ->
+                    var isStatusChanged = false
+                    worker.statuses.forEach { status ->
+                        if (status.code == "worked") {
+                            isStatusChanged = true
+                            status.value = status.value + 1
+                        }
+                    }
+                    if (!isStatusChanged) {
+                        val workerStatuses = worker.statuses.toMutableList()
+                        workerStatuses.add(
+                            Status(
+                                "worked",
+                                "Работал",
+                                "Если работать слишком много, то можно надорваться",
+                                1.0,
+                                true
+                            )
+                        )
+                        worker.statuses = workerStatuses
+                    }
+                }
+                hutorStatusesListInteractor.update(newStatusesList)
                 messageInteractor.update("Работа сделана в результате: $message")
             }
         ).subscribe()
