@@ -117,7 +117,7 @@ class MockLoadDataInteractor(
                             0.0,
                             true
                         ),
-                        "Удалось добыть N дерева"
+                        "Удалось добыть N еды"
                     )
                 )
             )

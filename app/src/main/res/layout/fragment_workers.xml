@@ -29,6 +29,7 @@
             android:layout_marginTop="@dimen/padding_small"
             android:layout_marginBottom="@dimen/padding_small"
             android:layout_marginRight="@dimen/padding_small"
+            android:enabled="false"
             android:visibility="gone"
             tools:visibility="visible"/>
 

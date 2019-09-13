@@ -1,4 +1,4 @@
-package com.example.hutorok.screen.worker_info
+package com.example.hutorok.screen.worker_info_screen
 
 import android.os.Bundle
 import android.view.LayoutInflater

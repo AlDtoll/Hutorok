@@ -7,10 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.hutorok.ext.replaceFragment
 import com.example.hutorok.screen.builds_screen.BuildsScreen
-import com.example.hutorok.screen.start.StartScreen
+import com.example.hutorok.screen.start_screen.StartScreen
 import com.example.hutorok.screen.tasks_screen.TasksScreen
-import com.example.hutorok.screen.worker_info.WorkerInfoScreen
-import com.example.hutorok.screen.workers.WorkersScreen
+import com.example.hutorok.screen.worker_info_screen.WorkerInfoScreen
+import com.example.hutorok.screen.workers_screen.WorkersScreen
 import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {

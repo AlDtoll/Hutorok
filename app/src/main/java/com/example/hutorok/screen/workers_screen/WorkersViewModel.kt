@@ -1,4 +1,4 @@
-package com.example.hutorok.screen.workers
+package com.example.hutorok.screen.workers_screen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams

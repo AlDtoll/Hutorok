@@ -1,4 +1,4 @@
-package com.example.hutorok.screen.start
+package com.example.hutorok.screen.start_screen
 
 import android.os.Bundle
 import android.view.LayoutInflater

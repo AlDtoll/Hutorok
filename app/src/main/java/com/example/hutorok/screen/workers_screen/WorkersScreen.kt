@@ -1,4 +1,4 @@
-package com.example.hutorok.screen.workers
+package com.example.hutorok.screen.workers_screen
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -74,6 +74,10 @@ class WorkersScreen : Fragment() {
 
         override fun selectWorker(worker: Worker) {
             workersViewModel.clickWorker(worker)
+        }
+
+        override fun clickCheckBox() {
+            executeTaskButton.isEnabled = workerAdapter.items.any { worker -> worker.isChecked }
         }
     }
 

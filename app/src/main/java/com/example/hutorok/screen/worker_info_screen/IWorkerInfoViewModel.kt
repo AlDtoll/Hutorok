@@ -1,4 +1,4 @@
-package com.example.hutorok.screen.worker_info
+package com.example.hutorok.screen.worker_info_screen
 
 import androidx.lifecycle.LiveData
 import com.example.hutorok.domain.model.Status

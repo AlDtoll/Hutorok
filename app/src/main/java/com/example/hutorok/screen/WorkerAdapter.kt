@@ -52,7 +52,9 @@ class WorkerAdapter(
             }
             checkbox.setOnCheckedChangeListener { _, b ->
                 item.isChecked = b
+                callback.clickCheckBox()
             }
+            checkbox.isChecked = item.isChecked
         }
     }
 
@@ -60,6 +62,8 @@ class WorkerAdapter(
 
     interface Callback {
         fun selectWorker(worker: Worker)
+
+        fun clickCheckBox()
     }
 }
 

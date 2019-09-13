@@ -8,14 +8,14 @@ import com.example.hutorok.domain.storage.*
 import com.example.hutorok.routing.*
 import com.example.hutorok.screen.builds_screen.BuildsViewModel
 import com.example.hutorok.screen.builds_screen.IBuildsViewModel
-import com.example.hutorok.screen.start.IStartViewModel
-import com.example.hutorok.screen.start.StartViewModel
+import com.example.hutorok.screen.start_screen.IStartViewModel
+import com.example.hutorok.screen.start_screen.StartViewModel
 import com.example.hutorok.screen.tasks_screen.ITasksViewModel
 import com.example.hutorok.screen.tasks_screen.TasksViewModel
-import com.example.hutorok.screen.worker_info.IWorkerInfoViewModel
-import com.example.hutorok.screen.worker_info.WorkerInfoViewModel
-import com.example.hutorok.screen.workers.IWorkersViewModel
-import com.example.hutorok.screen.workers.WorkersViewModel
+import com.example.hutorok.screen.worker_info_screen.IWorkerInfoViewModel
+import com.example.hutorok.screen.worker_info_screen.WorkerInfoViewModel
+import com.example.hutorok.screen.workers_screen.IWorkersViewModel
+import com.example.hutorok.screen.workers_screen.WorkersViewModel
 import org.koin.dsl.module.module
 
 val appModule = module {
