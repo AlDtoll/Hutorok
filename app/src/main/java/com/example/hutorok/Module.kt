@@ -22,7 +22,7 @@ val appModule = module {
     single { this }
     single { MainViewModel(get(), get(), get(), get()) as IMainViewModel }
 
-    single { Router() as IRouter }
+    single { Router(get()) as IRouter }
     single { GetNowScreenInteractor(get()) as IGetNowScreenInteractor }
     single { RouteToStartScreenInteractor(get()) }
     single { RouteToWorkersScreenInteractor(get(), get()) }

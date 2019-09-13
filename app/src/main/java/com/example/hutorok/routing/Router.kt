@@ -7,22 +7,30 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
-class Router : IRouter {
+class Router(
+    private val scenarioInteractor: IScenarioInteractor
+) : IRouter {
 
     private val nowScreen = BehaviorSubject.create<NowScreen>()
     private val pressBackButtonEvents = PublishSubject.create<Unit>()
 
     override fun nowScreen(): Observable<NowScreen> {
+        val observable = Observable.combineLatest(nowScreen.startWith(START_SCREEN),
+            scenarioInteractor.get().startWith(Scenario.SPEAK),
+            BiFunction { nowScreen: NowScreen, scenario: Scenario ->
+                nowScreen to scenario
+            })
         return Observable.combineLatest(
-            nowScreen.startWith(START_SCREEN),
-            pressBackButtonEvents.withLatestFrom(nowScreen,
-                BiFunction { _: Unit, nowScreen: NowScreen ->
-                    getPreviousScreen(nowScreen)
+            observable,
+            pressBackButtonEvents.withLatestFrom(
+                observable,
+                BiFunction { _: Unit, pair: Pair<NowScreen, Scenario> ->
+                    getPreviousScreen(pair.first, pair.second)
                 })
                 .doOnNext { nowScreen.onNext(it) }
                 .map { Unit }
                 .startWith(Unit),
-            BiFunction { nowScreen: NowScreen, _ -> nowScreen })
+            BiFunction { pair: Pair<NowScreen, Scenario>, _ -> pair.first })
     }
 
     override fun routeToStartScreen() {
@@ -49,11 +57,19 @@ class Router : IRouter {
         pressBackButtonEvents.onNext(Unit)
     }
 
-    private fun getPreviousScreen(nowScreen: NowScreen): NowScreen {
+    private fun getPreviousScreen(nowScreen: NowScreen, scenario: Scenario): NowScreen {
         return when (nowScreen) {
             START_SCREEN -> CLOSE_SCREEN
             WORKER_INFO_SCREEN -> WORKERS_SCREEN
+            WORKERS_SCREEN -> getPreviousScreenForWorkersScreen(scenario)
             else -> START_SCREEN
+        }
+    }
+
+    private fun getPreviousScreenForWorkersScreen(scenario: Scenario): NowScreen {
+        return when (scenario) {
+            Scenario.SPEAK -> START_SCREEN
+            Scenario.ORDER -> TASKS_SCREEN
         }
     }
 
