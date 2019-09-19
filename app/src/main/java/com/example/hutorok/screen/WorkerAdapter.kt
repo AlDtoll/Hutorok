@@ -25,6 +25,7 @@ class WorkerAdapter(
     }
 
     var isOrder = false
+    var importantStatusNames = emptyList<String>()
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): RecyclerView.ViewHolder =
         WorkerHolder(
@@ -55,6 +56,15 @@ class WorkerAdapter(
                 callback.clickCheckBox()
             }
             checkbox.isChecked = item.isChecked
+            var importantStatusesText = ""
+            item.statuses.forEach { workerStatuses ->
+                importantStatusNames.forEach {
+                    if (it == workerStatuses.name) {
+                        importantStatusesText = "$it; $importantStatusesText"
+                    }
+                }
+            }
+            importantStatuses.text = importantStatusesText
         }
     }
 

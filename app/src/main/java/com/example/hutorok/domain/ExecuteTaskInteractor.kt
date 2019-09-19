@@ -94,7 +94,7 @@ class ExecuteTaskInteractor(
                     }
                 }
                 hutorStatusesListInteractor.update(newStatusesList)
-                messageInteractor.update("Работа сделана в результате: $message")
+                messageInteractor.update("Работа сделана. В результате: $message")
             }
         ).subscribe()
     }

@@ -53,11 +53,21 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="@dimen/padding_small"
                 app:layout_constraintTop_toBottomOf="@id/name"
-                app:layout_constraintEnd_toStartOf="@+id/checkbox"
+                app:layout_constraintEnd_toStartOf="@+id/importantStatuses"
                 android:layout_marginStart="@dimen/padding_small"
                 android:layout_marginLeft="@dimen/padding_small"
                 android:layout_marginBottom="@dimen/padding_small"
                 tools:text="Возраст: взрослый"/>
+
+        <TextView
+                android:id="@+id/importantStatuses"
+                android:layout_width="wrap_content"
+                android:textColor="@color/red"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/age"
+                app:layout_constraintEnd_toStartOf="@+id/checkbox"
+                app:layout_constraintBottom_toBottomOf="@id/age"
+                tools:text="Работал"/>
 
         <CheckBox
                 android:id="@+id/checkbox"

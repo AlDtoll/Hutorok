@@ -13,4 +13,6 @@ interface IWorkersViewModel {
 
     fun clickExecute()
 
+    fun importantStatusesData(): LiveData<List<String>>
+
 }

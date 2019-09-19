@@ -2,16 +2,28 @@ package com.example.hutorok.domain
 
 import com.example.hutorok.domain.model.*
 import com.example.hutorok.domain.storage.IHutorStatusesListInteractor
+import com.example.hutorok.domain.storage.IImportantStatusNamesListInteractor
 import com.example.hutorok.domain.storage.ITasksListInteractor
 import com.example.hutorok.domain.storage.IWorkersListInteractor
 
 class MockLoadDataInteractor(
     private val workersListInteractor: IWorkersListInteractor,
     private val tasksListInteractor: ITasksListInteractor,
-    private val hutorStatusesListInteractor: IHutorStatusesListInteractor
+    private val hutorStatusesListInteractor: IHutorStatusesListInteractor,
+    private val importantStatusNamesListInteractor: IImportantStatusNamesListInteractor
 ) : ILoadDataInteractor {
 
     override fun update() {
+        updateWorkers()
+
+        updateTasks()
+
+        updateHutorStatuses()
+
+        updateImportantNames()
+    }
+
+    private fun updateWorkers() {
         val workers = listOf(
             Worker(
                 "Гавриил",
@@ -57,7 +69,9 @@ class MockLoadDataInteractor(
             )
         )
         workersListInteractor.update(workers)
+    }
 
+    private fun updateTasks() {
         val tasks = listOf(
             Task(
                 "getWoods",
@@ -135,7 +149,9 @@ class MockLoadDataInteractor(
             )
         )
         tasksListInteractor.update(tasks)
+    }
 
+    private fun updateHutorStatuses() {
         val statuses = listOf(
             Status(
                 "houseBuild",
@@ -160,6 +176,13 @@ class MockLoadDataInteractor(
             )
         )
         hutorStatusesListInteractor.update(statuses)
+    }
+
+    private fun updateImportantNames() {
+        val names = listOf(
+            "Работал"
+        )
+        importantStatusNamesListInteractor.update(names)
     }
 
 }

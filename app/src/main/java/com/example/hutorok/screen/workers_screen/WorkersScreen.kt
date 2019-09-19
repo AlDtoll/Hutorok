@@ -60,7 +60,14 @@ class WorkersScreen : Fragment() {
 
         executeTaskButton.onClick {
             workersViewModel.clickExecute()
+            workerAdapter.notifyDataSetChanged()
         }
+
+        workersViewModel.importantStatusesData().observe(this, Observer {
+            it?.run {
+                workerAdapter.importantStatusNames = it
+            }
+        })
     }
 
     private fun initToolbar() {

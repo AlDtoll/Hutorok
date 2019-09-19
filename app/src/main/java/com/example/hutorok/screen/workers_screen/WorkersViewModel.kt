@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import com.example.hutorok.domain.IExecuteTaskInteractor
 import com.example.hutorok.domain.model.Worker
+import com.example.hutorok.domain.storage.IImportantStatusNamesListInteractor
 import com.example.hutorok.domain.storage.IWorkerInteractor
 import com.example.hutorok.domain.storage.IWorkersListInteractor
 import com.example.hutorok.routing.IScenarioInteractor
@@ -16,7 +17,8 @@ class WorkersViewModel(
     private val workerInteractor: IWorkerInteractor,
     private val routeToWorkerInfoScreenInteractor: RouteToWorkerInfoScreenInteractor,
     private val scenarioInteractor: IScenarioInteractor,
-    private val executeTaskInteractor: IExecuteTaskInteractor
+    private val executeTaskInteractor: IExecuteTaskInteractor,
+    private val importantStatusNamesListInteractor: IImportantStatusNamesListInteractor
 ) : IWorkersViewModel {
 
     override fun workersData(): LiveData<List<Worker>> =
@@ -38,6 +40,12 @@ class WorkersViewModel(
 
     override fun clickExecute() {
         executeTaskInteractor.execute()
+    }
+
+    override fun importantStatusesData(): LiveData<List<String>> {
+        return LiveDataReactiveStreams.fromPublisher(
+            importantStatusNamesListInteractor.get().toFlowable(BackpressureStrategy.LATEST)
+        )
     }
 
 }
