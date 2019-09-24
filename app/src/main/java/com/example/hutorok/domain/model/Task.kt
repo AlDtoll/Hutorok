@@ -6,7 +6,8 @@ class Task(
     val describe: String,
     val workerFunction: TaskFunction,
     val hutorFunction: TaskFunction,
-    val results: List<TaskResult>
+    val results: List<TaskResult>,
+    val permissiveCondition: List<Pair<String, Double>> = emptyList()
 )
 
 class TaskFunction(val statuses: List<Pair<String, Double>> = emptyList(), val defaultValue: Int = 6)
@@ -24,5 +25,7 @@ enum class TaskTarget {
 
 enum class TaskAction {
     CHANGE_STATUS_VALUE,
-    SET_STATUS_VALUE
+    SET_STATUS_VALUE,
+    CHANGE_STATUS_VALUE_BY_FIXED_POINT,
+    ADD_STATUS
 }

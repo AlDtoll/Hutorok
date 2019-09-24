@@ -1,6 +1,10 @@
 package com.example.hutorok.domain
 
-import com.example.hutorok.domain.model.*
+import android.util.Log
+import com.example.hutorok.domain.model.Status
+import com.example.hutorok.domain.model.Task
+import com.example.hutorok.domain.model.TaskAction
+import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.domain.storage.IHutorStatusesListInteractor
 import com.example.hutorok.domain.storage.IMessageInteractor
 import com.example.hutorok.domain.storage.ITaskInteractor
@@ -17,86 +21,110 @@ class ExecuteTaskInteractor(
     private val messageInteractor: IMessageInteractor
 ) : IExecuteTaskInteractor {
 
+    private val TAG = "myLogs"
+
     override fun execute() {
         Observable.zip(
             workersListInteractor.get(),
             taskInteractor.get(),
             hutorStatusesListInteractor.get(),
             Function3 { workersList: List<Worker>, task: Task, statusesList: List<Status> ->
+                Log.d(TAG, "1")
                 val workers = workersList.filter { it.isChecked }
-                var usualWorkerPoint = 0
-                workers.forEach { _ ->
-                    usualWorkerPoint += Random(Date().time).nextInt(task.workerFunction.defaultValue) + 1
-                }
-                var specialWorkerPoint = 0.0
-                task.workerFunction.statuses.forEach { pair ->
-                    workers.forEach { worker ->
-                        worker.statuses.forEach {
-                            if (it.code == pair.first) {
-                                specialWorkerPoint += pair.second
-                            }
-                        }
-                    }
-                }
-                val usualHutorPoint = task.hutorFunction.defaultValue
-                var specialHutorPoint = 0.0
-                task.hutorFunction.statuses.forEach { pair ->
-                    statusesList.forEach {
-                        if (it.code == pair.first) {
-                            specialHutorPoint += pair.second
-                        }
-                    }
-                }
-                val point = usualWorkerPoint + specialWorkerPoint + usualHutorPoint + specialHutorPoint
+
+                val point = countTaskPoint(workers, task, statusesList)
+
+
                 var message = ""
                 val newStatusesList = statusesList.toMutableList()
                 task.results.forEach { taskResult ->
-                    when (taskResult.target) {
-                        TaskTarget.HUTOR -> {
-                            var isStatusChanged = false
-                            newStatusesList.forEach { status ->
-                                if (status.code == taskResult.status.code) {
-                                    isStatusChanged = true
-                                    when (taskResult.action) {
-                                        TaskAction.CHANGE_STATUS_VALUE -> status.value = status.value + point
-                                        TaskAction.SET_STATUS_VALUE -> status.value = taskResult.status.value
-                                    }
-                                }
+                    if (taskResult.action == TaskAction.ADD_STATUS) {
+                        newStatusesList.add(taskResult.status)
+                    } else {
+                        val findStatus = newStatusesList.find { status -> taskResult.status.code == status.code }
+                        if (findStatus == null) {
+                            //TODO сделать конструктор копирования - тут изменяется значение статуса
+                            taskResult.status.value = when (taskResult.action) {
+                                TaskAction.CHANGE_STATUS_VALUE -> taskResult.status.value + point
+                                TaskAction.SET_STATUS_VALUE -> taskResult.status.value
+                                TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT -> taskResult.status.value
+                                TaskAction.ADD_STATUS -> 0.0
                             }
-                            if (!isStatusChanged) {
-                                taskResult.status.value = point
-                                newStatusesList.add(taskResult.status)
+                            newStatusesList.add(taskResult.status)
+                        } else {
+                            findStatus.value = when (taskResult.action) {
+                                TaskAction.CHANGE_STATUS_VALUE -> findStatus.value + point
+                                TaskAction.SET_STATUS_VALUE -> taskResult.status.value
+                                TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT -> findStatus.value + taskResult.status.value
+                                TaskAction.ADD_STATUS -> 0.0
                             }
-                            message = message + taskResult.describe.replace("N", point.toString()) + "\n"
                         }
                     }
+                    message = message + taskResult.describe.replace("N", point.toString()) + "\n"
                 }
-                workers.forEach { worker ->
-                    var isStatusChanged = false
-                    worker.statuses.forEach { status ->
-                        if (status.code == "worked") {
-                            isStatusChanged = true
-                            status.value = status.value + 1
-                        }
-                    }
-                    if (!isStatusChanged) {
-                        val workerStatuses = worker.statuses.toMutableList()
-                        workerStatuses.add(
-                            Status(
-                                "worked",
-                                "Работал",
-                                "Если работать слишком много, то можно надорваться",
-                                1.0,
-                                true
-                            )
-                        )
-                        worker.statuses = workerStatuses
-                    }
-                }
+
+                markWorkersAsWorked(workers)
+
                 hutorStatusesListInteractor.update(newStatusesList)
                 messageInteractor.update("Работа сделана. В результате: $message")
             }
         ).subscribe()
+    }
+
+    private fun countTaskPoint(
+        workers: List<Worker>,
+        task: Task,
+        statusesList: List<Status>
+    ): Double {
+        var usualWorkerPoint = 0
+        workers.forEach { _ ->
+            usualWorkerPoint += Random(Date().time).nextInt(task.workerFunction.defaultValue) + 1
+        }
+        var specialWorkerPoint = 0.0
+        task.workerFunction.statuses.forEach { pair ->
+            workers.forEach { worker ->
+                worker.statuses.forEach {
+                    if (it.code == pair.first) {
+                        specialWorkerPoint += pair.second
+                    }
+                }
+            }
+        }
+        val usualHutorPoint = task.hutorFunction.defaultValue
+        var specialHutorPoint = 0.0
+        task.hutorFunction.statuses.forEach { pair ->
+            statusesList.forEach {
+                if (it.code == pair.first) {
+                    specialHutorPoint += pair.second
+                }
+            }
+        }
+        return usualWorkerPoint + specialWorkerPoint + usualHutorPoint + specialHutorPoint
+    }
+
+    private fun markWorkersAsWorked(workers: List<Worker>) {
+        workers.forEach { worker ->
+            var isStatusChanged = false
+            worker.statuses.forEach { status ->
+                if (status.code == "worked") {
+                    isStatusChanged = true
+                    status.value = status.value + 1
+                }
+            }
+            if (!isStatusChanged) {
+                val workerStatuses = worker.statuses.toMutableList()
+                workerStatuses.add(
+                    Status(
+                        "worked",
+                        "Работал",
+                        "Если работать слишком много, то можно надорваться",
+                        1.0,
+                        true
+                    )
+                )
+                worker.statuses = workerStatuses
+            }
+        }
     }
 
 }

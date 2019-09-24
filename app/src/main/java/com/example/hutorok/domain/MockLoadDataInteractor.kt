@@ -146,6 +146,91 @@ class MockLoadDataInteractor(
                         "Удалось добыть N еды"
                     )
                 )
+            ),
+            Task(
+                "buildHouse",
+                "Строить жилой дом",
+                "Дом из дерева. 35 древесины, 35 очков строительства",
+                TaskFunction(
+                    listOf(
+                        Pair("builder", 1.0),
+                        Pair("hasTool", 1.5)
+                    )
+                ),
+                TaskFunction(
+                    emptyList(),
+                    0
+                ),
+                listOf(
+                    TaskResult(
+                        TaskTarget.HUTOR,
+                        TaskAction.CHANGE_STATUS_VALUE,
+                        Status(
+                            "houseRES",
+                            "Очки строительства дома",
+                            "",
+                            0.0,
+                            true
+                        ),
+                        "Удалось построить N очков"
+                    )
+                ),
+                listOf(
+                    Pair("woodsRES", 0.0)
+                )
+            ),
+            Task(
+                "completeHouse",
+                "Завершить строительство жилого дома",
+                "Отнимет 35 древесины и 35 очков строительства",
+                TaskFunction(
+                    emptyList()
+                ),
+                TaskFunction(
+                    emptyList()
+                ),
+                listOf(
+                    TaskResult(
+                        TaskTarget.HUTOR,
+                        TaskAction.ADD_STATUS,
+                        Status(
+                            "houseBUILDING",
+                            "Жилой дом",
+                            "Тут живут люди",
+                            1.0,
+                            true
+                        ),
+                        "Завершено строительство дома"
+                    ),
+                    TaskResult(
+                        TaskTarget.HUTOR,
+                        TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT,
+                        Status(
+                            "houseRES",
+                            "-",
+                            "-",
+                            -35.0,
+                            true
+                        ),
+                        "Количество древесины стало меньше на 35"
+                    ),
+                    TaskResult(
+                        TaskTarget.HUTOR,
+                        TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT,
+                        Status(
+                            "woodsRES",
+                            "-",
+                            "-",
+                            -35.0,
+                            true
+                        ),
+                        "Количество очков строительства стало меньше на 35"
+                    )
+                ),
+                listOf(
+                    Pair("woodsRES", 35.0),
+                    Pair("houseRES", 35.0)
+                )
             )
         )
         tasksListInteractor.update(tasks)
@@ -154,14 +239,14 @@ class MockLoadDataInteractor(
     private fun updateHutorStatuses() {
         val statuses = listOf(
             Status(
-                "houseBuild",
+                "houseBUILDING",
                 "Жилой дом",
                 "Тут живут люди",
                 1.0,
                 true
             ),
             Status(
-                "houseBuild",
+                "houseBUILDING",
                 "Жилой дом",
                 "Тут живут люди",
                 1.0,
@@ -172,6 +257,13 @@ class MockLoadDataInteractor(
                 "Лес",
                 "Хутор окружен деревьями",
                 1.0,
+                true
+            ),
+            Status(
+                "foodsRES",
+                "Еда",
+                "Нужна для пропитания хутора",
+                10.0,
                 true
             )
         )
