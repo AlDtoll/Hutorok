@@ -104,14 +104,8 @@ class ExecuteTaskInteractor(
 
     private fun markWorkersAsWorked(workers: List<Worker>) {
         workers.forEach { worker ->
-            var isStatusChanged = false
-            worker.statuses.forEach { status ->
-                if (status.code == "worked") {
-                    isStatusChanged = true
-                    status.value = status.value + 1
-                }
-            }
-            if (!isStatusChanged) {
+            val findStatus = worker.statuses.find { status -> status.code == "worked" }
+            if (findStatus == null) {
                 val workerStatuses = worker.statuses.toMutableList()
                 workerStatuses.add(
                     Status(
@@ -123,6 +117,8 @@ class ExecuteTaskInteractor(
                     )
                 )
                 worker.statuses = workerStatuses
+            } else {
+                findStatus.value = findStatus.value + 1
             }
         }
     }

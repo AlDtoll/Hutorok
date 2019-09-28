@@ -1,5 +1,6 @@
 package com.example.hutorok.screen.start_screen
 
+import com.example.hutorok.domain.IEndTurnInteractor
 import com.example.hutorok.routing.RouteToBuildsScreenInteractor
 import com.example.hutorok.routing.RouteToTasksScreenInteractor
 import com.example.hutorok.routing.RouteToWorkersScreenInteractor
@@ -7,7 +8,8 @@ import com.example.hutorok.routing.RouteToWorkersScreenInteractor
 class StartViewModel(
     private val routeToWorkersScreenInteractor: RouteToWorkersScreenInteractor,
     private val routeToBuildsScreenInteractor: RouteToBuildsScreenInteractor,
-    private val routeToTasksScreenInteractor: RouteToTasksScreenInteractor
+    private val routeToTasksScreenInteractor: RouteToTasksScreenInteractor,
+    private val endTurnInteractor: IEndTurnInteractor
 ) : IStartViewModel {
 
     override fun clickWorkersButton() {
@@ -23,7 +25,7 @@ class StartViewModel(
     }
 
     override fun clickEndTurnButton() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        endTurnInteractor.execute()
     }
 
 }

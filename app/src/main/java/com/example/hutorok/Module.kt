@@ -1,9 +1,6 @@
 package com.example.hutorok
 
-import com.example.hutorok.domain.ExecuteTaskInteractor
-import com.example.hutorok.domain.IExecuteTaskInteractor
-import com.example.hutorok.domain.ILoadDataInteractor
-import com.example.hutorok.domain.MockLoadDataInteractor
+import com.example.hutorok.domain.*
 import com.example.hutorok.domain.storage.*
 import com.example.hutorok.routing.*
 import com.example.hutorok.screen.builds_screen.BuildsViewModel
@@ -32,11 +29,12 @@ val appModule = module {
     single { RouteToTaskInfoInteractor(get(), get()) }
     single { OnBackPressedInteractor(get()) }
 
-    single { MockLoadDataInteractor(get(), get(), get(), get()) as ILoadDataInteractor }
+    single { MockLoadDataInteractor(get(), get(), get(), get(), get()) as ILoadDataInteractor }
     single { ScenarioInteractor() as IScenarioInteractor }
     single { ExecuteTaskInteractor(get(), get(), get(), get()) as IExecuteTaskInteractor }
+    single { EndTurnInteractor(get(), get(), get(), get()) as IEndTurnInteractor }
 
-    single { StartViewModel(get(), get(), get()) as IStartViewModel }
+    single { StartViewModel(get(), get(), get(), get()) as IStartViewModel }
     single { WorkersViewModel(get(), get(), get(), get(), get(), get()) as IWorkersViewModel }
     single { WorkerInfoViewModel(get()) as IWorkerInfoViewModel }
     single { TasksViewModel(get(), get(), get(), get()) as ITasksViewModel }
@@ -49,4 +47,5 @@ val appModule = module {
     single { HutorStatusesListInteractor() as IHutorStatusesListInteractor }
     single { MessageInteractor() as IMessageInteractor }
     single { ImportantStatusNamesListInteractor() as IImportantStatusNamesListInteractor }
+    single { EndTasksListInteractor() as IEndTasksListInteractor }
 }
