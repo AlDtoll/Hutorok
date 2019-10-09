@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hutorok.R
+import com.example.hutorok.domain.model.Task
 import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.ext.onClick
 import kotlinx.android.synthetic.main.worker_item.view.*
@@ -26,6 +27,7 @@ class WorkerAdapter(
 
     var isOrder = false
     var importantStatusNames = emptyList<String>()
+    var taskType: Task.Type = Task.Type.WORK
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): RecyclerView.ViewHolder =
         WorkerHolder(
@@ -51,11 +53,11 @@ class WorkerAdapter(
             } else {
                 checkbox.visibility = View.GONE
             }
-            checkbox.setOnCheckedChangeListener { _, b ->
-                item.isChecked = b
-                callback.clickCheckBox()
+            checkbox.setOnCheckedChangeListener { _, isChecked ->
+                item.isChecked = isChecked
+                callback.isExecuteTaskButtonEnable(isExecuteTaskButtonEnable())
             }
-            checkbox.isChecked = item.isChecked
+            checkbox.isEnabled = isCheckboxEnabled(item)
             var importantStatusesText = ""
             item.statuses.forEach { workerStatuses ->
                 importantStatusNames.forEach {
@@ -68,12 +70,31 @@ class WorkerAdapter(
         }
     }
 
+    private fun isExecuteTaskButtonEnable(): Boolean {
+        if (taskType == Task.Type.BUILD) {
+            return true
+        }
+        return if (taskType == Task.Type.PERSON) {
+            val filterWorkers = items.filter { worker -> worker.isChecked }
+            filterWorkers.size == 1
+        } else {
+            items.any { worker -> worker.isChecked }
+        }
+    }
+
+    private fun isCheckboxEnabled(item: Worker): Boolean {
+        if (taskType == Task.Type.BUILD) {
+            return false
+        }
+        return true
+    }
+
     class WorkerHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     interface Callback {
         fun selectWorker(worker: Worker)
 
-        fun clickCheckBox()
+        fun isExecuteTaskButtonEnable(isEnable: Boolean)
     }
 }
 

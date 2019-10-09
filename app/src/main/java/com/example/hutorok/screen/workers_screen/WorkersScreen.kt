@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hutorok.R
+import com.example.hutorok.domain.model.Task
 import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.ext.onClick
 import com.example.hutorok.screen.WorkerAdapter
@@ -68,6 +69,13 @@ class WorkersScreen : Fragment() {
                 workerAdapter.importantStatusNames = it
             }
         })
+
+        workersViewModel.taskTypeData().observe(this, Observer {
+            it?.run {
+                workerAdapter.taskType = it
+                executeTaskButton.isEnabled = it == Task.Type.BUILD
+            }
+        })
     }
 
     private fun initToolbar() {
@@ -83,8 +91,8 @@ class WorkersScreen : Fragment() {
             workersViewModel.clickWorker(worker)
         }
 
-        override fun clickCheckBox() {
-            executeTaskButton.isEnabled = workerAdapter.items.any { worker -> worker.isChecked }
+        override fun isExecuteTaskButtonEnable(isEnable: Boolean) {
+            executeTaskButton.isEnabled = isEnable
         }
     }
 

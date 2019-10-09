@@ -1,6 +1,7 @@
 package com.example.hutorok.screen.workers_screen
 
 import androidx.lifecycle.LiveData
+import com.example.hutorok.domain.model.Task
 import com.example.hutorok.domain.model.Worker
 
 interface IWorkersViewModel {
@@ -14,5 +15,11 @@ interface IWorkersViewModel {
     fun clickExecute()
 
     fun importantStatusesData(): LiveData<List<String>>
+
+    fun taskTypeData(): LiveData<Task.Type>
+
+    fun isExecuteTaskButtonEnable(): LiveData<Boolean>
+
+    fun clickCheckbox(worker: Worker)
 
 }

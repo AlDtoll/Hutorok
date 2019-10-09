@@ -92,8 +92,8 @@ class MockLoadDataInteractor(
                 ),
                 listOf(
                     TaskResult(
-                        TaskTarget.HUTOR,
-                        TaskAction.CHANGE_STATUS_VALUE,
+                        TaskResult.TaskTarget.HUTOR,
+                        TaskResult.TaskAction.CHANGE_STATUS_VALUE,
                         Status(
                             "woodsRES",
                             "Строительная древесина",
@@ -104,8 +104,8 @@ class MockLoadDataInteractor(
                         "Удалось добыть N дерева"
                     ),
                     TaskResult(
-                        TaskTarget.HUTOR,
-                        TaskAction.CHANGE_STATUS_VALUE,
+                        TaskResult.TaskTarget.HUTOR,
+                        TaskResult.TaskAction.CHANGE_STATUS_VALUE,
                         Status(
                             "felling",
                             "Вырубка",
@@ -134,8 +134,8 @@ class MockLoadDataInteractor(
                 ),
                 listOf(
                     TaskResult(
-                        TaskTarget.HUTOR,
-                        TaskAction.CHANGE_STATUS_VALUE,
+                        TaskResult.TaskTarget.HUTOR,
+                        TaskResult.TaskAction.CHANGE_STATUS_VALUE,
                         Status(
                             "foodsRES",
                             "Пища",
@@ -163,8 +163,8 @@ class MockLoadDataInteractor(
                 ),
                 listOf(
                     TaskResult(
-                        TaskTarget.HUTOR,
-                        TaskAction.CHANGE_STATUS_VALUE,
+                        TaskResult.TaskTarget.HUTOR,
+                        TaskResult.TaskAction.CHANGE_STATUS_VALUE,
                         Status(
                             "houseRES",
                             "Очки строительства дома",
@@ -176,7 +176,7 @@ class MockLoadDataInteractor(
                     )
                 ),
                 listOf(
-                    Pair("woodsRES", 0.0)
+                    Triple("woodsRES", Task.Symbol.MORE, 1.0)
                 )
             ),
             Task(
@@ -191,8 +191,8 @@ class MockLoadDataInteractor(
                 ),
                 listOf(
                     TaskResult(
-                        TaskTarget.HUTOR,
-                        TaskAction.ADD_STATUS,
+                        TaskResult.TaskTarget.HUTOR,
+                        TaskResult.TaskAction.ADD_STATUS,
                         Status(
                             "houseBUILDING",
                             "Жилой дом",
@@ -203,8 +203,8 @@ class MockLoadDataInteractor(
                         "Завершено строительство дома"
                     ),
                     TaskResult(
-                        TaskTarget.HUTOR,
-                        TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT,
+                        TaskResult.TaskTarget.HUTOR,
+                        TaskResult.TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT,
                         Status(
                             "houseRES",
                             "-",
@@ -215,8 +215,8 @@ class MockLoadDataInteractor(
                         "Количество древесины стало меньше на 35"
                     ),
                     TaskResult(
-                        TaskTarget.HUTOR,
-                        TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT,
+                        TaskResult.TaskTarget.HUTOR,
+                        TaskResult.TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT,
                         Status(
                             "woodsRES",
                             "-",
@@ -228,9 +228,67 @@ class MockLoadDataInteractor(
                     )
                 ),
                 listOf(
-                    Pair("woodsRES", 35.0),
-                    Pair("houseRES", 35.0)
+                    Triple("woodsRES", Task.Symbol.MORE, 35.0),
+                    Triple("houseRES", Task.Symbol.MORE, 35.0)
+                ),
+                Task.Type.BUILD
+            ),
+            Task(
+                "makeTool",
+                "Сделать инструмент",
+                "Создать мотыго-лопато-топор",
+                TaskFunction.nothing(),
+                TaskFunction.nothing(),
+                listOf(
+                    TaskResult(
+                        TaskResult.TaskTarget.HUTOR,
+                        TaskResult.TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT,
+                        Status(
+                            "toolsRES",
+                            "Инструмент",
+                            "Мотыго-лопато-топор",
+                            1.0,
+                            true
+                        ),
+                        "Был сделан инструмент"
+                    )
                 )
+            ),
+            Task(
+                "giveTool",
+                "Дать инструмент",
+                "Отдать мотыго-лопато-топор рабочему",
+                TaskFunction.nothing(),
+                TaskFunction.nothing(),
+                listOf(
+                    TaskResult(
+                        TaskResult.TaskTarget.ONE_SELECTED_WORKER,
+                        TaskResult.TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT,
+                        Status(
+                            "hasTool",
+                            "Владеет рабочим инструментом",
+                            "Инструмент помогает лучше осуществлять рабочую деятельность",
+                            1.0,
+                            true
+                        ),
+                        "#WORKER получил инструмент"
+                    ),
+                    TaskResult(
+                        TaskResult.TaskTarget.HUTOR,
+                        TaskResult.TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT,
+                        Status(
+                            "toolsRES",
+                            "Инструмент",
+                            "Мотыго-лопато-топор",
+                            -1.0,
+                            true
+                        )
+                    )
+                ),
+                listOf(
+                    Triple("toolsRES", Task.Symbol.MORE, 1.0)
+                ),
+                Task.Type.PERSON
             )
         )
         tasksListInteractor.update(tasks)

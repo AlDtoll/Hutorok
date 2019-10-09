@@ -14,4 +14,8 @@ class WorkersListInteractor : IWorkersListInteractor {
 
     override fun get(): Observable<List<Worker>> = list
 
+    override fun refresh() {
+        list.onNext(list.value ?: emptyList())
+    }
+
 }

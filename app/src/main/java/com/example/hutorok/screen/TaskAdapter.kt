@@ -41,6 +41,15 @@ class TaskAdapter(
             }
             name.text = item.name
             description.text = item.describe
+            container.setCardBackgroundColor(resources.getColor(selectColor(item)))
+        }
+    }
+
+    private fun selectColor(item: Task): Int {
+        return when (item.type) {
+            Task.Type.WORK -> R.color.brown
+            Task.Type.BUILD -> R.color.dark_brown
+            Task.Type.PERSON -> R.color.blue
         }
     }
 

@@ -31,11 +31,11 @@ val appModule = module {
 
     single { MockLoadDataInteractor(get(), get(), get(), get(), get()) as ILoadDataInteractor }
     single { ScenarioInteractor() as IScenarioInteractor }
-    single { ExecuteTaskInteractor(get(), get(), get(), get()) as IExecuteTaskInteractor }
+    single { ExecuteTaskInteractor(get(), get(), get(), get(), get()) as IExecuteTaskInteractor }
     single { EndTurnInteractor(get(), get(), get(), get()) as IEndTurnInteractor }
 
     single { StartViewModel(get(), get(), get(), get()) as IStartViewModel }
-    single { WorkersViewModel(get(), get(), get(), get(), get(), get()) as IWorkersViewModel }
+    single { WorkersViewModel(get(), get(), get(), get(), get(), get(), get()) as IWorkersViewModel }
     single { WorkerInfoViewModel(get()) as IWorkerInfoViewModel }
     single { TasksViewModel(get(), get(), get(), get()) as ITasksViewModel }
     single { BuildsViewModel(get()) as IBuildsViewModel }

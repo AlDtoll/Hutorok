@@ -8,4 +8,6 @@ interface IWorkersListInteractor {
     fun update(workers: List<Worker>)
 
     fun get(): Observable<List<Worker>>
+
+    fun refresh()
 }

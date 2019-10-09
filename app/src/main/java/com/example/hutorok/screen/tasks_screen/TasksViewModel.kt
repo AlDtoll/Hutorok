@@ -50,12 +50,20 @@ class TasksViewModel(
         }
         task.permissiveCondition.forEach { condition ->
             val find = statusesList.find { condition.first == it.code }
-            if (find == null) {
-                return false
+            val findValue = find?.value ?: 0.0
+            when (condition.second) {
+                Task.Symbol.MORE -> {
+                    if (findValue < condition.third) {
+                        return false
+                    }
+                }
+                Task.Symbol.LESS -> {
+                    if (findValue > condition.third) {
+                        return false
+                    }
+                }
             }
-            if (find.value < condition.second) {
-                return false
-            }
+
         }
         return true
     }
