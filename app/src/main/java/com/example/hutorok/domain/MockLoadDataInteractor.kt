@@ -80,7 +80,8 @@ class MockLoadDataInteractor(
                 TaskFunction(
                     listOf(
                         Pair("hasTool", 1.5),
-                        Pair("craftsman", 1.0)
+                        Pair("craftsman", 1.0),
+                        Pair("?DISEASE", -1.0)
                     )
                 ),
                 TaskFunction(
@@ -124,7 +125,8 @@ class MockLoadDataInteractor(
                 TaskFunction(
                     listOf(
                         Pair("hunter", 1.0),
-                        Pair("hasBow", 1.5)
+                        Pair("hasBow", 1.5),
+                        Pair("?DISEASE", -1.0)
                     ),
                     4
                 ),
@@ -154,7 +156,8 @@ class MockLoadDataInteractor(
                 TaskFunction(
                     listOf(
                         Pair("builder", 1.0),
-                        Pair("hasTool", 1.5)
+                        Pair("hasTool", 1.5),
+                        Pair("?DISEASE", -1.0)
                     )
                 ),
                 TaskFunction(

@@ -33,8 +33,8 @@ class Task(
         var specialWorkerPoint = 0.0
         this.workerFunction.statuses.forEach { pair ->
             workers.forEach { worker ->
-                worker.statuses.forEach {
-                    if (it.code == pair.first) {
+                worker.statuses.forEach { workerStatus ->
+                    if (workerStatus.code == pair.first) {
                         specialWorkerPoint += pair.second
                     }
                 }
@@ -78,7 +78,7 @@ class TaskResult(
             if (this.action == TaskAction.ADD_STATUS) {
                 hutorStatuses.add(this.status)
             } else {
-                val findStatus = hutorStatuses.find { status -> this.status.code == status.code }
+                val findStatus = findStatus(hutorStatuses)
                 if (findStatus == null) {
                     val newStatus = Status(this.status)
                     newStatus.value = when (this.action) {
@@ -104,7 +104,7 @@ class TaskResult(
                 if (this.action == TaskAction.ADD_STATUS) {
                     workerStatuses.add(this.status)
                 } else {
-                    val findStatus = workerStatuses.find { status -> this.status.code == status.code }
+                    val findStatus = findStatus(workerStatuses)
                     if (findStatus == null) {
                         val newStatus = Status(this.status)
                         this.status.value = when (this.action) {
@@ -124,6 +124,21 @@ class TaskResult(
                     }
                 }
                 findWorker.statuses = workerStatuses
+            }
+        }
+    }
+
+    fun makeMessage(point: Double): String {
+        return this.describe.replace("N", point.toString()) + "\n"
+    }
+
+    private fun findStatus(Statuses: MutableList<Status>): Status? {
+        return Statuses.find { status ->
+            if (this.status.code.contains("?")) {
+                val mask = this.status.code.replace("?", "")
+                status.code.contains(mask)
+            } else {
+                this.status.code == status.code
             }
         }
     }

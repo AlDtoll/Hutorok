@@ -58,6 +58,7 @@ class EndTurnInteractor(
     }
 
     private fun eatFood(workers: List<Worker>, statusesList: List<Status>): String {
+        //todo сделать разное количество еды - возможно правило
         val findStatus = statusesList.find { status -> status.code == "foodsRES" }
         val size = workers.size
         if (findStatus != null) {
