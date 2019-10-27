@@ -44,16 +44,7 @@ class EndTurnInteractor(
 
     private fun markWorkersAsRested(workers: List<Worker>) {
         workers.forEach { worker ->
-            val findStatus = worker.statuses.find { status -> status.code == "worked" }
-            if (findStatus != null) {
-                if (findStatus.value <= 1) {
-                    val toMutableList = worker.statuses.toMutableList()
-                    toMutableList.remove(findStatus)
-                    worker.statuses = toMutableList
-                } else {
-                    findStatus.value = findStatus.value - 1
-                }
-            }
+            worker.rest()
         }
     }
 

@@ -53,7 +53,10 @@ class Task(
     }
 }
 
-class TaskFunction(val statuses: List<Pair<String, Double>> = emptyList(), val defaultValue: Int = 6) {
+class TaskFunction(
+    val statuses: List<Pair<String, Double>> = emptyList(),
+    val defaultValue: Int = 6
+) {
 
     companion object {
         fun nothing(): TaskFunction {
@@ -78,7 +81,7 @@ class TaskResult(
             if (this.action == TaskAction.ADD_STATUS) {
                 hutorStatuses.add(this.status)
             } else {
-                val findStatus = findStatus(hutorStatuses)
+                val findStatus = hutorStatuses.find { status -> this.status.code == status.code }
                 if (findStatus == null) {
                     val newStatus = Status(this.status)
                     newStatus.value = when (this.action) {
@@ -104,7 +107,8 @@ class TaskResult(
                 if (this.action == TaskAction.ADD_STATUS) {
                     workerStatuses.add(this.status)
                 } else {
-                    val findStatus = findStatus(workerStatuses)
+                    val findStatus =
+                        workerStatuses.find { status -> this.status.code == status.code }
                     if (findStatus == null) {
                         val newStatus = Status(this.status)
                         this.status.value = when (this.action) {
@@ -130,17 +134,6 @@ class TaskResult(
 
     fun makeMessage(point: Double): String {
         return this.describe.replace("N", point.toString()) + "\n"
-    }
-
-    private fun findStatus(Statuses: MutableList<Status>): Status? {
-        return Statuses.find { status ->
-            if (this.status.code.contains("?")) {
-                val mask = this.status.code.replace("?", "")
-                status.code.contains(mask)
-            } else {
-                this.status.code == status.code
-            }
-        }
     }
 
     enum class TaskTarget {

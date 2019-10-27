@@ -10,8 +10,6 @@ import com.example.hutorok.domain.storage.IWorkersListInteractor
 import com.example.hutorok.routing.OnBackPressedInteractor
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
-import java.util.*
-import kotlin.random.Random
 
 class ExecuteTaskInteractor(
     private val workersListInteractor: IWorkersListInteractor,
@@ -39,8 +37,8 @@ class ExecuteTaskInteractor(
                 }
 
                 makeFineForWorkers(workers)
-                if(task.type != Task.Type.PERSON){
-                    markWorkersAsWorked(workers)
+                if (task.type != Task.Type.PERSON) {
+                    message += markWorkersAsWorked(workers)
                 }
                 letWorkersGo(workers)
 
@@ -55,52 +53,17 @@ class ExecuteTaskInteractor(
         onBackPressedInteractor.execute()
     }
 
-    private fun makeFineForWorkers(workers: List<Worker>) {
+    private fun makeFineForWorkers(workers: List<Worker>): String {
+        var message = ""
         workers.forEach { worker ->
-            val findStatus = worker.statuses.find { status -> status.code == "worked" }
-            if (findStatus != null) {
-                //todo переделеать, сделать отдельно правило или настройку
-                val workerStatuses = worker.statuses.toMutableList()
-                val zeroOrOne = Random(Date().time).nextInt(2)
-                if (zeroOrOne == 1) {
-                    val diseaseStatus = worker.statuses.find { status -> status.code == "workDISEASE" }
-                    if (diseaseStatus == null) {
-                        workerStatuses.add(
-                            Status(
-                                "workDISEASE",
-                                "Перетрудился",
-                                "Недомогание, слабость и головная боль",
-                                1.0,
-                                true
-                            )
-                        )
-                    } else {
-                        diseaseStatus.value = diseaseStatus.value + 1
-                    }
-                }
-                worker.statuses = workerStatuses
-            }
+            message += worker.fine()
         }
+        return message
     }
 
     private fun markWorkersAsWorked(workers: List<Worker>) {
         workers.forEach { worker ->
-            val findStatus = worker.statuses.find { status -> status.code == "worked" }
-            if (findStatus == null) {
-                val workerStatuses = worker.statuses.toMutableList()
-                workerStatuses.add(
-                    Status(
-                        "worked",
-                        "Работал",
-                        "Если работать слишком много, то можно надорваться",
-                        1.0,
-                        true
-                    )
-                )
-                worker.statuses = workerStatuses
-            } else {
-                findStatus.value = findStatus.value + 1
-            }
+            worker.markAsWorked()
         }
     }
 
