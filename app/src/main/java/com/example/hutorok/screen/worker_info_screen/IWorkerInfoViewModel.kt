@@ -10,4 +10,8 @@ interface IWorkerInfoViewModel {
 
     fun statusesData(): LiveData<List<Status>>
 
+    fun getPreviousWorker()
+
+    fun getNextWorker()
+
 }

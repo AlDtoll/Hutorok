@@ -2,6 +2,7 @@ package com.example.hutorok.screen.worker_info_screen
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -15,12 +16,14 @@ import com.example.hutorok.domain.model.Status
 import com.example.hutorok.screen.StatusAdapter
 import kotlinx.android.synthetic.main.fragment_worker_info.*
 import org.koin.android.ext.android.inject
+import kotlin.math.abs
 
-class WorkerInfoScreen : Fragment() {
+class WorkerInfoScreen : Fragment(), View.OnTouchListener {
 
     private val workerInfoViewModel: IWorkerInfoViewModel by inject()
 
     companion object {
+        const val MIN_DISTANCE = 100
         fun newInstance(): WorkerInfoScreen = WorkerInfoScreen()
     }
 
@@ -37,6 +40,35 @@ class WorkerInfoScreen : Fragment() {
                 showStatus(it)
             }
         })
+    }
+
+    private var downX: Float = 0f
+    private var upX: Float = 0f
+
+    override fun onTouch(view: View, event: MotionEvent): Boolean {
+        view.performClick()
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                downX = event.x
+                return true
+            }
+            MotionEvent.ACTION_UP -> {
+                upX = event.x
+                swipe()
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun swipe() {
+        if (abs(downX - upX) > MIN_DISTANCE) {
+            if (downX < upX) {
+                workerInfoViewModel.getPreviousWorker()
+            } else {
+                workerInfoViewModel.getNextWorker()
+            }
+        }
     }
 
     private fun initUi() {
@@ -63,6 +95,8 @@ class WorkerInfoScreen : Fragment() {
         context?.run {
             statusesList.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         }
+
+        statusesList.setOnTouchListener(this)
     }
 
     private fun showStatus(statuses: List<Status>) {

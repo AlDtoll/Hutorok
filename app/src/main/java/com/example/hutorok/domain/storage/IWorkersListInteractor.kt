@@ -10,4 +10,8 @@ interface IWorkersListInteractor {
     fun get(): Observable<List<Worker>>
 
     fun refresh()
+
+    fun getPreviousWorker()
+
+    fun getNextWorker()
 }

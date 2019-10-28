@@ -8,4 +8,6 @@ interface IWorkerInteractor {
     fun update(worker: Worker)
 
     fun get(): Observable<Worker>
+
+    fun value(): Worker?
 }

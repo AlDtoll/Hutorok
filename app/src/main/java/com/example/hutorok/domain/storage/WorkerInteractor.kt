@@ -6,12 +6,14 @@ import io.reactivex.subjects.BehaviorSubject
 
 class WorkerInteractor : IWorkerInteractor {
 
-    private val value = BehaviorSubject.create<Worker>()
+    private val item = BehaviorSubject.create<Worker>()
 
     override fun update(worker: Worker) {
-        value.onNext(worker)
+        item.onNext(worker)
     }
 
-    override fun get(): Observable<Worker> = value
+    override fun get(): Observable<Worker> = item
+
+    override fun value(): Worker? = item.value
 
 }

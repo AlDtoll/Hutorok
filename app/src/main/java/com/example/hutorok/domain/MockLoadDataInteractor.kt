@@ -29,7 +29,7 @@ class MockLoadDataInteractor(
                 "Гавриил",
                 "С копьем ходил",
                 Age.ADULT,
-                listOf(
+                mutableListOf(
                     Status(
                         "hasTool",
                         "Владеет рабочим инструментом",
@@ -50,7 +50,7 @@ class MockLoadDataInteractor(
                 "Агафья",
                 "",
                 Age.CHILDREN,
-                listOf(
+                mutableListOf(
                     Status(
                         "hasRelative",
                         "Есть родственник",

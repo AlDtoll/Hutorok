@@ -26,7 +26,11 @@ class WorkersScreen : Fragment() {
         fun newInstance(): WorkersScreen = WorkersScreen()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_workers, container, false)
     }
 
