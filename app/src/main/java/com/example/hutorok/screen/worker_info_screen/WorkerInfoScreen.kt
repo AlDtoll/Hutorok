@@ -6,6 +6,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.constraintlayout.motion.widget.TransitionAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -27,7 +29,11 @@ class WorkerInfoScreen : Fragment(), View.OnTouchListener {
         fun newInstance(): WorkerInfoScreen = WorkerInfoScreen()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_worker_info, container, false)
     }
 
@@ -50,12 +56,10 @@ class WorkerInfoScreen : Fragment(), View.OnTouchListener {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 downX = event.x
-                return true
             }
             MotionEvent.ACTION_UP -> {
                 upX = event.x
                 swipe()
-                return true
             }
         }
         return false
@@ -64,14 +68,40 @@ class WorkerInfoScreen : Fragment(), View.OnTouchListener {
     private fun swipe() {
         if (abs(downX - upX) > MIN_DISTANCE) {
             if (downX < upX) {
-                workerInfoViewModel.getPreviousWorker()
+                screen.progress = 0f
+                screen.transitionToState(R.id.right)
             } else {
-                workerInfoViewModel.getNextWorker()
+                screen.progress = 0f
+                screen.transitionToState(R.id.left)
             }
         }
     }
 
     private fun initUi() {
+
+        screen.setTransitionListener(object : TransitionAdapter() {
+
+            override fun onTransitionCompleted(motionLayout: MotionLayout, currentId: Int) {
+                when (currentId) {
+                    R.id.offScreenRight -> {
+                        motionLayout.progress = 0f
+                        motionLayout.setTransition(R.id.start, R.id.right)
+                        topCard.scaleX = 1f
+                        topCard.scaleY = 1f
+                        workerInfoViewModel.getPreviousWorker()
+                    }
+                    R.id.offScreenLeft -> {
+                        motionLayout.progress = 0f
+                        motionLayout.setTransition(R.id.start, R.id.left)
+                        topCard.scaleX = 1f
+                        topCard.scaleY = 1f
+                        workerInfoViewModel.getNextWorker()
+                    }
+                }
+            }
+
+        })
+
         initToolbar()
 
         initRecyclerView()
@@ -81,7 +111,8 @@ class WorkerInfoScreen : Fragment(), View.OnTouchListener {
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         workerInfoViewModel.workerData().observe(this, Observer {
             it?.run {
-                (activity as AppCompatActivity).title = it.name + " " + it.nickname + " " + it.age.code
+                (activity as AppCompatActivity).title =
+                    it.name + " " + it.nickname + " " + it.age.code
             }
         })
     }

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ConstraintSet android:id="@+id/start">
+
+        <Constraint
+                android:id="@+id/topCard"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="50dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+            <Transform
+                    android:scaleX="1"
+                    android:scaleY="1" />
+
+        </Constraint>
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/left">
+
+        <Constraint
+                android:id="@+id/topCard"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="200dp"
+                android:layout_marginBottom="80dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintWidth_percent="0.7">
+
+            <Transform
+                    android:scaleX="0.5"
+                    android:scaleY="0.5" />
+
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/right">
+
+        <Constraint
+                android:id="@+id/topCard"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="200dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="80dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintWidth_percent="0.7">
+            <Transform
+                    android:scaleX="0.5"
+                    android:scaleY="0.5" />
+
+        </Constraint>
+
+    </ConstraintSet>
+
+    <Transition
+            app:constraintSetEnd="@+id/left"
+            app:constraintSetStart="@+id/start"
+            app:duration="300" />
+
+    <Transition
+            app:constraintSetEnd="@+id/right"
+            app:constraintSetStart="@+id/start"
+            app:duration="300" />
+
+    <ConstraintSet android:id="@+id/offScreenRight">
+
+        <Constraint
+                android:id="@id/topCard"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="80dp"
+                app:layout_constraintStart_toEndOf="parent"
+                app:layout_constraintWidth_percent="0.7">
+            <Transform
+                    android:scaleX="0.5"
+                    android:scaleY="0.5" />
+
+        </Constraint>
+
+    </ConstraintSet>
+
+    <Transition
+            app:autoTransition="animateToEnd"
+            app:constraintSetEnd="@+id/offScreenRight"
+            app:constraintSetStart="@+id/right"
+            app:duration="150" />
+
+    <ConstraintSet android:id="@+id/offScreenLeft">
+
+        <Constraint
+                android:id="@id/topCard"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="500dp"
+                android:layout_marginBottom="80dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintWidth_percent="0.7">
+            <Transform
+                    android:scaleX="0.5"
+                    android:scaleY="0.5" />
+
+        </Constraint>
+
+    </ConstraintSet>
+
+    <Transition
+            app:autoTransition="animateToEnd"
+            app:constraintSetEnd="@+id/offScreenLeft"
+            app:constraintSetStart="@+id/left"
+            app:duration="150" />
+
+</MotionScene>
