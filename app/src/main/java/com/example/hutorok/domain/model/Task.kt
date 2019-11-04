@@ -78,63 +78,58 @@ class TaskResult(
         workers: List<Worker>
     ) {
         if (target == TaskTarget.HUTOR) {
-            if (this.action == TaskAction.ADD_STATUS) {
-                hutorStatuses.add(this.status)
-            } else {
-                val findStatus = hutorStatuses.find { status -> this.status.code == status.code }
-                if (findStatus == null) {
-                    val newStatus = Status(this.status)
-                    newStatus.value = when (this.action) {
-                        TaskAction.CHANGE_STATUS_VALUE -> this.status.value + point
-                        TaskAction.SET_STATUS_VALUE -> this.status.value
-                        TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT -> this.status.value
-                        TaskAction.ADD_STATUS -> 0.0
-                    }
-                    hutorStatuses.add(newStatus)
-                } else {
-                    findStatus.value = when (this.action) {
-                        TaskAction.CHANGE_STATUS_VALUE -> findStatus.value + point
-                        TaskAction.SET_STATUS_VALUE -> this.status.value
-                        TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT -> findStatus.value + this.status.value
-                        TaskAction.ADD_STATUS -> 0.0
-                    }
-                }
-            }
+            changeStatuses(hutorStatuses, point)
         } else if (target == TaskTarget.ONE_SELECTED_WORKER) {
-            val findWorker = workers.find { worker -> worker.isChecked }
+            val findWorker = workers.find { worker -> worker.isSelected }
             if (findWorker != null) {
                 val workerStatuses = findWorker.statuses.toMutableList()
-                if (this.action == TaskAction.ADD_STATUS) {
-                    workerStatuses.add(this.status)
-                } else {
-                    val findStatus =
-                        workerStatuses.find { status -> this.status.code == status.code }
-                    if (findStatus == null) {
-                        val newStatus = Status(this.status)
-                        this.status.value = when (this.action) {
-                            TaskAction.CHANGE_STATUS_VALUE -> this.status.value + point
-                            TaskAction.SET_STATUS_VALUE -> this.status.value
-                            TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT -> this.status.value
-                            TaskAction.ADD_STATUS -> 0.0
-                        }
-                        workerStatuses.add(newStatus)
-                    } else {
-                        findStatus.value = when (this.action) {
-                            TaskAction.CHANGE_STATUS_VALUE -> findStatus.value + point
-                            TaskAction.SET_STATUS_VALUE -> this.status.value
-                            TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT -> findStatus.value + this.status.value
-                            TaskAction.ADD_STATUS -> 0.0
-                        }
-                    }
-                }
+                changeStatuses(workerStatuses, point)
                 findWorker.statuses = workerStatuses
             }
         }
     }
 
-    fun makeMessage(point: Double): String {
-        return this.describe.replace("N", point.toString()) + "\n"
+    private fun changeStatuses(
+        statuses: MutableList<Status>,
+        point: Double
+    ) {
+        if (this.action == TaskAction.ADD_STATUS) {
+            statuses.add(this.status)
+        } else {
+            val findStatus = statuses.find { status -> this.status.code == status.code }
+            if (findStatus == null) {
+                val newStatus = Status(this.status)
+                newStatus.value = when (this.action) {
+                    TaskAction.CHANGE_STATUS_VALUE -> this.status.value + point
+                    TaskAction.SET_STATUS_VALUE -> this.status.value
+                    TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT -> this.status.value
+                    TaskAction.ADD_STATUS -> 0.0
+                }
+                statuses.add(newStatus)
+            } else {
+                findStatus.value = when (this.action) {
+                    TaskAction.CHANGE_STATUS_VALUE -> findStatus.value + point
+                    TaskAction.SET_STATUS_VALUE -> this.status.value
+                    TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT -> findStatus.value + this.status.value
+                    TaskAction.ADD_STATUS -> 0.0
+                }
+            }
+        }
     }
+
+    fun makeMessage(
+        point: Double,
+        workers: List<Worker>
+    ): String {
+        if (this.describe.contains("#VALUE")) {
+            return this.describe.replace("#VALUE", point.toString()) + "\n"
+        }
+        if (this.describe.contains("#WORKER")) {
+            return this.describe.replace("#WORKER", workers[0].name) + "\n"
+        }
+        return this.describe + "\n"
+    }
+
 
     enum class TaskTarget {
         HUTOR,

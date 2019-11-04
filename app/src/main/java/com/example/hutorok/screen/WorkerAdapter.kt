@@ -54,7 +54,7 @@ class WorkerAdapter(
                 checkbox.visibility = View.GONE
             }
             checkbox.setOnCheckedChangeListener { _, isChecked ->
-                item.isChecked = isChecked
+                item.isSelected = isChecked
                 callback.isExecuteTaskButtonEnable(isExecuteTaskButtonEnable())
             }
             checkbox.isEnabled = isCheckboxEnabled(item)
@@ -75,10 +75,10 @@ class WorkerAdapter(
             return true
         }
         return if (taskType == Task.Type.PERSON) {
-            val filterWorkers = items.filter { worker -> worker.isChecked }
+            val filterWorkers = items.filter { worker -> worker.isSelected }
             filterWorkers.size == 1
         } else {
-            items.any { worker -> worker.isChecked }
+            items.any { worker -> worker.isSelected }
         }
     }
 

@@ -102,7 +102,7 @@ class MockLoadDataInteractor(
                             0.0,
                             true
                         ),
-                        "Удалось добыть N дерева"
+                        "Удалось добыть #VALUE дерева"
                     ),
                     TaskResult(
                         TaskResult.TaskTarget.HUTOR,
@@ -145,7 +145,7 @@ class MockLoadDataInteractor(
                             0.0,
                             true
                         ),
-                        "Удалось добыть N еды"
+                        "Удалось добыть #VALUE еды"
                     )
                 )
             ),
@@ -175,7 +175,7 @@ class MockLoadDataInteractor(
                             0.0,
                             true
                         ),
-                        "Удалось построить N очков"
+                        "Удалось построить #VALUE очков"
                     )
                 ),
                 listOf(

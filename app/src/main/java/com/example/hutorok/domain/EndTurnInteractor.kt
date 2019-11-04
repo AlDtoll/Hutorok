@@ -35,17 +35,19 @@ class EndTurnInteractor(
 
                     hutorStatusesListInteractor.update(newStatusesList)
                 }
-                markWorkersAsRested(workers)
+                message += markWorkersAsRested(workers)
                 message += eatFood(workers, statusesList)
                 messageInteractor.update("Ход закончен. В результате: $message")
             }
         ).subscribe()
     }
 
-    private fun markWorkersAsRested(workers: List<Worker>) {
+    private fun markWorkersAsRested(workers: List<Worker>): String {
+        var message = ""
         workers.forEach { worker ->
-            worker.rest()
+            message += worker.rest()
         }
+        return message
     }
 
     private fun eatFood(workers: List<Worker>, statusesList: List<Status>): String {

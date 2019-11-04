@@ -67,10 +67,10 @@ class WorkersViewModel(
                     return@BiFunction true
                 }
                 if (task.type == Task.Type.PERSON) {
-                    val filteredWorkers = workers.filter { worker -> worker.isChecked }
+                    val filteredWorkers = workers.filter { worker -> worker.isSelected }
                     return@BiFunction filteredWorkers.size == 1
                 } else {
-                    return@BiFunction workers.any { worker -> worker.isChecked }
+                    return@BiFunction workers.any { worker -> worker.isSelected }
                 }
 
             }

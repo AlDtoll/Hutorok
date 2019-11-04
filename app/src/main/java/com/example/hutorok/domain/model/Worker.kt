@@ -8,7 +8,7 @@ class Worker(
     var nickname: String? = "",
     var age: Age,
     var statuses: MutableList<Status>,
-    var isChecked: Boolean = false
+    var isSelected: Boolean = false
 ) {
 
     fun markAsWorked(): String {
@@ -57,15 +57,18 @@ class Worker(
         return ""
     }
 
-    fun rest() {
+    fun rest(): String {
         val findStatus = this.statuses.find { status -> status.code == "worked" }
         if (findStatus != null) {
-            if (findStatus.value <= 1) {
+            return if (findStatus.value <= 1) {
                 this.statuses.remove(findStatus)
+                "$name полностью отдохнул\n"
             } else {
                 findStatus.value = findStatus.value - 1
+                "$name отдохнул, но не полностью\n"
             }
         }
+        return ""
     }
 }
 
