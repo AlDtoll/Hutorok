@@ -8,7 +8,8 @@ class MockLoadDataInteractor(
     private val tasksListInteractor: ITasksListInteractor,
     private val hutorStatusesListInteractor: IHutorStatusesListInteractor,
     private val importantStatusNamesListInteractor: IImportantStatusNamesListInteractor,
-    private val endStatusesListInteractor: IEndTasksListInteractor
+    private val endStatusesListInteractor: IEndTasksListInteractor,
+    private val turnNumberInteractor: ITurnNumberInteractor
 ) : ILoadDataInteractor {
 
     override fun update() {
@@ -21,6 +22,8 @@ class MockLoadDataInteractor(
         updateImportantNames()
 
         updateEndTasks()
+
+        startHistory()
     }
 
     private fun updateWorkers() {
@@ -341,6 +344,10 @@ class MockLoadDataInteractor(
     private fun updateEndTasks() {
         val tasks = emptyList<Task>()
         endStatusesListInteractor.update(tasks)
+    }
+
+    private fun startHistory() {
+        turnNumberInteractor.increment()
     }
 
 }

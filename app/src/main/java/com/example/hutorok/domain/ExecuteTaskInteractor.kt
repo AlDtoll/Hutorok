@@ -19,6 +19,10 @@ class ExecuteTaskInteractor(
     private val onBackPressedInteractor: OnBackPressedInteractor
 ) : IExecuteTaskInteractor {
 
+    companion object {
+        const val EXECUTE_TASK_PREFIX = "Работа сделана. В результате: "
+    }
+
     override fun execute() {
         Observable.zip(
             workersListInteractor.get(),
@@ -47,7 +51,7 @@ class ExecuteTaskInteractor(
                     Task.Type.BUILD -> hutorStatusesListInteractor.update(hutorStatuses)
                     Task.Type.PERSON -> Unit
                 }
-                messageInteractor.update("Работа сделана. В результате: $message")
+                messageInteractor.update(EXECUTE_TASK_PREFIX + message)
             }
         ).subscribe()
         onBackPressedInteractor.execute()

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.hutorok.ext.replaceFragment
 import com.example.hutorok.screen.builds_screen.BuildsScreen
+import com.example.hutorok.screen.history_screen.HistoryScreen
 import com.example.hutorok.screen.start_screen.StartScreen
 import com.example.hutorok.screen.tasks_screen.TasksScreen
 import com.example.hutorok.screen.worker_info_screen.WorkerInfoScreen
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
                 NowScreen.WORKERS_SCREEN -> showWorkersScreen()
                 NowScreen.CLOSE_SCREEN -> finish()
                 NowScreen.WORKER_INFO_SCREEN -> showWorkerInfoScreen()
+                NowScreen.HISTORY_SCREEN -> showHistoryScreen()
             }
         })
 
@@ -42,7 +44,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == android.R.id.home) mainViewModel.onBackPressed()
+        if (item?.itemId == android.R.id.home) {
+            mainViewModel.onBackPressed()
+        }
         return super.onOptionsItemSelected(item)
     }
 
@@ -74,5 +78,8 @@ class MainActivity : AppCompatActivity() {
         replaceFragment(BuildsScreen.newInstance())
     }
 
+    private fun showHistoryScreen() {
+        replaceFragment(HistoryScreen.newInstance())
+    }
 
 }

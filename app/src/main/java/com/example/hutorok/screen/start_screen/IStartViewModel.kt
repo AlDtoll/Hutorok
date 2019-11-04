@@ -10,4 +10,6 @@ interface IStartViewModel {
 
     fun clickEndTurnButton()
 
+    fun clickHistoryButton()
+
 }

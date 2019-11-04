@@ -3,10 +3,12 @@
     <string name="workers_button_text">Пообщаться с хуторянами</string>
     <string name="builds_button_text">Прогуляться по хутору</string>
     <string name="tasks_button_text">Работать работу</string>
+    <string name="history_button_text">Посмотреть историю</string>
     <string name="end_turn_button_text">Закончить ход</string>
 
     <string name="workers_screen_toolbar_title">Хуторяне</string>
     <string name="tasks_screen_toolbar_title">Делишечки</string>
     <string name="builds_screen_toolbar_title">Хуторок</string>
+    <string name="history_screen_toolbar_title">В прошлом случилось...</string>
     <string name="execute_task_button_text">Отправить работников</string>
 </resources>

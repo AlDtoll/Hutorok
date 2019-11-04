@@ -43,6 +43,10 @@ class StartScreen : Fragment() {
             startViewModel.clickTasksButton()
         }
 
+        historyButton.onClick {
+            startViewModel.clickHistoryButton()
+        }
+
         endTurnButton.onClick {
             startViewModel.clickEndTurnButton()
         }

@@ -3,10 +3,7 @@ package com.example.hutorok.domain
 import com.example.hutorok.domain.model.Status
 import com.example.hutorok.domain.model.Task
 import com.example.hutorok.domain.model.Worker
-import com.example.hutorok.domain.storage.IEndTasksListInteractor
-import com.example.hutorok.domain.storage.IHutorStatusesListInteractor
-import com.example.hutorok.domain.storage.IMessageInteractor
-import com.example.hutorok.domain.storage.IWorkersListInteractor
+import com.example.hutorok.domain.storage.*
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 
@@ -14,8 +11,13 @@ class EndTurnInteractor(
     private val workersListInteractor: IWorkersListInteractor,
     private val hutorStatusesListInteractor: IHutorStatusesListInteractor,
     private val endTasksListInteractor: IEndTasksListInteractor,
-    private val messageInteractor: IMessageInteractor
+    private val messageInteractor: IMessageInteractor,
+    private val turnNumberInteractor: ITurnNumberInteractor
 ) : IEndTurnInteractor {
+
+    companion object {
+        const val END_TURN_PREFIX = "Ход закончен. В результате: "
+    }
 
     override fun execute() {
         Observable.zip(
@@ -30,14 +32,15 @@ class EndTurnInteractor(
                     val newStatusesList = statusesList.toMutableList()
                     task.results.forEach { taskResult ->
                         taskResult.makeAction(newStatusesList, point, workers)
-                        message = message + taskResult.describe.replace("N", point.toString()) + "\n"
+                        message += taskResult.makeMessage(point, workers)
                     }
 
                     hutorStatusesListInteractor.update(newStatusesList)
                 }
                 message += markWorkersAsRested(workers)
                 message += eatFood(workers, statusesList)
-                messageInteractor.update("Ход закончен. В результате: $message")
+                messageInteractor.update(END_TURN_PREFIX + message)
+                turnNumberInteractor.increment()
             }
         ).subscribe()
     }

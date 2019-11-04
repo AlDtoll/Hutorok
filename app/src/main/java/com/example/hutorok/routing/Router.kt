@@ -53,6 +53,10 @@ class Router(
         nowScreen.onNext(WORKER_INFO_SCREEN)
     }
 
+    override fun routeToHistoryScreen() {
+        nowScreen.onNext(HISTORY_SCREEN)
+    }
+
     override fun onBackPressed() {
         pressBackButtonEvents.onNext(Unit)
     }

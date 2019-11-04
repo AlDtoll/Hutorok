@@ -5,6 +5,8 @@ import com.example.hutorok.domain.storage.*
 import com.example.hutorok.routing.*
 import com.example.hutorok.screen.builds_screen.BuildsViewModel
 import com.example.hutorok.screen.builds_screen.IBuildsViewModel
+import com.example.hutorok.screen.history_screen.HistoryViewModel
+import com.example.hutorok.screen.history_screen.IHistoryViewModel
 import com.example.hutorok.screen.start_screen.IStartViewModel
 import com.example.hutorok.screen.start_screen.StartViewModel
 import com.example.hutorok.screen.tasks_screen.ITasksViewModel
@@ -27,25 +29,48 @@ val appModule = module {
     single { RouteToTasksScreenInteractor(get()) }
     single { RouteToWorkerInfoScreenInteractor(get()) }
     single { RouteToTaskInfoInteractor(get(), get()) }
+    single { RouteToHistoryScreenInteractor(get()) }
     single { OnBackPressedInteractor(get()) }
 
-    single { MockLoadDataInteractor(get(), get(), get(), get(), get()) as ILoadDataInteractor }
+    single {
+        MockLoadDataInteractor(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        ) as ILoadDataInteractor
+    }
     single { ScenarioInteractor() as IScenarioInteractor }
     single { ExecuteTaskInteractor(get(), get(), get(), get(), get()) as IExecuteTaskInteractor }
-    single { EndTurnInteractor(get(), get(), get(), get()) as IEndTurnInteractor }
+    single { EndTurnInteractor(get(), get(), get(), get(), get()) as IEndTurnInteractor }
 
-    single { StartViewModel(get(), get(), get(), get()) as IStartViewModel }
-    single { WorkersViewModel(get(), get(), get(), get(), get(), get(), get()) as IWorkersViewModel }
+    single { StartViewModel(get(), get(), get(), get(), get()) as IStartViewModel }
+    single {
+        WorkersViewModel(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        ) as IWorkersViewModel
+    }
     single { WorkerInfoViewModel(get(), get()) as IWorkerInfoViewModel }
     single { TasksViewModel(get(), get(), get(), get()) as ITasksViewModel }
     single { BuildsViewModel(get()) as IBuildsViewModel }
+    single { HistoryViewModel(get()) as IHistoryViewModel }
 
     single { WorkersListInteractor(get()) as IWorkersListInteractor }
     single { WorkerInteractor() as IWorkerInteractor }
     single { TasksListInteractor() as ITasksListInteractor }
     single { TaskInteractor() as ITaskInteractor }
     single { HutorStatusesListInteractor() as IHutorStatusesListInteractor }
-    single { MessageInteractor() as IMessageInteractor }
+    single { MessageInteractor(get()) as IMessageInteractor }
     single { ImportantStatusNamesListInteractor() as IImportantStatusNamesListInteractor }
     single { EndTasksListInteractor() as IEndTasksListInteractor }
+    single { HistoryInteractor() as IHistoryInteractor }
+    single { TurnNumberInteractor(get()) as ITurnNumberInteractor }
 }

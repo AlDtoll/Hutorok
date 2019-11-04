@@ -47,6 +47,18 @@
     />
 
     <Button
+            android:id="@+id/historyButton"
+            android:text="@string/history_button_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tasksButton"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textAllCaps="false"
+            android:layout_marginStart="@dimen/padding_small"
+            android:layout_marginLeft="@dimen/padding_small"
+            android:layout_marginTop="@dimen/padding_small" />
+
+    <Button
             android:id="@+id/endTurnButton"
             android:text="@string/end_turn_button_text"
             android:layout_width="wrap_content"

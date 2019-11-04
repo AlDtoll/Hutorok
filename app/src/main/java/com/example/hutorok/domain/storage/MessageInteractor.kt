@@ -3,7 +3,9 @@ package com.example.hutorok.domain.storage
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
-class MessageInteractor : IMessageInteractor {
+class MessageInteractor(
+    private val historyInteractor: IHistoryInteractor
+) : IMessageInteractor {
 
     private val value = PublishSubject.create<String>()
 
@@ -11,6 +13,7 @@ class MessageInteractor : IMessageInteractor {
 
     override fun update(message: String) {
         value.onNext(message)
+        historyInteractor.add(message)
     }
 
 }
