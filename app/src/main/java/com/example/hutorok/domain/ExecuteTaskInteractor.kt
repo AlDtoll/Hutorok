@@ -36,7 +36,7 @@ class ExecuteTaskInteractor(
                     message += taskResult.makeMessage(point)
                 }
 
-                makeFineForWorkers(workers)
+                message += makeFineForWorkers(workers)
                 if (task.type != Task.Type.PERSON) {
                     message += markWorkersAsWorked(workers)
                 }
@@ -61,10 +61,12 @@ class ExecuteTaskInteractor(
         return message
     }
 
-    private fun markWorkersAsWorked(workers: List<Worker>) {
+    private fun markWorkersAsWorked(workers: List<Worker>): String {
+        var message = ""
         workers.forEach { worker ->
-            worker.markAsWorked()
+            message += worker.markAsWorked()
         }
+        return message
     }
 
     private fun letWorkersGo(workers: List<Worker>) {

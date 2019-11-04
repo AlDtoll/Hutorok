@@ -53,9 +53,9 @@ class WorkersViewModel(
         )
     }
 
-    override fun taskTypeData(): LiveData<Task.Type> =
+    override fun taskData(): LiveData<Task> =
         LiveDataReactiveStreams.fromPublisher(
-            taskInteractor.get().map { it.type }.toFlowable(BackpressureStrategy.LATEST)
+            taskInteractor.get().map { it }.toFlowable(BackpressureStrategy.LATEST)
         )
 
     override fun isExecuteTaskButtonEnable(): LiveData<Boolean> {

@@ -16,7 +16,7 @@ interface IWorkersViewModel {
 
     fun importantStatusesData(): LiveData<List<String>>
 
-    fun taskTypeData(): LiveData<Task.Type>
+    fun taskData(): LiveData<Task>
 
     fun isExecuteTaskButtonEnable(): LiveData<Boolean>
 

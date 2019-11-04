@@ -74,10 +74,11 @@ class WorkersScreen : Fragment() {
             }
         })
 
-        workersViewModel.taskTypeData().observe(this, Observer {
+        workersViewModel.taskData().observe(this, Observer {
             it?.run {
-                workerAdapter.taskType = it
-                executeTaskButton.isEnabled = it == Task.Type.BUILD
+                workerAdapter.taskType = it.type
+                executeTaskButton.isEnabled = it.type == Task.Type.BUILD
+                changeToolbarTitle(it.name)
             }
         })
     }
@@ -85,6 +86,10 @@ class WorkersScreen : Fragment() {
     private fun initToolbar() {
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         (activity as AppCompatActivity).title = getString(R.string.workers_screen_toolbar_title)
+    }
+
+    private fun changeToolbarTitle(name: String) {
+        (activity as AppCompatActivity).title = name
     }
 
     private lateinit var workerAdapter: WorkerAdapter

@@ -11,7 +11,7 @@ class Worker(
     var isChecked: Boolean = false
 ) {
 
-    fun markAsWorked() {
+    fun markAsWorked(): String {
         val workedStatus = this.statuses.find { status -> status.code == "worked" }
         if (workedStatus == null) {
             val workerStatuses = this.statuses
@@ -28,6 +28,7 @@ class Worker(
         } else {
             workedStatus.value = workedStatus.value + 1
         }
+        return "$name поработал\n"
     }
 
     fun fine(): String {
@@ -50,7 +51,7 @@ class Worker(
                 } else {
                     diseaseStatus.value = diseaseStatus.value + 1
                 }
-                return "$name перетрудился на работе"
+                return "$name перетрудился на работе\n"
             }
         }
         return ""
