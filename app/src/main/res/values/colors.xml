@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">#206dad</color>
+    <color name="colorPrimaryDark">#164F7A</color>
     <color name="colorAccent">#D81B60</color>
 
     <color name="green">#1db151</color>
@@ -10,4 +10,10 @@
     <color name="brown">#A75426</color>
     <color name="dark_brown">#612513</color>
     <color name="blue">#0B3368</color>
+
+    <color name="light_background_color">#F6F6F6</color>
+    <color name="dark_background_color">#4D000000</color>
+    <color name="light_green_background_color">#2681D39D</color>
+    <color name="green_background_color">#81D39D</color>
+    <color name="light_blue_background_color">#264C85FF</color>
 </resources>

@@ -47,9 +47,9 @@ class TaskAdapter(
 
     private fun selectColor(item: Task): Int {
         return when (item.type) {
-            Task.Type.WORK -> R.color.brown
-            Task.Type.BUILD -> R.color.dark_brown
-            Task.Type.PERSON -> R.color.blue
+            Task.Type.WORK -> R.color.light_green_background_color
+            Task.Type.BUILD -> R.color.green_background_color
+            Task.Type.PERSON -> R.color.light_blue_background_color
         }
     }
 

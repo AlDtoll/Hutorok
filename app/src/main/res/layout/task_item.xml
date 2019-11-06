@@ -11,7 +11,6 @@
                                    android:layout_marginRight="@dimen/padding_small"
                                    android:layout_marginBottom="@dimen/padding_small"
                                    android:orientation="vertical"
-                                   app:cardBackgroundColor="@color/cardview_light_background"
                                    app:cardCornerRadius="6dp"
                                    app:cardElevation="0dp"
                                    app:cardUseCompatPadding="false">
@@ -25,7 +24,6 @@
                 android:layout_marginTop="@dimen/padding_small"
                 tools:text="Добыть строительной древесины"
                 android:layout_marginStart="@dimen/padding_small"
-                android:layout_marginLeft="@dimen/padding_small"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/description"
@@ -40,7 +38,6 @@
                 android:layout_marginTop="@dimen/padding_small"
                 app:layout_constraintTop_toBottomOf="@id/name"
                 android:layout_marginStart="@dimen/padding_small"
-                android:layout_marginLeft="@dimen/padding_small"
                 android:layout_marginBottom="@dimen/padding_small"
                 tools:text="Крепкие стволы пригодные для строительства"/>
 
