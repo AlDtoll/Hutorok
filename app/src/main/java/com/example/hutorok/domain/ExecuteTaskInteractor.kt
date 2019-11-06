@@ -40,17 +40,13 @@ class ExecuteTaskInteractor(
                     message += taskResult.makeMessage(point, selectedWorkers)
                 }
 
-                message += makeFineForWorkers(selectedWorkers)
                 if (task.type != Task.Type.PERSON) {
+                    message += makeFineForWorkers(selectedWorkers)
                     message += markWorkersAsWorked(selectedWorkers)
                 }
                 letWorkersGo(selectedWorkers)
 
-                when (task.type) {
-                    Task.Type.WORK -> hutorStatusesListInteractor.update(hutorStatuses)
-                    Task.Type.BUILD -> hutorStatusesListInteractor.update(hutorStatuses)
-                    Task.Type.PERSON -> Unit
-                }
+                hutorStatusesListInteractor.update(hutorStatuses)
                 messageInteractor.update(EXECUTE_TASK_PREFIX + message)
             }
         ).subscribe()

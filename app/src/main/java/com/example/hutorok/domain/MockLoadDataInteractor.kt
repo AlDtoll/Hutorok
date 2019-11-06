@@ -292,9 +292,75 @@ class MockLoadDataInteractor(
                     )
                 ),
                 listOf(
-                    Triple("toolsRES", Task.Symbol.MORE, 1.0)
+                    Triple("toolsRES", Task.Symbol.MORE, 0.0)
                 ),
-                Task.Type.PERSON
+                Task.Type.PERSON,
+                listOf(
+                    Triple("hasTool", Task.Symbol.LESS, 1.0)
+                )
+            ),
+            Task(
+                "takeTool",
+                "Взять инструмент",
+                "Забрать мотыго-лопато-топор у рабочего",
+                TaskFunction.nothing(),
+                TaskFunction.nothing(),
+                listOf(
+                    TaskResult(
+                        TaskResult.TaskTarget.ONE_SELECTED_WORKER,
+                        TaskResult.TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT,
+                        Status(
+                            "hasTool",
+                            "Владеет рабочим инструментом",
+                            "Инструмент помогает лучше осуществлять рабочую деятельность",
+                            -1.0,
+                            true
+                        ),
+                        "#WORKER остался без инструмента"
+                    ),
+                    TaskResult(
+                        TaskResult.TaskTarget.HUTOR,
+                        TaskResult.TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT,
+                        Status(
+                            "toolsRES",
+                            "Инструмент",
+                            "Мотыго-лопато-топор",
+                            1.0,
+                            true
+                        )
+                    )
+                ),
+                emptyList(),
+                Task.Type.PERSON,
+                listOf(
+                    Triple("hasTool", Task.Symbol.MORE, 0.0)
+                )
+            ),
+            Task(
+                "healWorkDisease",
+                "Лечиться от недомогания",
+                "Отдохнуть, да травы пожевать",
+                TaskFunction.nothing(),
+                TaskFunction.nothing(),
+                listOf(
+                    TaskResult(
+                        TaskResult.TaskTarget.ONE_SELECTED_WORKER,
+                        TaskResult.TaskAction.REMOVE_STATUS,
+                        Status(
+                            "workDISEASE",
+                            "Недомогание",
+                            "Жар и тошнота",
+                            1.0,
+                            true
+                        ),
+                        "#WORKER излечился от недомогания"
+                    )
+                ),
+                emptyList(),
+                Task.Type.PERSON,
+                listOf(
+                    Triple("workDISEASE", Task.Symbol.MORE, 0.0)
+                )
             )
         )
         tasksListInteractor.update(tasks)

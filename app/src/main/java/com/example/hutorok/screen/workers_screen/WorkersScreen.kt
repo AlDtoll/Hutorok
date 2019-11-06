@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hutorok.R
-import com.example.hutorok.domain.model.Task
 import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.ext.onClick
 import com.example.hutorok.screen.WorkerAdapter
@@ -76,8 +75,7 @@ class WorkersScreen : Fragment() {
 
         workersViewModel.taskData().observe(this, Observer {
             it?.run {
-                workerAdapter.taskType = it.type
-                executeTaskButton.isEnabled = it.type == Task.Type.BUILD
+                workerAdapter.task = it
                 changeToolbarTitle(it.name)
             }
         })

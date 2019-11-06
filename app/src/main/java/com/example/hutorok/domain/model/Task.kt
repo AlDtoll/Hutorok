@@ -11,7 +11,8 @@ class Task(
     val hutorFunction: TaskFunction,
     val results: List<TaskResult>,
     val permissiveCondition: List<Triple<String, Symbol, Double>> = emptyList(),
-    val type: Type = Type.WORK
+    val type: Type = Type.WORK,
+    val enableCondition: List<Triple<String, Symbol, Double>> = emptyList()
 ) {
 
     enum class Type {
@@ -95,6 +96,11 @@ class TaskResult(
     ) {
         if (this.action == TaskAction.ADD_STATUS) {
             statuses.add(this.status)
+        } else if (this.action == TaskAction.REMOVE_STATUS) {
+            val findStatus = statuses.find { status -> this.status.code == status.code }
+            findStatus?.run {
+                statuses.remove(findStatus)
+            }
         } else {
             val findStatus = statuses.find { status -> this.status.code == status.code }
             if (findStatus == null) {
@@ -103,7 +109,7 @@ class TaskResult(
                     TaskAction.CHANGE_STATUS_VALUE -> this.status.value + point
                     TaskAction.SET_STATUS_VALUE -> this.status.value
                     TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT -> this.status.value
-                    TaskAction.ADD_STATUS -> 0.0
+                    else -> 0.0
                 }
                 statuses.add(newStatus)
             } else {
@@ -111,7 +117,10 @@ class TaskResult(
                     TaskAction.CHANGE_STATUS_VALUE -> findStatus.value + point
                     TaskAction.SET_STATUS_VALUE -> this.status.value
                     TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT -> findStatus.value + this.status.value
-                    TaskAction.ADD_STATUS -> 0.0
+                    else -> 0.0
+                }
+                if (findStatus.value == 0.0) {
+                    statuses.remove(findStatus)
                 }
             }
         }
@@ -140,6 +149,7 @@ class TaskResult(
         CHANGE_STATUS_VALUE,
         SET_STATUS_VALUE,
         CHANGE_STATUS_VALUE_BY_FIXED_POINT,
-        ADD_STATUS
+        ADD_STATUS,
+        REMOVE_STATUS
     }
 }

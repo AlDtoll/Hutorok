@@ -53,12 +53,12 @@ class TasksViewModel(
             val findValue = find?.value ?: 0.0
             when (condition.second) {
                 Task.Symbol.MORE -> {
-                    if (findValue < condition.third) {
+                    if (findValue <= condition.third) {
                         return false
                     }
                 }
                 Task.Symbol.LESS -> {
-                    if (findValue > condition.third) {
+                    if (findValue >= condition.third) {
                         return false
                     }
                 }
