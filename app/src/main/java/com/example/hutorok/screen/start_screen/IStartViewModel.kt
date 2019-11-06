@@ -1,5 +1,7 @@
 package com.example.hutorok.screen.start_screen
 
+import androidx.lifecycle.LiveData
+
 interface IStartViewModel {
 
     fun clickWorkersButton()
@@ -11,5 +13,7 @@ interface IStartViewModel {
     fun clickEndTurnButton()
 
     fun clickHistoryButton()
+
+    fun turnNumberData(): LiveData<Int>
 
 }

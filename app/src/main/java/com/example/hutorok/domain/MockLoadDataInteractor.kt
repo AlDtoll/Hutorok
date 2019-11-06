@@ -155,7 +155,7 @@ class MockLoadDataInteractor(
             Task(
                 "buildHouse",
                 "Строить жилой дом",
-                "Дом из дерева. 35 древесины, 35 очков строительства",
+                "Дом из дерева",
                 TaskFunction(
                     listOf(
                         Pair("builder", 1.0),

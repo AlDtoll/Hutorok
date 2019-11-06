@@ -46,7 +46,7 @@ val appModule = module {
     single { ExecuteTaskInteractor(get(), get(), get(), get(), get()) as IExecuteTaskInteractor }
     single { EndTurnInteractor(get(), get(), get(), get(), get()) as IEndTurnInteractor }
 
-    single { StartViewModel(get(), get(), get(), get(), get()) as IStartViewModel }
+    single { StartViewModel(get(), get(), get(), get(), get(), get()) as IStartViewModel }
     single {
         WorkersViewModel(
             get(),

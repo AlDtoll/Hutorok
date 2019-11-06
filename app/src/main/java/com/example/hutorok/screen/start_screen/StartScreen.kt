@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.example.hutorok.R
 import com.example.hutorok.ext.onClick
 import kotlinx.android.synthetic.main.fragment_start.*
@@ -19,7 +20,11 @@ class StartScreen : Fragment() {
         fun newInstance(): StartScreen = StartScreen()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_start, container, false)
     }
 
@@ -30,6 +35,12 @@ class StartScreen : Fragment() {
 
     private fun initUi() {
         initToolbar()
+
+        startViewModel.turnNumberData().observe(this, Observer {
+            it?.run {
+                (activity as AppCompatActivity).title = "Ход: $it"
+            }
+        })
 
         workersButton.onClick {
             startViewModel.clickWorkersButton()
