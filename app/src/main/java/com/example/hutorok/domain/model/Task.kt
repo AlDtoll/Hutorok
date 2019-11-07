@@ -1,5 +1,7 @@
 package com.example.hutorok.domain.model
 
+import com.example.hutorok.domain.model.TaskFunction.Companion.ADD_ITSELF_VALUE
+import com.example.hutorok.domain.model.TaskFunction.Companion.MINUS_ITSELF_VALUE
 import java.util.*
 import kotlin.random.Random
 
@@ -12,7 +14,8 @@ class Task(
     val results: List<TaskResult>,
     val permissiveCondition: List<Triple<String, Symbol, Double>> = emptyList(),
     val type: Type = Type.WORK,
-    val enableCondition: List<Triple<String, Symbol, Double>> = emptyList()
+    val enableCondition: List<Triple<String, Symbol, Double>> = emptyList(),
+    val canBeNegative: Boolean = false
 ) {
 
     enum class Type {
@@ -26,31 +29,52 @@ class Task(
         LESS
     }
 
-    fun countPoint(workers: List<Worker>, statusesList: List<Status>): Double {
-        var usualWorkerPoint = 0
-        workers.forEach { _ ->
-            usualWorkerPoint += Random(Date().time).nextInt(this.workerFunction.defaultValue) + 1
+    fun countPoint(workers: List<Worker>, hutorStatues: List<Status>): Double {
+        var workersPoints = 0.0
+        workers.forEach { worker ->
+            workersPoints += getPointsFromFunction(this.workerFunction, worker.statuses)
         }
-        var specialWorkerPoint = 0.0
-        this.workerFunction.statuses.forEach { pair ->
-            workers.forEach { worker ->
-                worker.statuses.forEach { workerStatus ->
-                    if (workerStatus.code == pair.first) {
-                        specialWorkerPoint += pair.second
-                    }
+
+        val hutorPoints: Double = getPointsFromFunction(this.hutorFunction, hutorStatues)
+        return if (!this.canBeNegative && workersPoints + hutorPoints < 0) {
+            0.0
+        } else {
+            workersPoints + hutorPoints
+        }
+    }
+
+    private fun getPointsFromFunction(
+        taskFunction: TaskFunction,
+        statuses: List<Status>
+    ): Double {
+        var usualPoint = 0.0
+        var specialPoint = 0.0
+        val upEdge = if (taskFunction.defaultValue <= 0) {
+            1
+        } else {
+            taskFunction.defaultValue
+        }
+        usualPoint += Random(Date().time).nextInt(upEdge)
+        taskFunction.statuses.forEach { pair ->
+            specialPoint += getPointsFromStatus(statuses, pair)
+        }
+        return usualPoint + specialPoint
+    }
+
+    private fun getPointsFromStatus(
+        statuses: List<Status>,
+        pair: Pair<String, Double>
+    ): Double {
+        statuses.forEach { status ->
+            if (status.isCoincide(pair.first)) {
+                return when (pair.second) {
+                    ADD_ITSELF_VALUE -> status.value
+                    MINUS_ITSELF_VALUE -> -status.value
+                    else -> pair.second
                 }
             }
         }
-        val usualHutorPoint = this.hutorFunction.defaultValue
-        var specialHutorPoint = 0.0
-        this.hutorFunction.statuses.forEach { pair ->
-            statusesList.forEach {
-                if (it.code == pair.first) {
-                    specialHutorPoint += pair.second
-                }
-            }
-        }
-        return usualWorkerPoint + specialWorkerPoint + usualHutorPoint + specialHutorPoint
+        return 0.0
     }
 }
 
@@ -63,6 +87,9 @@ class TaskFunction(
         fun nothing(): TaskFunction {
             return TaskFunction(emptyList())
         }
+
+        const val ADD_ITSELF_VALUE = 100.500
+        const val MINUS_ITSELF_VALUE = -100.500
     }
 }
 
@@ -109,20 +136,40 @@ class TaskResult(
                     TaskAction.CHANGE_STATUS_VALUE -> this.status.value + point
                     TaskAction.SET_STATUS_VALUE -> this.status.value
                     TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT -> this.status.value
+                    TaskAction.CHANGE_STATUS_BY_RANDOM_VALUE -> calculateRandom(this.status.value)
                     else -> 0.0
                 }
-                statuses.add(newStatus)
+                if (newStatus.canBeNegative || newStatus.value > 0.0) {
+                    statuses.add(newStatus)
+                }
             } else {
                 findStatus.value = when (this.action) {
                     TaskAction.CHANGE_STATUS_VALUE -> findStatus.value + point
                     TaskAction.SET_STATUS_VALUE -> this.status.value
                     TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT -> findStatus.value + this.status.value
+                    TaskAction.CHANGE_STATUS_BY_RANDOM_VALUE -> findStatus.value + calculateRandom(
+                        this.status.value
+                    )
                     else -> 0.0
                 }
-                if (findStatus.value == 0.0) {
+                if (!findStatus.canBeNegative && findStatus.value <= 0.0) {
                     statuses.remove(findStatus)
                 }
             }
+        }
+    }
+
+    private fun calculateRandom(value: Double): Double {
+        val upEdge = if (value == 0.0) {
+            1.0
+        } else {
+            kotlin.math.abs(value)
+        }
+        val random = Random(Date().time).nextInt(upEdge.toInt()).toDouble()
+        return if (value < 0) {
+            -random
+        } else {
+            random
         }
     }
 
@@ -150,6 +197,7 @@ class TaskResult(
         SET_STATUS_VALUE,
         CHANGE_STATUS_VALUE_BY_FIXED_POINT,
         ADD_STATUS,
-        REMOVE_STATUS
+        REMOVE_STATUS,
+        CHANGE_STATUS_BY_RANDOM_VALUE
     }
 }

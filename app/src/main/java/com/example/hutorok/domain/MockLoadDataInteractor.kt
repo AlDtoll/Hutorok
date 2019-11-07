@@ -1,6 +1,7 @@
 package com.example.hutorok.domain
 
 import com.example.hutorok.domain.model.*
+import com.example.hutorok.domain.model.TaskFunction.Companion.MINUS_ITSELF_VALUE
 import com.example.hutorok.domain.storage.*
 
 class MockLoadDataInteractor(
@@ -8,7 +9,7 @@ class MockLoadDataInteractor(
     private val tasksListInteractor: ITasksListInteractor,
     private val hutorStatusesListInteractor: IHutorStatusesListInteractor,
     private val importantStatusNamesListInteractor: IImportantStatusNamesListInteractor,
-    private val endStatusesListInteractor: IEndTasksListInteractor,
+    private val endTasksListInteractor: IEndTasksListInteractor,
     private val turnNumberInteractor: ITurnNumberInteractor
 ) : ILoadDataInteractor {
 
@@ -84,7 +85,8 @@ class MockLoadDataInteractor(
                     listOf(
                         Pair("hasTool", 1.5),
                         Pair("craftsman", 1.0),
-                        Pair("?DISEASE", -1.0)
+                        Pair("?DISEASE", -1.0),
+                        Pair("worked", MINUS_ITSELF_VALUE)
                     )
                 ),
                 TaskFunction(
@@ -153,14 +155,15 @@ class MockLoadDataInteractor(
                 )
             ),
             Task(
-                "buildHouse",
-                "Строить жилой дом",
-                "Дом из дерева",
+                "getBuilds",
+                "Заниматься строительством",
+                "Возводить дома, частоколы, памятники и т.д",
                 TaskFunction(
                     listOf(
                         Pair("builder", 1.0),
                         Pair("hasTool", 1.5),
-                        Pair("?DISEASE", -1.0)
+                        Pair("?DISEASE", -1.0),
+                        Pair("worked", MINUS_ITSELF_VALUE)
                     )
                 ),
                 TaskFunction(
@@ -172,7 +175,7 @@ class MockLoadDataInteractor(
                         TaskResult.TaskTarget.HUTOR,
                         TaskResult.TaskAction.CHANGE_STATUS_VALUE,
                         Status(
-                            "houseRES",
+                            "buildRES",
                             "Очки строительства дома",
                             "",
                             0.0,
@@ -212,7 +215,7 @@ class MockLoadDataInteractor(
                         TaskResult.TaskTarget.HUTOR,
                         TaskResult.TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT,
                         Status(
-                            "houseRES",
+                            "buildRES",
                             "-",
                             "-",
                             -35.0,
@@ -235,7 +238,7 @@ class MockLoadDataInteractor(
                 ),
                 listOf(
                     Triple("woodsRES", Task.Symbol.MORE, 35.0),
-                    Triple("houseRES", Task.Symbol.MORE, 35.0)
+                    Triple("buildRES", Task.Symbol.MORE, 35.0)
                 ),
                 Task.Type.BUILD
             ),
@@ -354,12 +357,24 @@ class MockLoadDataInteractor(
                             true
                         ),
                         "#WORKER излечился от недомогания"
+                    ),
+                    TaskResult(
+                        TaskResult.TaskTarget.ONE_SELECTED_WORKER,
+                        TaskResult.TaskAction.ADD_STATUS,
+                        Status(
+                            "alreadyHeal",
+                            "Уже лечился",
+                            "На это ходу этот персонаж уже лечился",
+                            1.0,
+                            false
+                        )
                     )
                 ),
                 emptyList(),
                 Task.Type.PERSON,
                 listOf(
-                    Triple("workDISEASE", Task.Symbol.MORE, 0.0)
+                    Triple("workDISEASE", Task.Symbol.MORE, 0.0),
+                    Triple("alreadyHeal", Task.Symbol.LESS, 1.0)
                 )
             )
         )
@@ -409,7 +424,7 @@ class MockLoadDataInteractor(
 
     private fun updateEndTasks() {
         val tasks = emptyList<Task>()
-        endStatusesListInteractor.update(tasks)
+        endTasksListInteractor.update(tasks)
     }
 
     private fun startHistory() {

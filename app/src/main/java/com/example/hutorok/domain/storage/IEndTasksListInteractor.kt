@@ -5,7 +5,7 @@ import io.reactivex.Observable
 
 interface IEndTasksListInteractor {
 
-    fun update(statuses: List<Task>)
+    fun update(tasks: List<Task>)
 
     fun get(): Observable<List<Task>>
 }

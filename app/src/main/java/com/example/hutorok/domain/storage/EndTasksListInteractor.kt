@@ -8,8 +8,8 @@ class EndTasksListInteractor : IEndTasksListInteractor {
 
     private val list = BehaviorSubject.create<List<Task>>()
 
-    override fun update(statuses: List<Task>) {
-        list.onNext(statuses)
+    override fun update(tasks: List<Task>) {
+        list.onNext(tasks)
     }
 
     override fun get(): Observable<List<Task>> = list
