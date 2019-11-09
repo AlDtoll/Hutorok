@@ -26,7 +26,7 @@ class TasksViewModel(
             BiFunction { tasksList: List<Task>, statusesList: List<Status> ->
                 val visibleTasksList = emptyList<Task>().toMutableList()
                 tasksList.forEach { task ->
-                    if (isTaskVisible(task, statusesList)) {
+                    if (Task.conditionsIsComplete(task.permissiveConditions, statusesList)) {
                         visibleTasksList.add(task)
                     }
                 }
@@ -42,30 +42,6 @@ class TasksViewModel(
     override fun clickTask(task: Task) {
         taskInteractor.update(task)
         routeToTaskInfoInteractor.execute()
-    }
-
-    private fun isTaskVisible(task: Task, statusesList: List<Status>): Boolean {
-        if (task.permissiveCondition.isEmpty()) {
-            return true
-        }
-        task.permissiveCondition.forEach { condition ->
-            val find = statusesList.find { condition.first == it.code }
-            val findValue = find?.value ?: 0.0
-            when (condition.second) {
-                Task.Symbol.MORE -> {
-                    if (findValue <= condition.third) {
-                        return false
-                    }
-                }
-                Task.Symbol.LESS -> {
-                    if (findValue >= condition.third) {
-                        return false
-                    }
-                }
-            }
-
-        }
-        return true
     }
 
 }

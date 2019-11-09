@@ -32,7 +32,7 @@ class EndTurnInteractor(
                     val newStatusesList = statusesList.toMutableList()
                     task.results.forEach { taskResult ->
                         taskResult.makeAction(newStatusesList, point, workers)
-                        message += taskResult.makeMessage(point, workers)
+                        message += taskResult.makeMessage(workers)
                     }
 
                     hutorStatusesListInteractor.update(newStatusesList)

@@ -376,6 +376,33 @@ class MockLoadDataInteractor(
                     Triple("workDISEASE", Task.Symbol.MORE, 0.0),
                     Triple("alreadyHeal", Task.Symbol.LESS, 1.0)
                 )
+            ),
+            Task(
+                "findMagicStones",
+                "Искать магические камни",
+                "Искать магические камни вокруг поселения",
+                TaskFunction.nothing(),
+                TaskFunction.nothing(),
+                listOf(
+                    TaskResult(
+                        TaskResult.TaskTarget.HUTOR,
+                        TaskResult.TaskAction.CHANGE_STATUS_BY_RANDOM_VALUE,
+                        Status(
+                            "magicStonesRES",
+                            "Магический камень",
+                            "Используется для творения волшебства и магических ритуалов",
+                            5.0,
+                            true
+                        ),
+                        "Нашлось #VALUE магических камней",
+                        listOf(
+                            Pair(Triple("forest", Task.Symbol.MORE, 0.0), 50.0)
+                        ),
+                        "Не удалось найти камней"
+                    )
+                ),
+                emptyList(),
+                Task.Type.WORK
             )
         )
         tasksListInteractor.update(tasks)

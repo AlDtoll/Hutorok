@@ -37,7 +37,7 @@ class ExecuteTaskInteractor(
                 val hutorStatuses = hutorStatusesList.toMutableList()
                 task.results.forEach { taskResult ->
                     taskResult.makeAction(hutorStatuses, point, selectedWorkers)
-                    message += taskResult.makeMessage(point, selectedWorkers)
+                    message += taskResult.makeMessage(selectedWorkers)
                 }
 
                 if (task.type != Task.Type.PERSON) {

@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hutorok.R
-import com.example.hutorok.domain.model.Status
 import com.example.hutorok.domain.model.Task
 import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.ext.onClick
@@ -83,33 +82,14 @@ class WorkerAdapter(
     }
 
     private fun isCheckboxVisible(worker: Worker): Boolean {
-        if (isOrder && task.type != Task.Type.BUILD && isConditionComplete(worker.statuses)) {
+        if (isOrder && task.type != Task.Type.BUILD && Task.conditionsIsComplete(
+                task.enableConditions,
+                worker.statuses
+            )
+        ) {
             return true
         }
         return false
-    }
-
-    private fun isConditionComplete(statusesList: List<Status>): Boolean {
-        if (task.enableCondition.isEmpty()) {
-            return true
-        }
-        task.enableCondition.forEach { condition ->
-            val find = statusesList.find { condition.first == it.code }
-            val findValue = find?.value ?: 0.0
-            when (condition.second) {
-                Task.Symbol.MORE -> {
-                    if (findValue <= condition.third) {
-                        return false
-                    }
-                }
-                Task.Symbol.LESS -> {
-                    if (findValue >= condition.third) {
-                        return false
-                    }
-                }
-            }
-        }
-        return true
     }
 
     class WorkerHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
