@@ -7,9 +7,14 @@ class Worker(
     val name: String,
     var nickname: String? = "",
     var age: Age,
-    var statuses: MutableList<Status>,
+    var statuses: MutableList<Status> = mutableListOf(),
     var isSelected: Boolean = false
 ) {
+    constructor() : this(
+        name = "Новый хуторянин",
+        nickname = "",
+        age = Age.ADULT
+    )
 
     fun markAsWorked(): String {
         val workedStatus = this.statuses.find { status -> status.code == "worked" }

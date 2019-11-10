@@ -79,6 +79,12 @@ class WorkersScreen : Fragment() {
                 changeToolbarTitle(it.name)
             }
         })
+
+        workersViewModel.isExecuteTaskButtonEnable().observe(this, Observer {
+            it?.run {
+                executeTaskButton.isEnabled = true
+            }
+        })
     }
 
     private fun initToolbar() {

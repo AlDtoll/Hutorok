@@ -138,18 +138,44 @@ class TaskResult(
     fun makeAction(
         hutorStatuses: MutableList<Status>,
         point: Double,
-        workers: List<Worker>
+        workers: MutableList<Worker>
     ) {
+        if (this.action == TaskAction.ADD_WORKER) {
+            addNewWorker(workers)
+        }
         if (target == TaskTarget.HUTOR) {
             changeStatuses(hutorStatuses, point)
         } else if (target == TaskTarget.ONE_SELECTED_WORKER) {
             val findWorker = workers.find { worker -> worker.isSelected }
             if (findWorker != null) {
-                val workerStatuses = findWorker.statuses.toMutableList()
+                val workerStatuses = findWorker.statuses
                 changeStatuses(workerStatuses, point)
                 findWorker.statuses = workerStatuses
             }
         }
+    }
+
+    private fun addNewWorker(workers: MutableList<Worker>) {
+        val worker = Worker(
+            createNameForNewWorker(),
+            createNickNameForNewWorker(),
+            createAgeForNewWorker(),
+            mutableListOf(),
+            true
+        )
+        workers.add(worker)
+    }
+
+    private fun createNameForNewWorker(): String {
+        return this.status.name
+    }
+
+    private fun createNickNameForNewWorker(): String {
+        return this.status.description
+    }
+
+    private fun createAgeForNewWorker(): Age {
+        return Age.valueOf(this.status.code)
     }
 
     private fun changeStatuses(
@@ -266,8 +292,10 @@ class TaskResult(
         if (message.contains("#VALUE")) {
             return message.replace("#VALUE", VALUE.toString()) + "\n"
         }
-        if (message.contains("#WORKER")) {
-            return message.replace("#WORKER", workers[0].name) + "\n"
+        if (message.contains("#WORKER") && workers.isNotEmpty()) {
+            val worker = workers.find { worker -> worker.isSelected }
+            val name = worker?.name ?: ""
+            return message.replace("#WORKER", name) + "\n"
         }
         return message + "\n"
     }
@@ -284,6 +312,7 @@ class TaskResult(
         CHANGE_STATUS_VALUE_BY_FIXED_POINT,
         ADD_STATUS,
         REMOVE_STATUS,
-        CHANGE_STATUS_BY_RANDOM_VALUE
+        CHANGE_STATUS_BY_RANDOM_VALUE,
+        ADD_WORKER
     }
 }

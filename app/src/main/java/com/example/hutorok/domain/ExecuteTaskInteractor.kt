@@ -28,25 +28,23 @@ class ExecuteTaskInteractor(
             workersListInteractor.get(),
             taskInteractor.get(),
             hutorStatusesListInteractor.get(),
-            Function3 { workersList: List<Worker>, task: Task, hutorStatusesList: List<Status> ->
+            Function3 { workersList: MutableList<Worker>, task: Task, hutorStatusesList: MutableList<Status> ->
                 val selectedWorkers = workersList.filter { it.isSelected }
 
                 val point = task.countPoint(selectedWorkers, hutorStatusesList)
 
                 var message = ""
-                val hutorStatuses = hutorStatusesList.toMutableList()
                 task.results.forEach { taskResult ->
-                    taskResult.makeAction(hutorStatuses, point, selectedWorkers)
-                    message += taskResult.makeMessage(selectedWorkers)
+                    taskResult.makeAction(hutorStatusesList, point, workersList)
+                    message += taskResult.makeMessage(workersList)
                 }
 
                 if (task.type != Task.Type.PERSON) {
                     message += makeFineForWorkers(selectedWorkers)
                     message += markWorkersAsWorked(selectedWorkers)
                 }
-                letWorkersGo(selectedWorkers)
+                letWorkersGo(workersList)
 
-                hutorStatusesListInteractor.update(hutorStatuses)
                 messageInteractor.update(EXECUTE_TASK_PREFIX + message)
             }
         ).subscribe()

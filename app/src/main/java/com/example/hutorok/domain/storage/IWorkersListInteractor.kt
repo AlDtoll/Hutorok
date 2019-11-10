@@ -5,13 +5,15 @@ import io.reactivex.Observable
 
 interface IWorkersListInteractor {
 
-    fun update(workers: List<Worker>)
+    fun update(workers: MutableList<Worker>)
 
-    fun get(): Observable<List<Worker>>
+    fun get(): Observable<MutableList<Worker>>
 
     fun refresh()
 
     fun getPreviousWorker()
 
     fun getNextWorker()
+
+    fun add(worker: Worker)
 }

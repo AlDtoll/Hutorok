@@ -28,7 +28,7 @@ class MockLoadDataInteractor(
     }
 
     private fun updateWorkers() {
-        val workers = listOf(
+        val workers = mutableListOf(
             Worker(
                 "Гавриил",
                 "С копьем ходил",
@@ -403,13 +403,61 @@ class MockLoadDataInteractor(
                 ),
                 emptyList(),
                 Task.Type.WORK
+            ),
+            Task(
+                "callWorker",
+                "Провести ритуал призвания жителя",
+                "Ритуал потратит 1 магический камень",
+                TaskFunction.nothing(),
+                TaskFunction.nothing(),
+                listOf(
+                    TaskResult(
+                        TaskResult.TaskTarget.HUTOR,
+                        TaskResult.TaskAction.ADD_WORKER,
+                        Status(
+                            "ADULT",
+                            "Никодим",
+                            "Носит шапку соболью",
+                            5.0,
+                            true
+                        ),
+                        "К селению присоединился #WORKER"
+                    ),
+                    TaskResult(
+                        TaskResult.TaskTarget.ONE_SELECTED_WORKER,
+                        TaskResult.TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT,
+                        Status(
+                            "hasSobolHat",
+                            "Соболья шапка",
+                            "Шапка из соболя",
+                            1.0,
+                            true
+                        ),
+                        ""
+                    ),
+                    TaskResult(
+                        TaskResult.TaskTarget.HUTOR,
+                        TaskResult.TaskAction.CHANGE_STATUS_VALUE_BY_FIXED_POINT,
+                        Status(
+                            "magicStonesRES",
+                            "Магический камень",
+                            "Используется для творения волшебства и магических ритуалов",
+                            -1.0,
+                            true
+                        )
+                    )
+                ),
+                listOf(
+                    Triple("magicStonesRES", Task.Symbol.MORE, 0.0)
+                ),
+                Task.Type.BUILD
             )
         )
         tasksListInteractor.update(tasks)
     }
 
     private fun updateHutorStatuses() {
-        val statuses = listOf(
+        val statuses = mutableListOf(
             Status(
                 "houseBUILDING",
                 "Жилой дом",

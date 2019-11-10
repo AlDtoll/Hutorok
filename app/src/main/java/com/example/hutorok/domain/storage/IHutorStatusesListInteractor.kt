@@ -5,7 +5,7 @@ import io.reactivex.Observable
 
 interface IHutorStatusesListInteractor {
 
-    fun update(statuses: List<Status>)
+    fun update(statuses: MutableList<Status>)
 
-    fun get(): Observable<List<Status>>
+    fun get(): Observable<MutableList<Status>>
 }

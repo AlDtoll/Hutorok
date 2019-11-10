@@ -26,7 +26,7 @@ class WorkersViewModel(
     private val taskInteractor: ITaskInteractor
 ) : IWorkersViewModel {
 
-    override fun workersData(): LiveData<List<Worker>> =
+    override fun workersData(): LiveData<MutableList<Worker>> =
         LiveDataReactiveStreams.fromPublisher(
             workersListInteractor.get().toFlowable(BackpressureStrategy.LATEST)
         )

@@ -6,7 +6,7 @@ import com.example.hutorok.domain.model.Worker
 
 interface IWorkersViewModel {
 
-    fun workersData(): LiveData<List<Worker>>
+    fun workersData(): LiveData<MutableList<Worker>>
 
     fun clickWorker(worker: Worker)
 

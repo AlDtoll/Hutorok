@@ -8,16 +8,16 @@ class WorkersListInteractor(
     private val workerInteractor: IWorkerInteractor
 ) : IWorkersListInteractor {
 
-    private val list = BehaviorSubject.create<List<Worker>>()
+    private val list = BehaviorSubject.create<MutableList<Worker>>()
 
-    override fun update(workers: List<Worker>) {
+    override fun update(workers: MutableList<Worker>) {
         list.onNext(workers)
     }
 
-    override fun get(): Observable<List<Worker>> = list
+    override fun get(): Observable<MutableList<Worker>> = list
 
     override fun refresh() {
-        list.onNext(list.value ?: emptyList())
+        list.onNext(list.value ?: mutableListOf())
     }
 
     override fun getPreviousWorker() {
@@ -35,6 +35,17 @@ class WorkersListInteractor(
             if (indexOf < this.size - 1) {
                 workerInteractor.update(this[indexOf + 1])
             }
+        }
+    }
+
+    override fun add(worker: Worker) {
+        if (list.value == null) {
+            update(mutableListOf())
+        }
+        list.value?.run {
+            this.add(worker)
+            update(this)
+
         }
     }
 

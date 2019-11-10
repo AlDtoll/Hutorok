@@ -24,7 +24,7 @@ class EndTurnInteractor(
             workersListInteractor.get(),
             endTasksListInteractor.get(),
             hutorStatusesListInteractor.get(),
-            Function3 { workers: List<Worker>, tasksList: List<Task>, statusesList: List<Status> ->
+            Function3 { workers: MutableList<Worker>, tasksList: List<Task>, statusesList: List<Status> ->
                 var message = ""
                 tasksList.forEach { task ->
                     val point = task.countPoint(workers, statusesList)

@@ -6,11 +6,11 @@ import io.reactivex.subjects.BehaviorSubject
 
 class HutorStatusesListInteractor : IHutorStatusesListInteractor {
 
-    private val list = BehaviorSubject.create<List<Status>>()
+    private val list = BehaviorSubject.create<MutableList<Status>>()
 
-    override fun update(statuses: List<Status>) {
+    override fun update(statuses: MutableList<Status>) {
         list.onNext(statuses)
     }
 
-    override fun get(): Observable<List<Status>> = list
+    override fun get(): Observable<MutableList<Status>> = list
 }
