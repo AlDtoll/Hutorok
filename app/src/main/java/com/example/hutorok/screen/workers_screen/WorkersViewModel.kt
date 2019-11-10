@@ -5,10 +5,7 @@ import androidx.lifecycle.LiveDataReactiveStreams
 import com.example.hutorok.domain.IExecuteTaskInteractor
 import com.example.hutorok.domain.model.Task
 import com.example.hutorok.domain.model.Worker
-import com.example.hutorok.domain.storage.IImportantStatusNamesListInteractor
-import com.example.hutorok.domain.storage.ITaskInteractor
-import com.example.hutorok.domain.storage.IWorkerInteractor
-import com.example.hutorok.domain.storage.IWorkersListInteractor
+import com.example.hutorok.domain.storage.*
 import com.example.hutorok.routing.IScenarioInteractor
 import com.example.hutorok.routing.RouteToWorkerInfoScreenInteractor
 import com.example.hutorok.routing.Scenario
@@ -23,13 +20,26 @@ class WorkersViewModel(
     private val scenarioInteractor: IScenarioInteractor,
     private val executeTaskInteractor: IExecuteTaskInteractor,
     private val importantStatusNamesListInteractor: IImportantStatusNamesListInteractor,
-    private val taskInteractor: ITaskInteractor
+    private val taskInteractor: ITaskInteractor,
+    private val invisibleStatusNamesListInteractor: IInvisibleStatusNamesListInteractor
 ) : IWorkersViewModel {
 
-    override fun workersData(): LiveData<MutableList<Worker>> =
-        LiveDataReactiveStreams.fromPublisher(
-            workersListInteractor.get().toFlowable(BackpressureStrategy.LATEST)
+    override fun workersData(): LiveData<MutableList<Worker>> {
+        val observable = Observable.combineLatest(
+            workersListInteractor.get(),
+            invisibleStatusNamesListInteractor.get(),
+            BiFunction { workers: MutableList<Worker>, codes: List<String> ->
+                if (codes.isEmpty()) {
+                    workers
+                } else {
+                    workers.filter { worker -> isWorkerVisible(worker, codes) }.toMutableList()
+                }
+            }
         )
+        return LiveDataReactiveStreams.fromPublisher(
+            observable.toFlowable(BackpressureStrategy.LATEST)
+        )
+    }
 
     override fun clickWorker(worker: Worker) {
         workerInteractor.update(worker)
@@ -82,6 +92,17 @@ class WorkersViewModel(
 
     override fun clickCheckbox(worker: Worker) {
         workersListInteractor.refresh()
+    }
+
+    private fun isWorkerVisible(worker: Worker, codes: List<String>): Boolean {
+        codes.forEach { code ->
+            worker.statuses.forEach { status ->
+                if (status.isCoincide(code)) {
+                    return false
+                }
+            }
+        }
+        return true
     }
 
 }

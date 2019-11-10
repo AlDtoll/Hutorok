@@ -10,7 +10,8 @@ class MockLoadDataInteractor(
     private val hutorStatusesListInteractor: IHutorStatusesListInteractor,
     private val importantStatusNamesListInteractor: IImportantStatusNamesListInteractor,
     private val endTasksListInteractor: IEndTasksListInteractor,
-    private val turnNumberInteractor: ITurnNumberInteractor
+    private val turnNumberInteractor: ITurnNumberInteractor,
+    private val invisibleStatusNamesListInteractor: IInvisibleStatusNamesListInteractor
 ) : ILoadDataInteractor {
 
     override fun update() {
@@ -25,6 +26,8 @@ class MockLoadDataInteractor(
         updateEndTasks()
 
         startHistory()
+
+        updateInvisibleStatuses()
     }
 
     private fun updateWorkers() {
@@ -451,6 +454,29 @@ class MockLoadDataInteractor(
                     Triple("magicStonesRES", Task.Symbol.MORE, 0.0)
                 ),
                 Task.Type.BUILD
+            ),
+            Task(
+                "sacrifice",
+                "Принести рабочего в жертву",
+                "Будут получены магические камни",
+                TaskFunction.nothing(),
+                TaskFunction.nothing(),
+                listOf(
+                    TaskResult(
+                        TaskResult.TaskTarget.ONE_SELECTED_WORKER,
+                        TaskResult.TaskAction.SET_STATUS_VALUE,
+                        Status(
+                            "deadINVISIBLE",
+                            "Мертв",
+                            "Усопшее тело",
+                            1.0,
+                            true
+                        ),
+                        "#WORKER был принесен в жертву"
+                    )
+                ),
+                listOf(),
+                Task.Type.WORK
             )
         )
         tasksListInteractor.update(tasks)
@@ -504,6 +530,13 @@ class MockLoadDataInteractor(
 
     private fun startHistory() {
         turnNumberInteractor.increment()
+    }
+
+    private fun updateInvisibleStatuses() {
+        val codes = listOf(
+            "?INVISIBLE"
+        )
+        invisibleStatusNamesListInteractor.update(codes)
     }
 
 }
