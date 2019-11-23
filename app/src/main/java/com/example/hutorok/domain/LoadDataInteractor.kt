@@ -1,5 +1,6 @@
 package com.example.hutorok.domain
 
+import com.example.hutorok.domain.model.Status
 import com.example.hutorok.domain.model.Task
 import com.example.hutorok.domain.model.Worker
 
@@ -8,7 +9,9 @@ class LoadDataInteractor(
 
     override fun update(
         workers: MutableList<Worker>,
-        tasks: MutableList<Task>
+        tasks: MutableList<Task>,
+        hutorokStatuses: MutableList<Status>,
+        endTasks: MutableList<Task>
     ) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

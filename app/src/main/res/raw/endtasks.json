@@ -1,0 +1,87 @@
+{
+  "tasks": [
+    {
+      "code": "eatFoods",
+      "name": "Кормление населения",
+      "describe": "Уменьшает запасы пищи на количество населения",
+      "canBeNegative": true,
+      "hutorFunction": {
+        "statuses": [
+          {
+            "code": "populationsRES",
+            "value": -100.500
+          }
+        ],
+        "defaultValue": 0
+      },
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE",
+          "status": {
+            "code": "foodsRES",
+            "name": "Еда",
+            "describe": "populationsRES",
+            "value": 0.0,
+            "visible": true
+          },
+          "successMessage": "Было съедено #VALUE еды"
+        }
+      ]
+    },
+    {
+      "code": "markWorkersAsRested",
+      "name": "Отдых рабочих",
+      "describe": "",
+      "canBeNegative": true,
+      "results": [
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "worked",
+            "name": "Работал",
+            "describe": "",
+            "value": -1.0,
+            "visible": true
+          },
+          "successMessage": "#WORKER отдохнул"
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "worked",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        }
+      ]
+    },
+    {
+      "code": "sayAboutWorker",
+      "name": "Сообщение о том, что рабочий полностью отдохнул",
+      "describe": "",
+      "canBeNegative": true,
+      "results": [
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "worked",
+            "name": "Работал",
+            "describe": "",
+            "value": 0.0,
+            "visible": true
+          },
+          "successMessage": "#WORKER больше не нуждается в отдыхе"
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "worked",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        }
+      ]
+    }
+  ]
+}

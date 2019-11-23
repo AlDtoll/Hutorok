@@ -1,0 +1,39 @@
+{
+  "statuses": [
+    {
+      "code": "populationsRES",
+      "name": "Население",
+      "description": "Тут живут люди",
+      "value": 2.0,
+      "visible": true
+    },
+    {
+      "code": "turnRES",
+      "name": "Количество ходов сначала игры",
+      "description": "",
+      "value": 0.0,
+      "visible": false
+    },
+    {
+      "code": "houseBUILDING",
+      "name": "Жилой дом",
+      "description": "Тут живут люди",
+      "value": 1.0,
+      "visible": true
+    },
+    {
+      "code": "forest",
+      "name": "Лес",
+      "description": "Хутор окружен деревьями",
+      "value": 1.0,
+      "visible": true
+    },
+    {
+      "code": "foodsRES",
+      "name": "Еда",
+      "description": "Нужна для пропитания хутора",
+      "value": 10.0,
+      "visible": true
+    }
+  ]
+}

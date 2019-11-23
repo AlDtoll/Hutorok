@@ -2,6 +2,7 @@ package com.example.hutorok.domain
 
 import com.example.hutorok.domain.model.Status
 import com.example.hutorok.domain.model.Task
+import com.example.hutorok.domain.model.Task.Companion.deselectAll
 import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.domain.storage.IHutorStatusesListInteractor
 import com.example.hutorok.domain.storage.IMessageInteractor
@@ -43,7 +44,7 @@ class ExecuteTaskInteractor(
                     message += makeFineForWorkers(selectedWorkers)
                     message += markWorkersAsWorked(selectedWorkers)
                 }
-                letWorkersGo(workersList)
+                deselectAll(workersList)
 
                 messageInteractor.update(EXECUTE_TASK_PREFIX + message)
             }
@@ -65,10 +66,6 @@ class ExecuteTaskInteractor(
             message += worker.markAsWorked()
         }
         return message
-    }
-
-    private fun letWorkersGo(workers: List<Worker>) {
-        workers.forEach { worker -> worker.isSelected = false }
     }
 
 }

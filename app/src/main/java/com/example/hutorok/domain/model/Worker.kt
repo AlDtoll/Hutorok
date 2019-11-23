@@ -84,20 +84,6 @@ class Worker(
         }
         return ""
     }
-
-    fun rest(): String {
-        val findStatus = this.statuses.find { status -> status.code == "worked" }
-        if (findStatus != null) {
-            return if (findStatus.value <= 1) {
-                this.statuses.remove(findStatus)
-                "$name полностью отдохнул\n"
-            } else {
-                findStatus.value = findStatus.value - 1
-                "$name отдохнул, но не полностью\n"
-            }
-        }
-        return ""
-    }
 }
 
 enum class Age(val code: String) {

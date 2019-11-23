@@ -24,15 +24,19 @@ class Task(
         code = jsonObject.optString("code"),
         name = jsonObject.optString("name"),
         describe = jsonObject.optString("describe"),
-        workerFunction = TaskFunction(jsonObject.optJSONObject("workerFunction")),
+        workerFunction = if (jsonObject.optJSONObject("workerFunction") != null) {
+            TaskFunction(jsonObject.optJSONObject("workerFunction"))
+        } else {
+            TaskFunction.nothing()
+        },
         hutorFunction = TaskFunction(jsonObject.optJSONObject("hutorFunction")),
         results = parseTaskResults(jsonObject.optJSONArray("results")),
         permissiveConditions = parseConditions(jsonObject.optJSONArray("permissiveConditions")),
-        type = (if (jsonObject.optString("type").isNotEmpty()) {
+        type = if (jsonObject.optString("type").isNotEmpty()) {
             Type.valueOf(jsonObject.optString("type"))
         } else {
             Type.WORK
-        }),
+        },
         enableConditions = parseConditions(jsonObject.optJSONArray("enableConditions")),
         canBeNegative = jsonObject.optBoolean("canBeNegative")
     )
@@ -91,6 +95,21 @@ class Task(
                 return conditions
             }
             return mutableListOf()
+        }
+
+        fun selectAll(
+            workers: List<Worker>,
+            enableConditions: List<Triple<String, Symbol, Double>>
+        ) {
+            workers.forEach { worker ->
+                if (conditionsIsComplete(enableConditions, worker.statuses)) {
+                    worker.isSelected = true
+                }
+            }
+        }
+
+        fun deselectAll(workers: List<Worker>) {
+            workers.forEach { worker -> worker.isSelected = false }
         }
     }
 
@@ -165,7 +184,7 @@ class TaskFunction(
 
     companion object {
         fun nothing(): TaskFunction {
-            return TaskFunction(emptyList())
+            return TaskFunction(emptyList(), 0)
         }
 
         const val ADD_ITSELF_VALUE = 100.500
@@ -236,14 +255,25 @@ class TaskResult(
         if (this.action == TaskAction.ADD_WORKER) {
             addNewWorker(workers)
         }
-        if (target == TaskTarget.HUTOR) {
-            changeStatuses(hutorStatuses, point)
-        } else if (target == TaskTarget.ONE_SELECTED_WORKER) {
-            val findWorker = workers.find { worker -> worker.isSelected }
-            if (findWorker != null) {
-                val workerStatuses = findWorker.statuses
-                changeStatuses(workerStatuses, point)
-                findWorker.statuses = workerStatuses
+        when (target) {
+            TaskTarget.HUTOR -> changeStatuses(hutorStatuses, point)
+            TaskTarget.ALL_SELECTED_WORKER -> {
+                val selectedWorkers = workers.filter { worker -> worker.isSelected }
+                if (selectedWorkers.isNotEmpty()) {
+                    selectedWorkers.forEach { worker ->
+                        val workerStatuses = worker.statuses
+                        changeStatuses(workerStatuses, point)
+                        worker.statuses = workerStatuses
+                    }
+                }
+            }
+            TaskTarget.ONE_SELECTED_WORKER -> {
+                val findWorker = workers.find { worker -> worker.isSelected }
+                if (findWorker != null) {
+                    val workerStatuses = findWorker.statuses
+                    changeStatuses(workerStatuses, point)
+                    findWorker.statuses = workerStatuses
+                }
             }
         }
     }
@@ -292,26 +322,28 @@ class TaskResult(
             IS_SUCCESS = false
             return
         }
-        if (this.action == TaskAction.ADD_STATUS) {
-            statuses.add(this.status)
-        } else if (this.action == TaskAction.REMOVE_STATUS) {
-            val findStatus = statuses.find { status -> this.status.code == status.code }
-            findStatus?.run {
-                statuses.remove(findStatus)
-            }
-        } else {
-            val findStatus = statuses.find { status -> this.status.code == status.code }
-            if (findStatus == null) {
-                val newStatus = Status(this.status)
-                newStatus.value = 0.0
-                newStatus.value = changeStatusValue(newStatus, point)
-                if (newStatus.canBeNegative || newStatus.value > 0.0) {
-                    statuses.add(newStatus)
-                }
-            } else {
-                findStatus.value = changeStatusValue(findStatus, point)
-                if (!findStatus.canBeNegative && findStatus.value <= 0.0) {
+        when {
+            this.action == TaskAction.ADD_STATUS -> statuses.add(this.status)
+            this.action == TaskAction.REMOVE_STATUS -> {
+                val findStatus = statuses.find { status -> this.status.code == status.code }
+                findStatus?.run {
                     statuses.remove(findStatus)
+                }
+            }
+            else -> {
+                val findStatus = statuses.find { status -> this.status.code == status.code }
+                if (findStatus == null) {
+                    val newStatus = Status(this.status)
+                    newStatus.value = 0.0
+                    newStatus.value = changeStatusValue(newStatus, point)
+                    if (newStatus.canBeNegative || newStatus.value > 0.0) {
+                        statuses.add(newStatus)
+                    }
+                } else {
+                    findStatus.value = changeStatusValue(findStatus, point)
+                    if (!findStatus.canBeNegative && findStatus.value <= 0.0) {
+                        statuses.remove(findStatus)
+                    }
                 }
             }
         }
@@ -386,9 +418,16 @@ class TaskResult(
             return message.replace("#VALUE", VALUE.toString()) + "\n"
         }
         if (message.contains("#WORKER") && workers.isNotEmpty()) {
-            val worker = workers.find { worker -> worker.isSelected }
-            val name = worker?.name ?: ""
-            return message.replace("#WORKER", name) + "\n"
+            val selectedWorkers = workers.filter { worker -> worker.isSelected }
+            if (selectedWorkers.isNotEmpty()) {
+                var name = ""
+                selectedWorkers.forEach {
+                    name = name + it.name + " "
+                }
+                return message.replace("#WORKER", name) + "\n"
+            } else {
+                return ""
+            }
         }
         return message + "\n"
     }
@@ -396,7 +435,8 @@ class TaskResult(
 
     enum class TaskTarget {
         HUTOR,
-        ONE_SELECTED_WORKER
+        ONE_SELECTED_WORKER,
+        ALL_SELECTED_WORKER
     }
 
     enum class TaskAction {

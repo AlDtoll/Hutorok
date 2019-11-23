@@ -3,6 +3,7 @@ package com.example.hutorok
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import com.example.hutorok.domain.ILoadDataInteractor
+import com.example.hutorok.domain.model.Status
 import com.example.hutorok.domain.model.Task
 import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.domain.storage.IMessageInteractor
@@ -29,9 +30,11 @@ class MainViewModel(
 
     override fun loadData(
         workers: MutableList<Worker>,
-        tasks: MutableList<Task>
+        tasks: MutableList<Task>,
+        hutorokStatuses: MutableList<Status>,
+        endTasks: MutableList<Task>
     ) {
-        loadDataInteractor.update(workers, tasks)
+        loadDataInteractor.update(workers, tasks, hutorokStatuses, endTasks)
     }
 
     override fun messageData(): LiveData<String> {

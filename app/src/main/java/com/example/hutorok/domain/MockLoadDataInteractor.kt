@@ -17,17 +17,19 @@ class MockLoadDataInteractor(
 
     override fun update(
         workers: MutableList<Worker>,
-        tasks: MutableList<Task>
+        tasks: MutableList<Task>,
+        hutorokStatuses: MutableList<Status>,
+        endTasks: MutableList<Task>
     ) {
         updateWorkers(workers)
 
         updateTasks(tasks)
 
-        updateHutorStatuses()
+        updateHutorStatuses(hutorokStatuses)
 
         updateImportantNames()
 
-        updateEndTasks()
+        updateEndTasks(endTasks)
 
         startHistory()
 
@@ -42,38 +44,8 @@ class MockLoadDataInteractor(
         tasksListInteractor.update(tasks)
     }
 
-    private fun updateHutorStatuses() {
-        val statuses = mutableListOf(
-            Status(
-                "houseBUILDING",
-                "Жилой дом",
-                "Тут живут люди",
-                1.0,
-                true
-            ),
-            Status(
-                "houseBUILDING",
-                "Жилой дом",
-                "Тут живут люди",
-                1.0,
-                true
-            ),
-            Status(
-                "forest",
-                "Лес",
-                "Хутор окружен деревьями",
-                1.0,
-                true
-            ),
-            Status(
-                "foodsRES",
-                "Еда",
-                "Нужна для пропитания хутора",
-                10.0,
-                true
-            )
-        )
-        hutorStatusesListInteractor.update(statuses)
+    private fun updateHutorStatuses(hutorokStatuses: MutableList<Status>) {
+        hutorStatusesListInteractor.update(hutorokStatuses)
     }
 
     private fun updateImportantNames() {
@@ -83,9 +55,8 @@ class MockLoadDataInteractor(
         importantStatusNamesListInteractor.update(names)
     }
 
-    private fun updateEndTasks() {
-        val tasks = emptyList<Task>()
-        endTasksListInteractor.update(tasks)
+    private fun updateEndTasks(endTasks: MutableList<Task>) {
+        endTasksListInteractor.update(endTasks)
     }
 
     private fun startHistory() {

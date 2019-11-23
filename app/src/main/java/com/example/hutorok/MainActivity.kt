@@ -5,6 +5,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.example.hutorok.domain.model.Status
 import com.example.hutorok.domain.model.Task
 import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.ext.replaceFragment
@@ -99,8 +100,25 @@ class MainActivity : AppCompatActivity() {
             tasks.add(Task(tasksArray.getJSONObject(i)))
         }
 
+        val hutorokText = resources.openRawResource(R.raw.hutorok)
+            .bufferedReader().use { it.readText() }
+        val hutorokStatuses = mutableListOf<Status>()
+        val hutorokStatusObject = JSONObject(hutorokText)
+        val statusArray = hutorokStatusObject.getJSONArray("statuses")
+        for (i in 0 until statusArray.length()) {
+            hutorokStatuses.add(Status(statusArray.getJSONObject(i)))
+        }
 
-        mainViewModel.loadData(workers, tasks)
+        val endTaskText = resources.openRawResource(R.raw.endtasks)
+            .bufferedReader().use { it.readText() }
+        val endTasks = mutableListOf<Task>()
+        val endTasksObject = JSONObject(endTaskText)
+        val endTasksArray = endTasksObject.getJSONArray("tasks")
+        for (i in 0 until endTasksArray.length()) {
+            endTasks.add(Task(endTasksArray.getJSONObject(i)))
+        }
+
+        mainViewModel.loadData(workers, tasks, hutorokStatuses, endTasks)
     }
 
 }

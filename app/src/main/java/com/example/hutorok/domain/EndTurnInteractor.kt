@@ -2,6 +2,8 @@ package com.example.hutorok.domain
 
 import com.example.hutorok.domain.model.Status
 import com.example.hutorok.domain.model.Task
+import com.example.hutorok.domain.model.Task.Companion.deselectAll
+import com.example.hutorok.domain.model.Task.Companion.selectAll
 import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.domain.storage.*
 import io.reactivex.Observable
@@ -24,43 +26,23 @@ class EndTurnInteractor(
             workersListInteractor.get(),
             endTasksListInteractor.get(),
             hutorStatusesListInteractor.get(),
-            Function3 { workers: MutableList<Worker>, tasksList: List<Task>, statusesList: List<Status> ->
+            Function3 { workers: MutableList<Worker>, tasksList: List<Task>, hutorStatusesList: MutableList<Status> ->
                 var message = ""
                 tasksList.forEach { task ->
-                    val point = task.countPoint(workers, statusesList)
+                    selectAll(workers, task.enableConditions)
+                    val point = task.countPoint(workers, hutorStatusesList)
 
-                    val newStatusesList = statusesList.toMutableList()
                     task.results.forEach { taskResult ->
-                        taskResult.makeAction(newStatusesList, point, workers)
+                        taskResult.makeAction(hutorStatusesList, point, workers)
                         message += taskResult.makeMessage(workers)
                     }
-
-                    hutorStatusesListInteractor.update(newStatusesList)
+                    deselectAll(workers)
                 }
-                message += markWorkersAsRested(workers)
-                message += eatFood(workers, statusesList)
+
                 messageInteractor.update(END_TURN_PREFIX + message)
                 turnNumberInteractor.increment()
             }
         ).subscribe()
-    }
-
-    private fun markWorkersAsRested(workers: List<Worker>): String {
-        var message = ""
-        workers.forEach { worker ->
-            message += worker.rest()
-        }
-        return message
-    }
-
-    private fun eatFood(workers: List<Worker>, statusesList: List<Status>): String {
-        //todo сделать разное количество еды - возможно правило
-        val findStatus = statusesList.find { status -> status.code == "foodsRES" }
-        val size = workers.size
-        if (findStatus != null) {
-            findStatus.value = findStatus.value - size
-        }
-        return "Было съедено $size еды"
     }
 
 }
