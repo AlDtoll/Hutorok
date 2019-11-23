@@ -1,0 +1,41 @@
+{
+  "workers": [
+    {
+      "name": "Гавриил",
+      "nickname": "С копьем ходил",
+      "age": "ADULT",
+      "statuses": [
+        {
+          "code": "hasTool",
+          "name": "Владеет рабочим инструментом",
+          "description": "Инструмент помогает лучше осуществлять рабочую деятельность",
+          "value": 1.0,
+          "visible": true
+        }
+      ]
+    },
+    {
+      "name": "Агафья",
+      "nickname": "",
+      "age": "CHILDREN",
+      "statuses": [
+        {
+          "code": "hasRelative",
+          "name": "Есть родственник",
+          "description": "Люди с родственниками реже попадают в неприятности",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "hasPet",
+          "name": "Есть питомец",
+          "description": "Кошка, собака, а можеть птичка",
+          "value": 1.0,
+          "visible": false
+        }
+      ]
+    }
+  ]
+}
+
+

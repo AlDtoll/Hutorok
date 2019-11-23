@@ -3,6 +3,8 @@ package com.example.hutorok
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import com.example.hutorok.domain.ILoadDataInteractor
+import com.example.hutorok.domain.model.Task
+import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.domain.storage.IMessageInteractor
 import com.example.hutorok.routing.IGetNowScreenInteractor
 import com.example.hutorok.routing.OnBackPressedInteractor
@@ -25,8 +27,11 @@ class MainViewModel(
         onBackPressedInteractor.execute()
     }
 
-    override fun loadData() {
-        loadDataInteractor.update()
+    override fun loadData(
+        workers: MutableList<Worker>,
+        tasks: MutableList<Task>
+    ) {
+        loadDataInteractor.update(workers, tasks)
     }
 
     override fun messageData(): LiveData<String> {

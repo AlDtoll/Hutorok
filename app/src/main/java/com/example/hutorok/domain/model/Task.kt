@@ -2,6 +2,8 @@ package com.example.hutorok.domain.model
 
 import com.example.hutorok.domain.model.TaskFunction.Companion.ADD_ITSELF_VALUE
 import com.example.hutorok.domain.model.TaskFunction.Companion.MINUS_ITSELF_VALUE
+import org.json.JSONArray
+import org.json.JSONObject
 import java.util.*
 import kotlin.random.Random
 
@@ -17,6 +19,23 @@ class Task(
     val enableConditions: List<Triple<String, Symbol, Double>> = emptyList(),
     val canBeNegative: Boolean = false
 ) {
+
+    constructor(jsonObject: JSONObject) : this(
+        code = jsonObject.optString("code"),
+        name = jsonObject.optString("name"),
+        describe = jsonObject.optString("describe"),
+        workerFunction = TaskFunction(jsonObject.optJSONObject("workerFunction")),
+        hutorFunction = TaskFunction(jsonObject.optJSONObject("hutorFunction")),
+        results = parseTaskResults(jsonObject.optJSONArray("results")),
+        permissiveConditions = parseConditions(jsonObject.optJSONArray("permissiveConditions")),
+        type = (if (jsonObject.optString("type").isNotEmpty()) {
+            Type.valueOf(jsonObject.optString("type"))
+        } else {
+            Type.WORK
+        }),
+        enableConditions = parseConditions(jsonObject.optJSONArray("enableConditions")),
+        canBeNegative = jsonObject.optBoolean("canBeNegative")
+    )
 
     companion object {
         fun conditionsIsComplete(
@@ -43,6 +62,35 @@ class Task(
                 }
             }
             return true
+        }
+
+        fun parseTaskResults(jsonArray: JSONArray?): MutableList<TaskResult> {
+            jsonArray?.run {
+                val taskResults = mutableListOf<TaskResult>()
+                for (i in 0 until jsonArray.length()) {
+                    taskResults.add(TaskResult(jsonArray.getJSONObject(i)))
+                }
+                return taskResults
+            }
+            return mutableListOf()
+        }
+
+        fun parseConditions(jsonArray: JSONArray?): List<Triple<String, Task.Symbol, Double>> {
+            jsonArray?.run {
+                val conditions = mutableListOf<Triple<String, Task.Symbol, Double>>()
+                for (i in 0 until jsonArray.length()) {
+                    val jsonObject = jsonArray.getJSONObject(i)
+                    conditions.add(
+                        Triple(
+                            jsonObject.optString("statusCode"),
+                            Symbol.valueOf(jsonObject.optString("symbol")),
+                            jsonObject.optDouble("statusValue")
+                        )
+                    )
+                }
+                return conditions
+            }
+            return mutableListOf()
         }
     }
 
@@ -110,6 +158,10 @@ class TaskFunction(
     val statuses: List<Pair<String, Double>> = emptyList(),
     val defaultValue: Int = 6
 ) {
+    constructor(jsonObject: JSONObject?) : this(
+        statuses = parseStatuses(jsonObject?.optJSONArray("statuses")),
+        defaultValue = jsonObject?.optInt("defaultValue") ?: 6
+    )
 
     companion object {
         fun nothing(): TaskFunction {
@@ -118,6 +170,18 @@ class TaskFunction(
 
         const val ADD_ITSELF_VALUE = 100.500
         const val MINUS_ITSELF_VALUE = -100.500
+
+        fun parseStatuses(jsonArray: JSONArray?): List<Pair<String, Double>> {
+            jsonArray?.run {
+                val statuses = mutableListOf<Pair<String, Double>>()
+                for (i in 0 until jsonArray.length()) {
+                    val jsonObject = jsonArray.getJSONObject(i)
+                    statuses.add(Pair(jsonObject.optString("code"), jsonObject.optDouble("value")))
+                }
+                return statuses
+            }
+            return emptyList()
+        }
     }
 }
 
@@ -129,10 +193,39 @@ class TaskResult(
     val conditions: List<Pair<Triple<String, Task.Symbol, Double>, Double>> = emptyList(),
     val failMessage: String = ""
 ) {
+    constructor(jsonObject: JSONObject) : this(
+        target = TaskTarget.valueOf(jsonObject.optString("target")),
+        action = TaskAction.valueOf(jsonObject.optString("action")),
+        status = Status(jsonObject.getJSONObject("status")),
+        successMessage = jsonObject.optString("successMessage"),
+        conditions = parseConditions(jsonObject.optJSONArray("conditions")),
+        failMessage = jsonObject.optString("failMessage")
+    )
 
     companion object {
         var IS_SUCCESS = true
         var VALUE = 0.0
+
+        fun parseConditions(jsonArray: JSONArray?): List<Pair<Triple<String, Task.Symbol, Double>, Double>> {
+            jsonArray?.run {
+                val conditions = mutableListOf<Pair<Triple<String, Task.Symbol, Double>, Double>>()
+                for (i in 0 until jsonArray.length()) {
+                    val jsonObject = jsonArray.getJSONObject(i)
+                    conditions.add(
+                        Pair(
+                            Triple(
+                                jsonObject.optString("statusCode"),
+                                Task.Symbol.valueOf(jsonObject.optString("symbol")),
+                                jsonObject.getDouble("statusValue")
+                            ),
+                            jsonObject.getDouble("value")
+                        )
+                    )
+                }
+                return conditions
+            }
+            return emptyList()
+        }
     }
 
     fun makeAction(

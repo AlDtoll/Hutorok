@@ -1,0 +1,408 @@
+{
+  "tasks": [
+    {
+      "code": "getWoods",
+      "name": "Добыть строительной древесины",
+      "describe": "Для этой задачи лучше подойдут ремесленники и люди с инструментами",
+      "workersFunction": {
+        "statuses": [
+          {
+            "code": "hasTool",
+            "value": 1.5
+          },
+          {
+            "code": "craftsman",
+            "value": 1.0
+          },
+          {
+            "code": "?DISEASE",
+            "value": -1.0
+          },
+          {
+            "code": "worked",
+            "value": -100.500
+          }
+        ]
+      },
+      "hutorFunction": {
+        "statuses": [
+          {
+            "code": "forest",
+            "value": 2.0
+          }
+        ]
+      },
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE",
+          "status": {
+            "code": "woodsRES",
+            "name": "Строительная древесина",
+            "describe": "",
+            "value": 0.0,
+            "visible": true
+          },
+          "successMessage": "Удалось добыть #VALUE дерева"
+        },
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE",
+          "status": {
+            "code": "felling",
+            "name": "Вырубка",
+            "describe": "Когда-то здесь был лес, а теперь только пни",
+            "value": 1.0,
+            "visible": true
+          },
+          "successMessage": "Возле селения образовалась вырубка"
+        }
+      ]
+    },
+    {
+      "code": "getBuilds",
+      "name": "Заниматься строительством",
+      "describe": "Возводить дома, частоколы, памятники и т.д",
+      "workersFunction": {
+        "statuses": [
+          {
+            "code": "hasTool",
+            "value": 1.5
+          },
+          {
+            "code": "builder",
+            "value": 1.0
+          },
+          {
+            "code": "?DISEASE",
+            "value": -1.0
+          },
+          {
+            "code": "worked",
+            "value": -100.500
+          }
+        ]
+      },
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE",
+          "status": {
+            "code": "buildsRES",
+            "name": "Очки строительства",
+            "describe": "",
+            "value": 0.0,
+            "visible": true
+          },
+          "successMessage": "Удалось построить #VALUE очков"
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "woodsRES",
+          "symbol": "MORE",
+          "statusValue": 1.0
+        }
+      ]
+    },
+    {
+      "code": "completeHouse",
+      "name": "Завершить строительство жилого дома",
+      "describe": "Отнимет 15 древесины и 15 очков строительства",
+      "type": "BUILD",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "ADD_STATUS",
+          "status": {
+            "code": "houseBUILDING",
+            "name": "Жилой дом",
+            "describe": "Тут живут люди",
+            "value": 1.0,
+            "visible": true
+          },
+          "successMessage": "Завершено строительство дома"
+        },
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "buildsRES",
+            "name": "",
+            "describe": "",
+            "value": -15.0,
+            "visible": true
+          },
+          "successMessage": "Количество древесины стало меньше на 15"
+        },
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "woodsRES",
+            "name": "",
+            "describe": "",
+            "value": -15.0,
+            "visible": true
+          },
+          "successMessage": "Количество очков строительства стало меньше на 15"
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "woodsRES",
+          "symbol": "MORE",
+          "statusValue": 15.0
+        },
+        {
+          "statusCode": "buildsRES",
+          "symbol": "MORE",
+          "statusValue": 15.0
+        }
+      ]
+    },
+    {
+      "code": "makeTool",
+      "name": "Сделать инструмент",
+      "describe": "Создать мотыго-лопато-топор",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "toolsRES",
+            "name": "Инструмент",
+            "describe": "Мотыго-лопато-топор",
+            "value": 1.0,
+            "visible": true
+          },
+          "successMessage": "Был сделан инструмент"
+        }
+      ]
+    },
+    {
+      "code": "giveTool",
+      "name": "Дать инструмент",
+      "describe": "Отдать мотыго-лопато-топор",
+      "type": "PERSON",
+      "results": [
+        {
+          "target": "ONE_SELECTED_WORKER",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "hasTool",
+            "name": "Владеет рабочим инструментом",
+            "describe": "Инструмент помогает лучше осуществлять рабочую деятельность",
+            "value": 1.0,
+            "visible": true
+          },
+          "successMessage": "#WORKER получил инструмент"
+        },
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "toolsRES",
+            "name": "Инструмент",
+            "describe": "Мотыго-лопато-топор",
+            "value": -1.0,
+            "visible": true
+          }
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "toolsRES",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "hasTool",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        }
+      ]
+    },
+    {
+      "code": "takeTool",
+      "name": "Взять инструмент",
+      "describe": "Забрать мотыго-лопато-топор у рабочего",
+      "type": "PERSON",
+      "results": [
+        {
+          "target": "ONE_SELECTED_WORKER",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "hasTool",
+            "name": "Владеет рабочим инструментом",
+            "describe": "Инструмент помогает лучше осуществлять рабочую деятельность",
+            "value": -1.0,
+            "visible": true
+          },
+          "successMessage": "#WORKER остался без инструмента"
+        },
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "toolsRES",
+            "name": "Инструмент",
+            "describe": "Мотыго-лопато-топор",
+            "value": 1.0,
+            "visible": true
+          }
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "hasTool",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        }
+      ]
+    },
+    {
+      "code": "healWorkDisease",
+      "name": "Лечиться от недомогания",
+      "describe": "Отдохнуть, да травы пожевать",
+      "type": "PERSON",
+      "results": [
+        {
+          "target": "ONE_SELECTED_WORKER",
+          "action": "REMOVE_STATUS",
+          "status": {
+            "code": "workDISEASE",
+            "name": "Недомогание",
+            "describe": "Жар и тошнота",
+            "value": 1.0,
+            "visible": true
+          },
+          "successMessage": "#WORKER излечился от недомогания"
+        },
+        {
+          "target": "ONE_SELECTED_WORKER",
+          "action": "ADD_STATUS",
+          "status": {
+            "code": "alreadyHeal",
+            "name": "Уже лечился",
+            "describe": "На это ходу этот персонаж уже лечился",
+            "value": 1.0,
+            "visible": false
+          }
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "workDISEASE",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        },
+        {
+          "statusCode": "alreadyHeal",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        }
+      ]
+    },
+    {
+      "code": "findMagicStones",
+      "name": "Искать магические камни",
+      "describe": "Искать магические камни вокруг поселения",
+      "type": "WORK",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_BY_RANDOM_VALUE",
+          "status": {
+            "code": "magicStonesRES",
+            "name": "Магический камень",
+            "describe": "Используется для творения волшебства и магических ритуалов",
+            "value": 5.0,
+            "visible": true
+          },
+          "successMessage": "Нашлось #VALUE магических камней",
+          "conditions": [
+            {
+              "statusCode": "forest",
+              "symbol": "MORE",
+              "statusValue": 0.0,
+              "value": 50.0
+            }
+          ],
+          "failMessage": "Не удалось найти камней"
+        }
+      ]
+    },
+    {
+      "code": "callWorker",
+      "name": "Провести ритуал призвания жителя",
+      "describe": "Ритуал потратит 1 магический камень",
+      "type": "BUILD",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "ADD_WORKER",
+          "status": {
+            "code": "ADULT",
+            "name": "Никодим",
+            "describe": "Носит шапку соболью",
+            "value": 0.0,
+            "visible": true
+          },
+          "successMessage": "К селению присоединился #WORKER"
+        },
+        {
+          "target": "ONE_SELECTED_WORKER",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "hasSobolHat",
+            "name": "Соболья шапка",
+            "describe": "Шапка из соболя",
+            "value": 1.0,
+            "visible": true
+          }
+        },
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "magicStonesRES",
+            "name": "Магический камень",
+            "describe": "Используется для творения волшебства и магических ритуалов",
+            "value": -1.0,
+            "visible": true
+          }
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "magicStonesRES",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        }
+      ]
+    },
+    {
+      "code": "sacrifice",
+      "name": "Принести рабочего в жертву",
+      "describe": "Ритуал потратит 1 магический камень",
+      "type": "PERSON",
+      "results": [
+        {
+          "target": "ONE_SELECTED_WORKER",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "deadINVISIBLE",
+            "name": "Мертв",
+            "describe": "Усопшее тело",
+            "value": 1.0,
+            "visible": true
+          },
+          "successMessage": "#WORKER был принесен в жертву"
+        }
+      ]
+    }
+  ]
+}

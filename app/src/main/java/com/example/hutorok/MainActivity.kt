@@ -5,6 +5,8 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.example.hutorok.domain.model.Task
+import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.ext.replaceFragment
 import com.example.hutorok.screen.builds_screen.BuildsScreen
 import com.example.hutorok.screen.history_screen.HistoryScreen
@@ -12,6 +14,7 @@ import com.example.hutorok.screen.start_screen.StartScreen
 import com.example.hutorok.screen.tasks_screen.TasksScreen
 import com.example.hutorok.screen.worker_info_screen.WorkerInfoScreen
 import com.example.hutorok.screen.workers_screen.WorkersScreen
+import org.json.JSONObject
 import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
@@ -21,7 +24,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initToolbar()
         mainViewModel.nowScreen().observe(this, Observer {
             when (it) {
                 NowScreen.START_SCREEN -> showStartScreen()
@@ -34,7 +36,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        mainViewModel.loadData()
+        loadFromResources()
 
         mainViewModel.messageData().observe(this, Observer {
             it?.run {
@@ -52,10 +54,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         mainViewModel.onBackPressed()
-    }
-
-    private fun initToolbar() {
-//        setSupportActionBar(toolbar)
     }
 
     private fun showStartScreen() {
@@ -80,6 +78,29 @@ class MainActivity : AppCompatActivity() {
 
     private fun showHistoryScreen() {
         replaceFragment(HistoryScreen.newInstance())
+    }
+
+    private fun loadFromResources() {
+        val workersText = resources.openRawResource(R.raw.workers)
+            .bufferedReader().use { it.readText() }
+        val workers = mutableListOf<Worker>()
+        val workersObject = JSONObject(workersText)
+        val workersArray = workersObject.getJSONArray("workers")
+        for (i in 0 until workersArray.length()) {
+            workers.add(Worker(workersArray.getJSONObject(i)))
+        }
+
+        val tasksText = resources.openRawResource(R.raw.tasks)
+            .bufferedReader().use { it.readText() }
+        val tasks = mutableListOf<Task>()
+        val tasksObject = JSONObject(tasksText)
+        val tasksArray = tasksObject.getJSONArray("tasks")
+        for (i in 0 until tasksArray.length()) {
+            tasks.add(Task(tasksArray.getJSONObject(i)))
+        }
+
+
+        mainViewModel.loadData(workers, tasks)
     }
 
 }

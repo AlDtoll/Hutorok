@@ -1,6 +1,8 @@
 package com.example.hutorok
 
 import androidx.lifecycle.LiveData
+import com.example.hutorok.domain.model.Task
+import com.example.hutorok.domain.model.Worker
 
 interface IMainViewModel {
 
@@ -8,7 +10,10 @@ interface IMainViewModel {
 
     fun onBackPressed()
 
-    fun loadData()
+    fun loadData(
+        workers: MutableList<Worker>,
+        tasks: MutableList<Task>
+    )
 
     fun messageData(): LiveData<String>
 

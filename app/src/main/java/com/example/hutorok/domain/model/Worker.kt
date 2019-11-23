@@ -1,5 +1,7 @@
 package com.example.hutorok.domain.model
 
+import org.json.JSONArray
+import org.json.JSONObject
 import java.util.*
 import kotlin.random.Random
 
@@ -15,6 +17,27 @@ class Worker(
         nickname = "",
         age = Age.ADULT
     )
+
+    constructor(jsonObject: JSONObject) : this(
+        name = jsonObject.optString("name"),
+        nickname = jsonObject.optString("nickname"),
+        age = Age.valueOf(jsonObject.optString("age")),
+        statuses = parseStatuses(jsonObject.optJSONArray("statuses")),
+        isSelected = jsonObject.optBoolean("isSelected")
+    )
+
+    companion object {
+        fun parseStatuses(jsonArray: JSONArray?): MutableList<Status> {
+            jsonArray?.run {
+                val statuses = mutableListOf<Status>()
+                for (i in 0 until jsonArray.length()) {
+                    statuses.add(Status(jsonArray.getJSONObject(i)))
+                }
+                return statuses
+            }
+            return mutableListOf()
+        }
+    }
 
     fun markAsWorked(): String {
         val workedStatus = this.statuses.find { status -> status.code == "worked" }
