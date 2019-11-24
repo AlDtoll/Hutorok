@@ -41,8 +41,15 @@ class WorkerAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = items[position]
         holder.itemView.run {
-            this.onClick {
-                callback.selectWorker(item)
+            if (isOrder) {
+                this.setOnLongClickListener {
+                    callback.selectWorker(item)
+                    true
+                }
+            } else {
+                this.onClick {
+                    callback.selectWorker(item)
+                }
             }
             name.text = item.name
             nickname.text = item.nickname

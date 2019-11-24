@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hutorok.R
 import com.example.hutorok.domain.model.Status
+import com.example.hutorok.ext.addTextWatcher
+import com.example.hutorok.ext.onClick
 import com.example.hutorok.screen.StatusAdapter
 import kotlinx.android.synthetic.main.fragment_builds.*
 import org.koin.android.ext.android.inject
@@ -24,7 +26,11 @@ class BuildsScreen : Fragment() {
         fun newInstance(): BuildsScreen = BuildsScreen()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_builds, container, false)
     }
 
@@ -43,6 +49,28 @@ class BuildsScreen : Fragment() {
         initToolbar()
 
         initRecyclerView()
+
+        buildsSearch.addTextWatcher { search, _, _, _ ->
+            buildsViewModel.searchChange(search.toString())
+        }
+
+        buildsViewModel.searchData().observe(this, Observer {
+            it?.run {
+                if (it != buildsSearch.text.toString()) {
+                    buildsSearch.setText(it)
+                    buildsSearch.setSelection(it.length)
+                }
+                if (it.isNotEmpty()) {
+                    buildsSearchClearButton.visibility = View.VISIBLE
+                } else {
+                    buildsSearchClearButton.visibility = View.GONE
+                }
+            }
+        })
+
+        buildsSearchClearButton.onClick {
+            buildsViewModel.clickClearButton()
+        }
     }
 
     private fun initToolbar() {

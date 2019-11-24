@@ -61,7 +61,7 @@ val appModule = module {
         ) as IWorkersViewModel
     }
     single { WorkerInfoViewModel(get(), get()) as IWorkerInfoViewModel }
-    single { TasksViewModel(get(), get(), get(), get()) as ITasksViewModel }
+    single { TasksViewModel(get(), get(), get(), get(), get()) as ITasksViewModel }
     single { BuildsViewModel(get()) as IBuildsViewModel }
     single { HistoryViewModel(get()) as IHistoryViewModel }
 

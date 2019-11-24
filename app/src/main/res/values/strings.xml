@@ -9,6 +9,8 @@
     <string name="workers_screen_toolbar_title">Хуторяне</string>
     <string name="tasks_screen_toolbar_title">Делишечки</string>
     <string name="builds_screen_toolbar_title">Хуторок</string>
-    <string name="history_screen_toolbar_title">В прошлом случилось...</string>
+    <string name="history_screen_toolbar_title">В прошлом случилось…</string>
     <string name="execute_task_button_text">Отправить работников</string>
+    <string name="execute_task_button_text_for_one_worker">Отправить работника</string>
+    <string name="execute_task_button_text_without_worker">Выполнить работу</string>
 </resources>

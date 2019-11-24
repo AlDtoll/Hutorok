@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hutorok.R
 import com.example.hutorok.domain.model.Task
+import com.example.hutorok.ext.addTextWatcher
+import com.example.hutorok.ext.onClick
 import com.example.hutorok.screen.TaskAdapter
 import kotlinx.android.synthetic.main.fragment_tasks.*
 import org.koin.android.ext.android.inject
@@ -24,7 +26,11 @@ class TasksScreen : Fragment() {
         fun newInstance(): TasksScreen = TasksScreen()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_tasks, container, false)
     }
 
@@ -36,12 +42,38 @@ class TasksScreen : Fragment() {
     private fun initUi() {
         initToolbar()
 
+        tasksScreenEndTurnButton.setOnClickListener {
+            tasksViewModel.clickEndTurnButton()
+        }
+
         tasksViewModel.tasksData().observe(this, Observer {
             taskAdapter.clear()
             it?.run {
                 showTasks(it)
             }
         })
+
+        tasksSearch.addTextWatcher { search, _, _, _ ->
+            tasksViewModel.searchChange(search.toString())
+        }
+
+        tasksViewModel.searchData().observe(this, Observer {
+            it?.run {
+                if (it != tasksSearch.text.toString()) {
+                    tasksSearch.setText(it)
+                    tasksSearch.setSelection(it.length)
+                }
+                if (it.isNotEmpty()) {
+                    tasksSearchClearButton.visibility = View.VISIBLE
+                } else {
+                    tasksSearchClearButton.visibility = View.GONE
+                }
+            }
+        })
+
+        tasksSearchClearButton.onClick {
+            tasksViewModel.clickClearButton()
+        }
 
         initRecyclerView()
     }

@@ -7,6 +7,29 @@
         android:orientation="vertical"
         tools:background="@color/green">
 
+    <EditText
+            android:id="@+id/buildsSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_small"
+            android:layout_marginTop="@dimen/padding_small"
+            android:paddingStart="0dp"
+            android:paddingEnd="@dimen/search_bar_padding_end"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+            android:id="@+id/buildsSearchClearButton"
+            android:layout_width="@dimen/search_bar_icon_size"
+            android:layout_height="@dimen/search_bar_icon_size"
+            android:layout_marginEnd="@dimen/padding_small"
+            android:src="@drawable/ic_clear"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/buildsSearch"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/buildsSearch"
+            tools:visibility="visible" />
+
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/statusesList"
             android:layout_width="match_parent"
@@ -15,7 +38,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/buildsSearch"
             tools:listitem="@layout/status_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

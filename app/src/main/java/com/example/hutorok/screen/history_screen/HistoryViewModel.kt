@@ -6,13 +6,13 @@ import com.example.hutorok.domain.storage.IHistoryInteractor
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 
 class HistoryViewModel(
     private val historyInteractor: IHistoryInteractor
 ) : IHistoryViewModel {
 
-    private var search = BehaviorSubject.create<String>()
+    private var search = PublishSubject.create<String>()
 
     override fun historyData(): LiveData<List<String>> {
         val filtered = Observable.combineLatest(historyInteractor.get(),
@@ -22,7 +22,7 @@ class HistoryViewModel(
                     list
                 } else {
                     list.filter { it.contains(search, true) }
-                }
+                }.reversed()
             })
         return LiveDataReactiveStreams
             .fromPublisher(filtered.toFlowable(BackpressureStrategy.LATEST))

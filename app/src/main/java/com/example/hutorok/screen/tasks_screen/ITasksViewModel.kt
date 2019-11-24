@@ -9,4 +9,12 @@ interface ITasksViewModel {
 
     fun clickTask(task: Task)
 
+    fun clickEndTurnButton()
+
+    fun searchChange(searchData: String)
+
+    fun searchData(): LiveData<String>
+
+    fun clickClearButton()
+
 }

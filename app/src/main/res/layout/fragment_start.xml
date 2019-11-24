@@ -1,74 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:orientation="vertical"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:background="@color/green"
->
+        android:orientation="vertical"
+        tools:background="@color/green">
 
     <Button
             android:id="@+id/workersButton"
-            android:text="@string/workers_button_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textAllCaps="false"
             android:layout_marginStart="@dimen/padding_small"
-            android:layout_marginLeft="@dimen/padding_small"
-            android:layout_marginTop="@dimen/padding_small"/>
+            android:layout_marginTop="@dimen/padding_small"
+            android:drawableStart="@drawable/ic_chat"
+            android:drawablePadding="@dimen/padding_small"
+            android:text="@string/workers_button_text"
+            android:textAllCaps="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     <Button
             android:id="@+id/buildsButton"
-            android:text="@string/builds_button_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/workersButton"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textAllCaps="false"
             android:layout_marginStart="@dimen/padding_small"
-            android:layout_marginLeft="@dimen/padding_small"
             android:layout_marginTop="@dimen/padding_small"
-    />
+            android:drawableStart="@drawable/ic_medieval_house"
+            android:drawablePadding="@dimen/padding_small"
+            android:text="@string/builds_button_text"
+            android:textAllCaps="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/workersButton" />
 
     <Button
             android:id="@+id/tasksButton"
-            android:text="@string/tasks_button_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/buildsButton"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textAllCaps="false"
             android:layout_marginStart="@dimen/padding_small"
-            android:layout_marginLeft="@dimen/padding_small"
             android:layout_marginTop="@dimen/padding_small"
-    />
+            android:drawableStart="@drawable/ic_axe"
+            android:drawablePadding="@dimen/padding_small"
+            android:text="@string/tasks_button_text"
+            android:textAllCaps="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/buildsButton" />
 
     <Button
             android:id="@+id/historyButton"
-            android:text="@string/history_button_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tasksButton"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textAllCaps="false"
             android:layout_marginStart="@dimen/padding_small"
-            android:layout_marginLeft="@dimen/padding_small"
-            android:layout_marginTop="@dimen/padding_small" />
+            android:layout_marginTop="@dimen/padding_small"
+            android:drawableStart="@drawable/ic_scroll"
+            android:drawablePadding="@dimen/padding_small"
+            android:text="@string/history_button_text"
+            android:textAllCaps="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tasksButton" />
 
     <Button
             android:id="@+id/endTurnButton"
-            android:text="@string/end_turn_button_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:textAllCaps="false"
-            android:layout_marginEnd="@dimen/padding_small"
             android:layout_marginTop="@dimen/padding_small"
+            android:layout_marginEnd="@dimen/padding_small"
             android:layout_marginBottom="@dimen/padding_small"
-            android:layout_marginRight="@dimen/padding_small"/>
+            android:drawableStart="@drawable/ic_end_turn"
+            android:drawablePadding="@dimen/padding_small"
+            android:text="@string/end_turn_button_text"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
