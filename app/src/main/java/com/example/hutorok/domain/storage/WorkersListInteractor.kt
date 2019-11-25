@@ -49,4 +49,6 @@ class WorkersListInteractor(
         }
     }
 
+    override fun value(): MutableList<Worker> = list.value ?: emptyList<Worker>().toMutableList()
+
 }

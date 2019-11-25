@@ -16,4 +16,6 @@ interface IWorkersListInteractor {
     fun getNextWorker()
 
     fun add(worker: Worker)
+
+    fun value(): MutableList<Worker>
 }

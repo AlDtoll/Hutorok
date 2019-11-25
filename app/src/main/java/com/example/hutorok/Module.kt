@@ -74,6 +74,6 @@ val appModule = module {
     single { ImportantStatusNamesListInteractor() as IImportantStatusNamesListInteractor }
     single { EndTasksListInteractor() as IEndTasksListInteractor }
     single { HistoryInteractor() as IHistoryInteractor }
-    single { TurnNumberInteractor(get()) as ITurnNumberInteractor }
+    single { TurnNumberInteractor(get(), get()) as ITurnNumberInteractor }
     single { InvisibleStatusNamesListInteractor() as IInvisibleStatusNamesListInteractor }
 }

@@ -1,5 +1,6 @@
 package com.example.hutorok
 
+import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
@@ -17,6 +18,8 @@ import com.example.hutorok.screen.worker_info_screen.WorkerInfoScreen
 import com.example.hutorok.screen.workers_screen.WorkersScreen
 import org.json.JSONObject
 import org.koin.android.ext.android.inject
+import java.io.File
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -82,8 +85,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadFromResources() {
-        val workersText = resources.openRawResource(R.raw.workers)
-            .bufferedReader().use { it.readText() }
+        val isWorkersFilePresent = isFilePresent(this, "currentworkers.json")
+        val workersText = if (isWorkersFilePresent) {
+            read("currentworkers.json")
+        } else {
+            resources.openRawResource(R.raw.workers)
+                .bufferedReader().use { it.readText() }
+        }
         val workers = mutableListOf<Worker>()
         val workersObject = JSONObject(workersText)
         val workersArray = workersObject.getJSONArray("workers")
@@ -119,6 +127,21 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainViewModel.loadData(workers, tasks, hutorokStatuses, endTasks)
+    }
+
+    private fun isFilePresent(context: Context, fileName: String): Boolean {
+        val path = context.filesDir.absolutePath + "/" + fileName
+        val file = File(path)
+        return file.exists()
+    }
+
+    private fun read(fileName: String): String? {
+        var string = ""
+        val path = App.instance.filesDir.absolutePath + "/" + fileName
+        File(path).bufferedReader().readLines().forEach {
+            string += it
+        }
+        return string
     }
 
 }
