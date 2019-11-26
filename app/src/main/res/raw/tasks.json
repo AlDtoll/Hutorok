@@ -4,7 +4,7 @@
       "code": "getWoods",
       "name": "Добыть строительной древесины",
       "describe": "Для этой задачи лучше подойдут ремесленники и люди с инструментами",
-      "workersFunction": {
+      "workerFunction": {
         "statuses": [
           {
             "code": "hasTool",
@@ -22,7 +22,8 @@
             "code": "worked",
             "value": -100.500
           }
-        ]
+        ],
+        "defaultValue": 6
       },
       "hutorFunction": {
         "statuses": [
@@ -63,7 +64,7 @@
       "code": "getBuilds",
       "name": "Заниматься строительством",
       "describe": "Возводить дома, частоколы, памятники и т.д",
-      "workersFunction": {
+      "workerFunction": {
         "statuses": [
           {
             "code": "hasTool",
@@ -81,7 +82,8 @@
             "code": "worked",
             "value": -100.500
           }
-        ]
+        ],
+        "defaultValue": 6
       },
       "results": [
         {

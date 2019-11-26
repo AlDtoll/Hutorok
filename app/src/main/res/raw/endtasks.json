@@ -82,6 +82,26 @@
           "statusValue": 1.0
         }
       ]
+    },
+    {
+      "code": "removeHealWorkDisease",
+      "name": "Вернуть возможность лечиться от недомогания",
+      "describe": "",
+      "canBeNegative": true,
+      "results": [
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "REMOVE_STATUS",
+          "status": {
+            "code": "alreadyHeal",
+            "name": "Уже лечился",
+            "describe": "",
+            "value": 0.0,
+            "visible": true
+          },
+          "successMessage": "#WORKER снова может лечиться от недомогания"
+        }
+      ]
     }
   ]
 }
