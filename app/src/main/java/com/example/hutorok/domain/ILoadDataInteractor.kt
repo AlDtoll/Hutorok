@@ -10,6 +10,8 @@ interface ILoadDataInteractor {
         workers: MutableList<Worker>,
         tasks: MutableList<Task>,
         hutorokStatuses: MutableList<Status>,
-        endTasks: MutableList<Task>
+        endTasks: MutableList<Task>,
+        events: MutableList<String>,
+        turnNumber: Int
     )
 }

@@ -12,14 +12,17 @@ class MockLoadDataInteractor(
     private val importantStatusNamesListInteractor: IImportantStatusNamesListInteractor,
     private val endTasksListInteractor: IEndTasksListInteractor,
     private val turnNumberInteractor: ITurnNumberInteractor,
-    private val invisibleStatusNamesListInteractor: IInvisibleStatusNamesListInteractor
+    private val invisibleStatusNamesListInteractor: IInvisibleStatusNamesListInteractor,
+    private val historyInteractor: IHistoryInteractor
 ) : ILoadDataInteractor {
 
     override fun update(
         workers: MutableList<Worker>,
         tasks: MutableList<Task>,
         hutorokStatuses: MutableList<Status>,
-        endTasks: MutableList<Task>
+        endTasks: MutableList<Task>,
+        events: MutableList<String>,
+        turnNumber: Int
     ) {
         updateWorkers(workers)
 
@@ -31,7 +34,7 @@ class MockLoadDataInteractor(
 
         updateEndTasks(endTasks)
 
-        startHistory()
+        updateHistory(events, turnNumber)
 
         updateInvisibleStatuses()
     }
@@ -59,8 +62,9 @@ class MockLoadDataInteractor(
         endTasksListInteractor.update(endTasks)
     }
 
-    private fun startHistory() {
-        turnNumberInteractor.increment()
+    private fun updateHistory(events: MutableList<String>, turnNumber: Int) {
+        historyInteractor.update(events)
+        turnNumberInteractor.update(turnNumber)
     }
 
     private fun updateInvisibleStatuses() {

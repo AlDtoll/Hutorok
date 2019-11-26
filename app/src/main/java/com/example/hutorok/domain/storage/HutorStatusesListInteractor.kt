@@ -13,4 +13,6 @@ class HutorStatusesListInteractor : IHutorStatusesListInteractor {
     }
 
     override fun get(): Observable<MutableList<Status>> = list
+
+    override fun value(): MutableList<Status> = list.value ?: emptyList<Status>().toMutableList()
 }

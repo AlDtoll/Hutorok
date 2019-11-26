@@ -8,4 +8,6 @@ interface IHutorStatusesListInteractor {
     fun update(statuses: MutableList<Status>)
 
     fun get(): Observable<MutableList<Status>>
+
+    fun value(): MutableList<Status>
 }

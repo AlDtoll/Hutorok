@@ -84,7 +84,7 @@ class WorkersScreen : Fragment() {
 
         workersViewModel.isExecuteTaskButtonEnable().observe(this, Observer {
             it?.run {
-                executeTaskButton.isEnabled = true
+                executeTaskButton.isEnabled = it
             }
         })
     }

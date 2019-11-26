@@ -32,9 +32,11 @@ class MainViewModel(
         workers: MutableList<Worker>,
         tasks: MutableList<Task>,
         hutorokStatuses: MutableList<Status>,
-        endTasks: MutableList<Task>
+        endTasks: MutableList<Task>,
+        events: MutableList<String>,
+        turnNumber: Int
     ) {
-        loadDataInteractor.update(workers, tasks, hutorokStatuses, endTasks)
+        loadDataInteractor.update(workers, tasks, hutorokStatuses, endTasks, events, turnNumber)
     }
 
     override fun messageData(): LiveData<String> {

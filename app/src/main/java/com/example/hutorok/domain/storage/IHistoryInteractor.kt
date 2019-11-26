@@ -9,4 +9,6 @@ interface IHistoryInteractor {
     fun get(): Observable<MutableList<String>>
 
     fun add(message: String)
+
+    fun value(): MutableList<String>
 }

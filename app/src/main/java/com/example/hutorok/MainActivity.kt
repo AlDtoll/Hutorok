@@ -108,8 +108,14 @@ class MainActivity : AppCompatActivity() {
             tasks.add(Task(tasksArray.getJSONObject(i)))
         }
 
-        val hutorokText = resources.openRawResource(R.raw.hutorok)
-            .bufferedReader().use { it.readText() }
+        val isHutorFilePresent = isFilePresent(this, "currenthutorok.json")
+
+        val hutorokText = if (isHutorFilePresent) {
+            read("currenthutorok.json")
+        } else {
+            resources.openRawResource(R.raw.hutorok)
+                .bufferedReader().use { it.readText() }
+        }
         val hutorokStatuses = mutableListOf<Status>()
         val hutorokStatusObject = JSONObject(hutorokText)
         val statusArray = hutorokStatusObject.getJSONArray("statuses")
@@ -126,7 +132,28 @@ class MainActivity : AppCompatActivity() {
             endTasks.add(Task(endTasksArray.getJSONObject(i)))
         }
 
-        mainViewModel.loadData(workers, tasks, hutorokStatuses, endTasks)
+        val isHistoryFilePresent = isFilePresent(this, "history.json")
+        val historyText = if (isHistoryFilePresent) {
+            read("history.json")
+        } else {
+            resources.openRawResource(R.raw.start)
+                .bufferedReader().use { it.readText() }
+        }
+        val events = mutableListOf<String>()
+        val historyObject = JSONObject(
+            if (historyText.isEmpty()) {
+                resources.openRawResource(R.raw.start)
+                    .bufferedReader().use { it.readText() }
+            } else {
+                historyText
+            })
+        val eventsArray = historyObject.getJSONArray("events")
+        val turn = historyObject.getInt("turn")
+        for (i in 0 until eventsArray.length()) {
+            events.add(eventsArray.getString(i))
+        }
+
+        mainViewModel.loadData(workers, tasks, hutorokStatuses, endTasks, events, turn)
     }
 
     private fun isFilePresent(context: Context, fileName: String): Boolean {
@@ -135,7 +162,7 @@ class MainActivity : AppCompatActivity() {
         return file.exists()
     }
 
-    private fun read(fileName: String): String? {
+    private fun read(fileName: String): String {
         var string = ""
         val path = App.instance.filesDir.absolutePath + "/" + fileName
         File(path).bufferedReader().readLines().forEach {

@@ -32,4 +32,7 @@ class HistoryInteractor : IHistoryInteractor {
         }
         return message.replace(EXECUTE_TASK_PREFIX, "")
     }
+
+    override fun value(): MutableList<String> = list.value ?: emptyList<String>().toMutableList()
+
 }
