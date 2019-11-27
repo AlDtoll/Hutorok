@@ -14,7 +14,8 @@ class EndTurnInteractor(
     private val hutorStatusesListInteractor: IHutorStatusesListInteractor,
     private val endTasksListInteractor: IEndTasksListInteractor,
     private val messageInteractor: IMessageInteractor,
-    private val turnNumberInteractor: ITurnNumberInteractor
+    private val turnNumberInteractor: ITurnNumberInteractor,
+    private val invisibleStatusNamesListInteractor: IInvisibleStatusNamesListInteractor
 ) : IEndTurnInteractor {
 
     companion object {
@@ -40,6 +41,7 @@ class EndTurnInteractor(
                 }
 
                 messageInteractor.update(END_TURN_PREFIX + message)
+                invisibleStatusNamesListInteractor.refresh()
                 turnNumberInteractor.increment()
             }
         ).subscribe()

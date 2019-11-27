@@ -45,13 +45,21 @@ val appModule = module {
         ) as ILoadDataInteractor
     }
     single { ScenarioInteractor() as IScenarioInteractor }
-    single { ExecuteTaskInteractor(get(), get(), get(), get(), get()) as IExecuteTaskInteractor }
-    single { EndTurnInteractor(get(), get(), get(), get(), get()) as IEndTurnInteractor }
+    single {
+        ExecuteTaskInteractor(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        ) as IExecuteTaskInteractor
+    }
+    single { EndTurnInteractor(get(), get(), get(), get(), get(), get()) as IEndTurnInteractor }
 
     single { StartViewModel(get(), get(), get(), get(), get(), get()) as IStartViewModel }
     single {
         WorkersViewModel(
-            get(),
             get(),
             get(),
             get(),
@@ -76,5 +84,5 @@ val appModule = module {
     single { EndTasksListInteractor() as IEndTasksListInteractor }
     single { HistoryInteractor() as IHistoryInteractor }
     single { TurnNumberInteractor(get(), get(), get()) as ITurnNumberInteractor }
-    single { InvisibleStatusNamesListInteractor() as IInvisibleStatusNamesListInteractor }
+    single { InvisibleStatusNamesListInteractor(get()) as IInvisibleStatusNamesListInteractor }
 }

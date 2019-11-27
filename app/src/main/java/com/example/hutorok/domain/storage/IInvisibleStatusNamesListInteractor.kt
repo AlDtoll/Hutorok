@@ -4,8 +4,11 @@ import io.reactivex.Observable
 
 interface IInvisibleStatusNamesListInteractor {
 
-    fun update(statuses: List<String>)
+    fun update(statuses: MutableList<String>)
 
-    fun get(): Observable<List<String>>
+    fun get(): Observable<MutableList<String>>
 
+    fun value(): MutableList<String>
+
+    fun refresh()
 }

@@ -4,10 +4,7 @@ import com.example.hutorok.domain.model.Status
 import com.example.hutorok.domain.model.Task
 import com.example.hutorok.domain.model.Task.Companion.deselectAll
 import com.example.hutorok.domain.model.Worker
-import com.example.hutorok.domain.storage.IHutorStatusesListInteractor
-import com.example.hutorok.domain.storage.IMessageInteractor
-import com.example.hutorok.domain.storage.ITaskInteractor
-import com.example.hutorok.domain.storage.IWorkersListInteractor
+import com.example.hutorok.domain.storage.*
 import com.example.hutorok.routing.OnBackPressedInteractor
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
@@ -17,7 +14,8 @@ class ExecuteTaskInteractor(
     private val taskInteractor: ITaskInteractor,
     private val hutorStatusesListInteractor: IHutorStatusesListInteractor,
     private val messageInteractor: IMessageInteractor,
-    private val onBackPressedInteractor: OnBackPressedInteractor
+    private val onBackPressedInteractor: OnBackPressedInteractor,
+    private val invisibleStatusNamesListInteractor: IInvisibleStatusNamesListInteractor
 ) : IExecuteTaskInteractor {
 
     companion object {
@@ -49,6 +47,7 @@ class ExecuteTaskInteractor(
                 messageInteractor.update(EXECUTE_TASK_PREFIX + message)
             }
         ).subscribe()
+        invisibleStatusNamesListInteractor.refresh()
         onBackPressedInteractor.execute()
     }
 

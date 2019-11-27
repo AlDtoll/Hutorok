@@ -68,7 +68,7 @@ class MockLoadDataInteractor(
     }
 
     private fun updateInvisibleStatuses() {
-        val codes = listOf(
+        val codes = mutableListOf(
             "?INVISIBLE"
         )
         invisibleStatusNamesListInteractor.update(codes)

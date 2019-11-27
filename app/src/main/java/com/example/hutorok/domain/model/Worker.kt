@@ -10,7 +10,8 @@ class Worker(
     var nickname: String? = "",
     var age: Age,
     var statuses: MutableList<Status> = mutableListOf(),
-    var isSelected: Boolean = false
+    var isSelected: Boolean = false,
+    var isInvisible: Boolean = false
 ) {
     constructor() : this(
         name = "Новый хуторянин",
@@ -23,7 +24,8 @@ class Worker(
         nickname = jsonObject.optString("nickname"),
         age = Age.valueOf(jsonObject.optString("age")),
         statuses = parseStatuses(jsonObject.optJSONArray("statuses")),
-        isSelected = jsonObject.optBoolean("isSelected")
+        isSelected = jsonObject.optBoolean("isSelected"),
+        isInvisible = jsonObject.optBoolean("isInvisible")
     )
 
     companion object {

@@ -102,7 +102,11 @@ class Task(
             enableConditions: List<Triple<String, Symbol, Double>>
         ) {
             workers.forEach { worker ->
-                if (conditionsIsComplete(enableConditions, worker.statuses)) {
+                if (!worker.isInvisible && conditionsIsComplete(
+                        enableConditions,
+                        worker.statuses
+                    )
+                ) {
                     worker.isSelected = true
                 }
             }
