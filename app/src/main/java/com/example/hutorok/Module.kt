@@ -7,6 +7,8 @@ import com.example.hutorok.screen.builds_screen.BuildsViewModel
 import com.example.hutorok.screen.builds_screen.IBuildsViewModel
 import com.example.hutorok.screen.history_screen.HistoryViewModel
 import com.example.hutorok.screen.history_screen.IHistoryViewModel
+import com.example.hutorok.screen.quest_screen.IQuestViewModel
+import com.example.hutorok.screen.quest_screen.QuestViewModel
 import com.example.hutorok.screen.start_screen.IStartViewModel
 import com.example.hutorok.screen.start_screen.StartViewModel
 import com.example.hutorok.screen.tasks_screen.ITasksViewModel
@@ -19,7 +21,7 @@ import org.koin.dsl.module.module
 
 val appModule = module {
     single { this }
-    single { MainViewModel(get(), get(), get(), get()) as IMainViewModel }
+    single { MainViewModel(get(), get(), get(), get(), get()) as IMainViewModel }
 
     single { Router(get()) as IRouter }
     single { GetNowScreenInteractor(get()) as IGetNowScreenInteractor }
@@ -30,10 +32,12 @@ val appModule = module {
     single { RouteToWorkerInfoScreenInteractor(get()) }
     single { RouteToTaskInfoInteractor(get(), get()) }
     single { RouteToHistoryScreenInteractor(get()) }
+    single { RouteToQuestScreenInteractor(get()) }
     single { OnBackPressedInteractor(get()) }
 
     single {
         MockLoadDataInteractor(
+            get(),
             get(),
             get(),
             get(),
@@ -73,6 +77,7 @@ val appModule = module {
     single { TasksViewModel(get(), get(), get(), get(), get()) as ITasksViewModel }
     single { BuildsViewModel(get()) as IBuildsViewModel }
     single { HistoryViewModel(get()) as IHistoryViewModel }
+    single { QuestViewModel(get(), get(), get(), get()) as IQuestViewModel }
 
     single { WorkersListInteractor(get()) as IWorkersListInteractor }
     single { WorkerInteractor() as IWorkerInteractor }
@@ -85,4 +90,5 @@ val appModule = module {
     single { HistoryInteractor() as IHistoryInteractor }
     single { TurnNumberInteractor(get(), get(), get()) as ITurnNumberInteractor }
     single { InvisibleStatusNamesListInteractor(get()) as IInvisibleStatusNamesListInteractor }
+    single { QuestInteractor() as IQuestInteractor }
 }

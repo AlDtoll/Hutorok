@@ -47,7 +47,7 @@ class WorkersViewModel(
     }
 
     override fun clickExecute() {
-        executeTaskInteractor.execute()
+        executeTaskInteractor.execute(false)
     }
 
     override fun importantStatusesData(): LiveData<List<String>> {

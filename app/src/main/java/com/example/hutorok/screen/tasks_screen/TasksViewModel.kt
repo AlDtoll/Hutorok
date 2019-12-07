@@ -45,7 +45,7 @@ class TasksViewModel(
                     list
                 } else {
                     list.filter {
-                        it.name.contains(search, true) || it.describe.contains(
+                        it.name.contains(search, true) || it.description.contains(
                             search,
                             true
                         )

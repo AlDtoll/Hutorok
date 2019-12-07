@@ -3,7 +3,7 @@
     {
       "code": "getWoods",
       "name": "Добыть строительной древесины",
-      "describe": "Для этой задачи лучше подойдут ремесленники и люди с инструментами",
+      "description": "Для этой задачи лучше подойдут ремесленники и люди с инструментами",
       "workerFunction": {
         "statuses": [
           {
@@ -40,7 +40,7 @@
           "status": {
             "code": "woodsRES",
             "name": "Строительная древесина",
-            "describe": "",
+            "description": "",
             "value": 0.0,
             "visible": true
           },
@@ -52,7 +52,7 @@
           "status": {
             "code": "felling",
             "name": "Вырубка",
-            "describe": "Когда-то здесь был лес, а теперь только пни",
+            "description": "Когда-то здесь был лес, а теперь только пни",
             "value": 1.0,
             "visible": true
           },
@@ -63,7 +63,7 @@
     {
       "code": "getBuilds",
       "name": "Заниматься строительством",
-      "describe": "Возводить дома, частоколы, памятники и т.д",
+      "description": "Возводить дома, частоколы, памятники и т.д",
       "workerFunction": {
         "statuses": [
           {
@@ -92,7 +92,7 @@
           "status": {
             "code": "buildsRES",
             "name": "Очки строительства",
-            "describe": "",
+            "description": "",
             "value": 0.0,
             "visible": true
           },
@@ -110,7 +110,7 @@
     {
       "code": "completeHouse",
       "name": "Завершить строительство жилого дома",
-      "describe": "Отнимет 15 древесины и 15 очков строительства",
+      "description": "Отнимет 15 древесины и 15 очков строительства",
       "type": "BUILD",
       "results": [
         {
@@ -119,7 +119,7 @@
           "status": {
             "code": "houseBUILDING",
             "name": "Жилой дом",
-            "describe": "Тут живут люди",
+            "description": "Тут живут люди",
             "value": 1.0,
             "visible": true
           },
@@ -131,7 +131,7 @@
           "status": {
             "code": "buildsRES",
             "name": "",
-            "describe": "",
+            "description": "",
             "value": -15.0,
             "visible": true
           },
@@ -143,7 +143,7 @@
           "status": {
             "code": "woodsRES",
             "name": "",
-            "describe": "",
+            "description": "",
             "value": -15.0,
             "visible": true
           },
@@ -166,7 +166,7 @@
     {
       "code": "makeTool",
       "name": "Сделать инструмент",
-      "describe": "Создать мотыго-лопато-топор",
+      "description": "Создать мотыго-лопато-топор",
       "results": [
         {
           "target": "HUTOR",
@@ -174,7 +174,7 @@
           "status": {
             "code": "toolsRES",
             "name": "Инструмент",
-            "describe": "Мотыго-лопато-топор",
+            "description": "Мотыго-лопато-топор",
             "value": 1.0,
             "visible": true
           },
@@ -185,7 +185,7 @@
     {
       "code": "giveTool",
       "name": "Дать инструмент",
-      "describe": "Отдать мотыго-лопато-топор",
+      "description": "Отдать мотыго-лопато-топор",
       "type": "PERSON",
       "results": [
         {
@@ -194,7 +194,7 @@
           "status": {
             "code": "hasTool",
             "name": "Владеет рабочим инструментом",
-            "describe": "Инструмент помогает лучше осуществлять рабочую деятельность",
+            "description": "Инструмент помогает лучше осуществлять рабочую деятельность",
             "value": 1.0,
             "visible": true
           },
@@ -206,7 +206,7 @@
           "status": {
             "code": "toolsRES",
             "name": "Инструмент",
-            "describe": "Мотыго-лопато-топор",
+            "description": "Мотыго-лопато-топор",
             "value": -1.0,
             "visible": true
           }
@@ -230,7 +230,7 @@
     {
       "code": "takeTool",
       "name": "Взять инструмент",
-      "describe": "Забрать мотыго-лопато-топор у рабочего",
+      "description": "Забрать мотыго-лопато-топор у рабочего",
       "type": "PERSON",
       "results": [
         {
@@ -239,7 +239,7 @@
           "status": {
             "code": "hasTool",
             "name": "Владеет рабочим инструментом",
-            "describe": "Инструмент помогает лучше осуществлять рабочую деятельность",
+            "description": "Инструмент помогает лучше осуществлять рабочую деятельность",
             "value": -1.0,
             "visible": true
           },
@@ -251,7 +251,7 @@
           "status": {
             "code": "toolsRES",
             "name": "Инструмент",
-            "describe": "Мотыго-лопато-топор",
+            "description": "Мотыго-лопато-топор",
             "value": 1.0,
             "visible": true
           }
@@ -268,7 +268,7 @@
     {
       "code": "healWorkDisease",
       "name": "Лечиться от недомогания",
-      "describe": "Отдохнуть, да травы пожевать",
+      "description": "Отдохнуть, да травы пожевать",
       "type": "PERSON",
       "results": [
         {
@@ -277,7 +277,7 @@
           "status": {
             "code": "workDISEASE",
             "name": "Недомогание",
-            "describe": "Жар и тошнота",
+            "description": "Жар и тошнота",
             "value": 1.0,
             "visible": true
           },
@@ -289,7 +289,7 @@
           "status": {
             "code": "alreadyHeal",
             "name": "Уже лечился",
-            "describe": "На это ходу этот персонаж уже лечился",
+            "description": "На это ходу этот персонаж уже лечился",
             "value": 1.0,
             "visible": false
           }
@@ -311,7 +311,7 @@
     {
       "code": "findMagicStones",
       "name": "Искать магические камни",
-      "describe": "Искать магические камни вокруг поселения",
+      "description": "Искать магические камни вокруг поселения",
       "type": "WORK",
       "results": [
         {
@@ -320,7 +320,7 @@
           "status": {
             "code": "magicStonesRES",
             "name": "Магический камень",
-            "describe": "Используется для творения волшебства и магических ритуалов",
+            "description": "Используется для творения волшебства и магических ритуалов",
             "value": 5.0,
             "visible": true
           },
@@ -340,7 +340,7 @@
     {
       "code": "callWorker",
       "name": "Провести ритуал призвания жителя",
-      "describe": "Ритуал потратит 1 магический камень",
+      "description": "Ритуал потратит 1 магический камень",
       "type": "BUILD",
       "results": [
         {
@@ -349,7 +349,7 @@
           "status": {
             "code": "ADULT",
             "name": "Никодим",
-            "describe": "Носит шапку соболью",
+            "description": "Носит шапку соболью",
             "value": 0.0,
             "visible": true
           },
@@ -361,7 +361,7 @@
           "status": {
             "code": "hasSobolHat",
             "name": "Соболья шапка",
-            "describe": "Шапка из соболя",
+            "description": "Шапка из соболя",
             "value": 1.0,
             "visible": true
           }
@@ -372,7 +372,7 @@
           "status": {
             "code": "magicStonesRES",
             "name": "Магический камень",
-            "describe": "Используется для творения волшебства и магических ритуалов",
+            "description": "Используется для творения волшебства и магических ритуалов",
             "value": -1.0,
             "visible": true
           }
@@ -389,7 +389,7 @@
     {
       "code": "sacrifice",
       "name": "Принести рабочего в жертву",
-      "describe": "Ритуал потратит 1 магический камень",
+      "description": "Ритуал потратит 1 магический камень",
       "type": "PERSON",
       "results": [
         {
@@ -398,7 +398,7 @@
           "status": {
             "code": "deadINVISIBLE",
             "name": "Мертв",
-            "describe": "Усопшее тело",
+            "description": "Усопшее тело",
             "value": 1.0,
             "visible": true
           },

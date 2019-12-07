@@ -3,7 +3,7 @@
     {
       "code": "eatFoods",
       "name": "Кормление населения",
-      "describe": "Уменьшает запасы пищи на количество населения",
+      "description": "Уменьшает запасы пищи на количество населения",
       "canBeNegative": true,
       "hutorFunction": {
         "statuses": [
@@ -21,7 +21,7 @@
           "status": {
             "code": "foodsRES",
             "name": "Еда",
-            "describe": "populationsRES",
+            "description": "populationsRES",
             "value": 0.0,
             "visible": true
           },
@@ -32,7 +32,7 @@
     {
       "code": "markWorkersAsRested",
       "name": "Отдых рабочих",
-      "describe": "",
+      "description": "",
       "canBeNegative": true,
       "results": [
         {
@@ -41,7 +41,7 @@
           "status": {
             "code": "worked",
             "name": "Работал",
-            "describe": "",
+            "description": "",
             "value": -1.0,
             "visible": true
           },
@@ -59,7 +59,7 @@
     {
       "code": "sayAboutWorker",
       "name": "Сообщение о том, что рабочий полностью отдохнул",
-      "describe": "",
+      "description": "",
       "canBeNegative": true,
       "results": [
         {
@@ -68,7 +68,7 @@
           "status": {
             "code": "worked",
             "name": "Работал",
-            "describe": "",
+            "description": "",
             "value": 0.0,
             "visible": true
           },
@@ -86,7 +86,7 @@
     {
       "code": "removeHealWorkDisease",
       "name": "Вернуть возможность лечиться от недомогания",
-      "describe": "",
+      "description": "",
       "canBeNegative": true,
       "results": [
         {
@@ -95,7 +95,7 @@
           "status": {
             "code": "alreadyHeal",
             "name": "Уже лечился",
-            "describe": "",
+            "description": "",
             "value": 0.0,
             "visible": true
           },

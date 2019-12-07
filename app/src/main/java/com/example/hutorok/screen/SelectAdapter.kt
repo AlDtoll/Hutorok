@@ -5,15 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hutorok.R
-import com.example.hutorok.domain.model.Task
-import com.example.hutorok.ext.onClick
+import com.example.hutorok.domain.model.Select
 import kotlinx.android.synthetic.main.task_item.view.*
 
-class TaskAdapter(
+class SelectAdapter(
     private val callback: Callback
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var items = ArrayList<Task>()
+    var items = ArrayList<Select>()
         set(data) {
             field = data
             notifyDataSetChanged()
@@ -25,7 +24,7 @@ class TaskAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): RecyclerView.ViewHolder =
-        WorkerHolder(
+        SelectHolder(
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.task_item, parent, false)
         )
@@ -36,26 +35,19 @@ class TaskAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = items[position]
         holder.itemView.run {
-            this.onClick {
-                callback.selectTask(item)
+            this.setOnClickListener {
+                callback.clickSelect(item)
             }
-            name.text = item.name
-            description.text = item.description
-            container.setCardBackgroundColor(resources.getColor(selectColor(item)))
+            name.text = item.task.name
+            description.text = item.task.description
+            container.setCardBackgroundColor(resources.getColor(R.color.light_green_background_color))
         }
     }
 
-    private fun selectColor(item: Task): Int {
-        return when (item.type) {
-            Task.Type.WORK -> R.color.light_green_background_color
-            Task.Type.BUILD -> R.color.green_background_color
-            Task.Type.PERSON -> R.color.light_blue_background_color
-        }
-    }
-
-    class WorkerHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    class SelectHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     interface Callback {
-        fun selectTask(task: Task)
+
+        fun clickSelect(select: Select)
     }
 }

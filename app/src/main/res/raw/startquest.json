@@ -1,0 +1,461 @@
+{
+  "scenes": [
+    {
+      "code": "bornPlayer",
+      "type": "BEFORE",
+      "text": "",
+      "selects": [
+        {
+          "task": {
+            "code": "createPlayer",
+            "name": "Создаем персонажа игрока",
+            "results": [
+              {
+                "target": "HUTOR",
+                "action": "ADD_WORKER",
+                "status": {
+                  "code": "ADULT",
+                  "name": "Тит",
+                  "description": "Много-говорит",
+                  "value": 0.0,
+                  "visible": true
+                }
+              }
+            ]
+          },
+          "nextScene": "selectPerson"
+        }
+      ]
+    },
+    {
+      "code": "selectPerson",
+      "text": "Жил был на свете Данил Гамадрил. Был он бароном, увлекался погромом. Часто пил ром отчего, а от него в баронстве разгром. От беспорядка барон осерчал и на своем пути повстречал...",
+      "selects": [
+        {
+          "task": {
+            "code": "selectHunter",
+            "name": "Охотника",
+            "description": "",
+            "results": [
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "hunterRANK",
+                  "name": "Охотник",
+                  "description": "Умеет выслеживать зверя, луком там и вот это все",
+                  "value": 1.0,
+                  "visible": true
+                }
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "rangerSKILL",
+                  "name": "Следопыт",
+                  "description": "Позволяет читать следы",
+                  "value": 1.0,
+                  "visible": true
+                }
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "bowSKILL",
+                  "name": "Стрельба из лука",
+                  "description": "Умеет стрелять из лука",
+                  "value": 1.0,
+                  "visible": true
+                }
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "carveSKILL",
+                  "name": "Свежевание",
+                  "description": "Умеет разделывать туши",
+                  "value": 1.0,
+                  "visible": true
+                }
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "survivalSKILL",
+                  "name": "Выживание",
+                  "description": "Приспособлен к выживанию в дикой природе",
+                  "value": 1.0,
+                  "visible": true
+                }
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "illiterate",
+                  "name": "Неграмотный",
+                  "description": "Плохо считает, почти не читает",
+                  "value": 1.0,
+                  "visible": true
+                }
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "illiterate",
+                  "name": "Неграмотный",
+                  "description": "Плохо считает, почти не читает",
+                  "value": 1.0,
+                  "visible": true
+                }
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "superstitiousVICE",
+                  "name": "Суеверный",
+                  "description": "Верит в колдовство и приметы",
+                  "value": 1.0,
+                  "visible": false
+                }
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "cruelVICE",
+                  "name": "Жестокий",
+                  "description": "Испытывает тягу к насилию",
+                  "value": 1.0,
+                  "visible": false
+                }
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "attentionSTATUS",
+                  "name": "Внимательность",
+                  "description": "Природная наблюдательность и осторожность",
+                  "value": 1.0,
+                  "visible": false
+                }
+              }
+            ]
+          },
+          "nextScene": "frontir"
+        },
+        {
+          "task": {
+            "code": "selectThief",
+            "name": "Вора",
+            "description": "",
+            "results": [
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "thiefRANK",
+                  "name": "Вор",
+                  "description": "Ловкость рук и всякое мошенничество",
+                  "value": 1.0,
+                  "visible": true
+                }
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "agilitySTATUS",
+                  "name": "Ловкий",
+                  "description": "Природная гибкость и координация",
+                  "value": 1.0,
+                  "visible": false
+                }
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "crackerSKILL",
+                  "name": "Взломщик",
+                  "description": "Двери и сундуки не помеха",
+                  "value": 1.0,
+                  "visible": true
+                }
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "attentionSTATUS",
+                  "name": "Внимательность",
+                  "description": "Природная наблюдательность и осторожность",
+                  "value": 1.0,
+                  "visible": false
+                }
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "greedVICE",
+                  "name": "Жадность",
+                  "description": "И побольше, побольше",
+                  "value": 1.0,
+                  "visible": false
+                }
+              }
+            ]
+          },
+          "nextScene": "frontir"
+        },
+        {
+          "nextScene": "frontir",
+          "task": {
+            "code": "selectMerchant",
+            "name": "Купца",
+            "description": "",
+            "results": [
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "merchantRANK",
+                  "name": "Торговец",
+                  "description": "Знает, на чем поиметь выгоду",
+                  "value": 1.0,
+                  "visible": true
+                }
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "economicSKILL",
+                  "name": "Экономист",
+                  "description": "Умеет извлекать дополнительную выгоду",
+                  "value": 1.0,
+                  "visible": false
+                }
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "hasEnemyVICE",
+                  "name": "Имеет темное прошлое",
+                  "description": "Помолодости совершил множество препуступлений, многим насолив",
+                  "value": 1.0,
+                  "visible": true
+                }
+              }
+            ]
+          }
+        },
+        {
+          "nextScene": "dead",
+          "task": {
+            "code": "selectReaper",
+            "name": "Жнеца",
+            "description": "",
+            "results": [
+              {
+                "target": "HUTOR",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "DEFEAT",
+                  "name": "ПОБЕДА",
+                  "description": "Хутор так и не узнал о бароне",
+                  "value": 1.0,
+                  "visible": true
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "code": "dead",
+      "type": "END",
+      "text": "И оказалось это началом конца. Индоктринировал Жнец подлеца"
+    },
+    {
+      "code": "frontir",
+      "text": "Будешь помощником! Сроком на год. А дальше как знать... Почет? Эшафот? Дорога лежит тебе в лесной край. Способ доставки - сам выбирай. Живет там ведьма, а с нею сынки - дань ты с них мне собери. Сто звонких монет! Поспеши!",
+      "selects": [
+        {
+          "nextScene": "home",
+          "task": {
+            "code": "goHome",
+            "name": "- Заехать за вещами домой разреши!",
+            "results": [
+              {
+                "target": "HUTOR",
+                "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+                "status": {
+                  "code": "weekRES",
+                  "name": "Прошло недель",
+                  "value": 1.0,
+                  "visible": true
+                }
+              }
+            ]
+          }
+        },
+        {
+          "nextScene": "traktir",
+          "task": {
+            "code": "goToTraktir",
+            "name": "Тит (наш герой): - Поспешу! И с ведьмы с дитями оброк соберу. А уж привезу ли - попозже решу..."
+          }
+        }
+      ]
+    },
+    {
+      "code": "home",
+      "text": "Дозволил барон, явиться домой, но к Титу (герою) приставил конвой.",
+      "selects": [
+        {
+          "nextScene": "traktir",
+          "task": {
+            "code": "goToTraktir",
+            "name": "Собрать вещи",
+            "workerFunction": {
+              "statuses": [
+                {
+                  "code": "thiefRANK",
+                  "value": 4
+                },
+                {
+                  "code": "merchantRANK",
+                  "value": 20.0
+                }
+              ],
+              "defaultValue": 3
+            },
+            "results": [
+              {
+                "target": "HUTOR",
+                "action": "CHANGE_STATUS_VALUE",
+                "status": {
+                  "code": "goldenCoinsRES",
+                  "name": "Золотые монеты",
+                  "value": 0.0,
+                  "visible": true
+                }
+              },
+              {
+                "target": "HUTOR",
+                "action": "CHANGE_STATUS_VALUE",
+                "status": {
+                  "code": "cart",
+                  "name": "Телега",
+                  "description": "Лошадь прилагается, но не изымается",
+                  "value": 1.0,
+                  "visible": true
+                },
+                "conditions": [
+                  {
+                    "statusCode": "merchantRANK",
+                    "symbol": "MORE",
+                    "statusValue": 0.0,
+                    "value": 100.0
+                  }
+                ]
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "CHANGE_STATUS_VALUE",
+                "status": {
+                  "code": "passkey",
+                  "name": "Отмычки",
+                  "value": 1.0,
+                  "visible": true
+                },
+                "conditions": [
+                  {
+                    "statusCode": "thiefRANK",
+                    "symbol": "MORE",
+                    "statusValue": 0.0,
+                    "value": 100.0
+                  }
+                ]
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "CHANGE_STATUS_VALUE",
+                "status": {
+                  "code": "daggerWEAPON",
+                  "name": "Кинжал",
+                  "value": 1.0,
+                  "visible": true
+                },
+                "conditions": [
+                  {
+                    "statusCode": "thiefRANK",
+                    "symbol": "MORE",
+                    "statusValue": 0.0,
+                    "value": 100.0
+                  }
+                ]
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "CHANGE_STATUS_VALUE",
+                "status": {
+                  "code": "bowWEAPON",
+                  "name": "Лук",
+                  "description": "Яйца и бесконечные стрелы прилагаются",
+                  "value": 1.0,
+                  "visible": true
+                },
+                "conditions": [
+                  {
+                    "statusCode": "hunterRANK",
+                    "symbol": "MORE",
+                    "statusValue": 0.0,
+                    "value": 100.0
+                  }
+                ]
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "CHANGE_STATUS_VALUE",
+                "status": {
+                  "code": "spearWEAPON",
+                  "name": "Копье",
+                  "description": "Короткое и толстое для ближнего боя со зверем или человеком",
+                  "value": 1.0,
+                  "visible": true
+                },
+                "conditions": [
+                  {
+                    "statusCode": "hunterRANK",
+                    "symbol": "MORE",
+                    "statusValue": 0.0,
+                    "value": 100.0
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "nextScene": "escape",
+          "task": {
+            "code": "escape",
+            "name": "Срочно бежать! Не дело тирану в таком помогать"
+          }
+        }
+      ]
+    }
+  ]
+}

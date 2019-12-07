@@ -4,4 +4,6 @@
 
     <dimen name="search_bar_icon_size">24dp</dimen>
     <dimen name="search_bar_padding_end">72dp</dimen>
+
+    <dimen name="quest_select_block_height">340dp</dimen>
 </resources>

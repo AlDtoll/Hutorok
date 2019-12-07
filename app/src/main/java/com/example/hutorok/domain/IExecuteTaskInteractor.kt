@@ -2,5 +2,5 @@ package com.example.hutorok.domain
 
 interface IExecuteTaskInteractor {
 
-    fun execute()
+    fun execute(isQuest: Boolean)
 }

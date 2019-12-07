@@ -10,7 +10,7 @@ import kotlin.random.Random
 class Task(
     val code: String,
     val name: String,
-    val describe: String,
+    val description: String,
     val workerFunction: TaskFunction,
     val hutorFunction: TaskFunction,
     val results: List<TaskResult>,
@@ -23,7 +23,7 @@ class Task(
     constructor(jsonObject: JSONObject) : this(
         code = jsonObject.optString("code"),
         name = jsonObject.optString("name"),
-        describe = jsonObject.optString("describe"),
+        description = jsonObject.optString("description"),
         workerFunction = if (jsonObject.optJSONObject("workerFunction") != null) {
             TaskFunction(jsonObject.optJSONObject("workerFunction"))
         } else {

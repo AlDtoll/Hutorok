@@ -1,5 +1,6 @@
 package com.example.hutorok.domain
 
+import com.example.hutorok.domain.model.Quest
 import com.example.hutorok.domain.model.Status
 import com.example.hutorok.domain.model.Task
 import com.example.hutorok.domain.model.Worker
@@ -13,7 +14,8 @@ class MockLoadDataInteractor(
     private val endTasksListInteractor: IEndTasksListInteractor,
     private val turnNumberInteractor: ITurnNumberInteractor,
     private val invisibleStatusNamesListInteractor: IInvisibleStatusNamesListInteractor,
-    private val historyInteractor: IHistoryInteractor
+    private val historyInteractor: IHistoryInteractor,
+    private val questInteractor: IQuestInteractor
 ) : ILoadDataInteractor {
 
     override fun update(
@@ -22,7 +24,8 @@ class MockLoadDataInteractor(
         hutorokStatuses: MutableList<Status>,
         endTasks: MutableList<Task>,
         events: MutableList<String>,
-        turnNumber: Int
+        turnNumber: Int,
+        startQuest: Quest
     ) {
         updateWorkers(workers)
 
@@ -37,6 +40,8 @@ class MockLoadDataInteractor(
         updateHistory(events, turnNumber)
 
         updateInvisibleStatuses()
+
+        updateQuest(startQuest)
     }
 
     private fun updateWorkers(workers: MutableList<Worker>) {
@@ -72,6 +77,10 @@ class MockLoadDataInteractor(
             "?INVISIBLE"
         )
         invisibleStatusNamesListInteractor.update(codes)
+    }
+
+    private fun updateQuest(quest: Quest) {
+        questInteractor.update(quest)
     }
 
 }

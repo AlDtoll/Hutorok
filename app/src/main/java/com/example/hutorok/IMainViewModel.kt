@@ -1,6 +1,7 @@
 package com.example.hutorok
 
 import androidx.lifecycle.LiveData
+import com.example.hutorok.domain.model.Quest
 import com.example.hutorok.domain.model.Status
 import com.example.hutorok.domain.model.Task
 import com.example.hutorok.domain.model.Worker
@@ -17,9 +18,12 @@ interface IMainViewModel {
         hutorokStatuses: MutableList<Status>,
         endTasks: MutableList<Task>,
         events: MutableList<String>,
-        turnNumber: Int
+        turnNumber: Int,
+        startQuest: Quest
     )
 
     fun messageData(): LiveData<String>
+
+    fun startQuest()
 
 }

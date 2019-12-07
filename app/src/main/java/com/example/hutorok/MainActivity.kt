@@ -1,17 +1,20 @@
 package com.example.hutorok
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.example.hutorok.domain.model.Quest
 import com.example.hutorok.domain.model.Status
 import com.example.hutorok.domain.model.Task
 import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.ext.replaceFragment
 import com.example.hutorok.screen.builds_screen.BuildsScreen
 import com.example.hutorok.screen.history_screen.HistoryScreen
+import com.example.hutorok.screen.quest_screen.QuestScreen
 import com.example.hutorok.screen.start_screen.StartScreen
 import com.example.hutorok.screen.tasks_screen.TasksScreen
 import com.example.hutorok.screen.worker_info_screen.WorkerInfoScreen
@@ -23,6 +26,12 @@ import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        const val FIRST_RUN = "first_run"
+        const val APP_PREFERENCES = "mysettings"
+    }
+
+    var prefs: SharedPreferences? = null
     private val mainViewModel: IMainViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +46,7 @@ class MainActivity : AppCompatActivity() {
                 NowScreen.CLOSE_SCREEN -> finish()
                 NowScreen.WORKER_INFO_SCREEN -> showWorkerInfoScreen()
                 NowScreen.HISTORY_SCREEN -> showHistoryScreen()
+                NowScreen.QUEST_SCREEN -> showQuestScreen()
             }
         })
 
@@ -47,6 +57,13 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this@MainActivity, it, Toast.LENGTH_SHORT).show()
             }
         })
+
+        prefs = App.instance.getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE)
+        prefs?.run {
+            if (this.getBoolean(FIRST_RUN, true)) {
+                mainViewModel.startQuest()
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -82,6 +99,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun showHistoryScreen() {
         replaceFragment(HistoryScreen.newInstance())
+    }
+
+    private fun showQuestScreen() {
+        replaceFragment(QuestScreen.newInstance())
     }
 
     private fun loadFromResources() {
@@ -153,7 +174,12 @@ class MainActivity : AppCompatActivity() {
             events.add(eventsArray.getString(i))
         }
 
-        mainViewModel.loadData(workers, tasks, hutorokStatuses, endTasks, events, turn)
+        val startQuestText = resources.openRawResource(R.raw.startquest)
+            .bufferedReader().use { it.readText() }
+        val questObject = JSONObject(startQuestText)
+        val startQuest = Quest(questObject)
+
+        mainViewModel.loadData(workers, tasks, hutorokStatuses, endTasks, events, turn, startQuest)
     }
 
     private fun isFilePresent(context: Context, fileName: String): Boolean {

@@ -7,5 +7,6 @@ enum class NowScreen {
     WORKERS_SCREEN,
     CLOSE_SCREEN,
     WORKER_INFO_SCREEN,
-    HISTORY_SCREEN
+    HISTORY_SCREEN,
+    QUEST_SCREEN
 }

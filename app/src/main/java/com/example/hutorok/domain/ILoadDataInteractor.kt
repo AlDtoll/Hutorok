@@ -1,5 +1,6 @@
 package com.example.hutorok.domain
 
+import com.example.hutorok.domain.model.Quest
 import com.example.hutorok.domain.model.Status
 import com.example.hutorok.domain.model.Task
 import com.example.hutorok.domain.model.Worker
@@ -12,6 +13,7 @@ interface ILoadDataInteractor {
         hutorokStatuses: MutableList<Status>,
         endTasks: MutableList<Task>,
         events: MutableList<String>,
-        turnNumber: Int
+        turnNumber: Int,
+        startQuest: Quest
     )
 }

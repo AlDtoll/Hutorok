@@ -20,4 +20,6 @@ interface IRouter {
     fun routeToWorkerInfoScreen()
 
     fun routeToHistoryScreen()
+
+    fun routeToQuestScreen()
 }

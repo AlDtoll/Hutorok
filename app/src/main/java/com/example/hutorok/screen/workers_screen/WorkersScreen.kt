@@ -122,6 +122,7 @@ class WorkersScreen : Fragment() {
 
     private fun showWorkers(workers: List<Worker>) {
         workerAdapter.items = ArrayList(workers)
+        Task.deselectAll(workers)
     }
 
 

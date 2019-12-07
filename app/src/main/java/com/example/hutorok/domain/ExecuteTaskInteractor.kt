@@ -22,7 +22,7 @@ class ExecuteTaskInteractor(
         const val EXECUTE_TASK_PREFIX = "Работа сделана. В результате: "
     }
 
-    override fun execute() {
+    override fun execute(isQuest: Boolean) {
         Observable.zip(
             workersListInteractor.get(),
             taskInteractor.get(),
@@ -38,17 +38,21 @@ class ExecuteTaskInteractor(
                     message += taskResult.makeMessage(workersList)
                 }
 
-                if (task.type != Task.Type.PERSON) {
+                if (!isQuest && task.type != Task.Type.PERSON) {
                     message += makeFineForWorkers(selectedWorkers)
                     message += markWorkersAsWorked(selectedWorkers)
                 }
-                deselectAll(workersList)
 
-                messageInteractor.update(EXECUTE_TASK_PREFIX + message)
+                if (!isQuest) {
+                    deselectAll(workersList)
+                    messageInteractor.update(EXECUTE_TASK_PREFIX + message)
+                }
             }
         ).subscribe()
         invisibleStatusNamesListInteractor.refresh()
-        onBackPressedInteractor.execute()
+        if (!isQuest) {
+            onBackPressedInteractor.execute()
+        }
     }
 
     private fun makeFineForWorkers(workers: List<Worker>): String {
