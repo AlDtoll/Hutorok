@@ -5,6 +5,8 @@ import com.example.hutorok.domain.storage.*
 import com.example.hutorok.routing.*
 import com.example.hutorok.screen.builds_screen.BuildsViewModel
 import com.example.hutorok.screen.builds_screen.IBuildsViewModel
+import com.example.hutorok.screen.finish_screen.FinishViewModel
+import com.example.hutorok.screen.finish_screen.IFinishViewModel
 import com.example.hutorok.screen.history_screen.HistoryViewModel
 import com.example.hutorok.screen.history_screen.IHistoryViewModel
 import com.example.hutorok.screen.quest_screen.IQuestViewModel
@@ -33,6 +35,7 @@ val appModule = module {
     single { RouteToTaskInfoInteractor(get(), get()) }
     single { RouteToHistoryScreenInteractor(get()) }
     single { RouteToQuestScreenInteractor(get()) }
+    single { RouteToFinishScreenInteractor(get()) }
     single { OnBackPressedInteractor(get()) }
 
     single {
@@ -56,10 +59,21 @@ val appModule = module {
             get(),
             get(),
             get(),
+            get(),
             get()
         ) as IExecuteTaskInteractor
     }
-    single { EndTurnInteractor(get(), get(), get(), get(), get(), get()) as IEndTurnInteractor }
+    single {
+        EndTurnInteractor(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        ) as IEndTurnInteractor
+    }
 
     single { StartViewModel(get(), get(), get(), get(), get(), get()) as IStartViewModel }
     single {
@@ -78,6 +92,7 @@ val appModule = module {
     single { BuildsViewModel(get()) as IBuildsViewModel }
     single { HistoryViewModel(get()) as IHistoryViewModel }
     single { QuestViewModel(get(), get(), get(), get()) as IQuestViewModel }
+    single { FinishViewModel(get(), get()) as IFinishViewModel }
 
     single { WorkersListInteractor(get()) as IWorkersListInteractor }
     single { WorkerInteractor() as IWorkerInteractor }

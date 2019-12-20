@@ -6,6 +6,7 @@ import com.example.hutorok.domain.model.Task.Companion.deselectAll
 import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.domain.storage.*
 import com.example.hutorok.routing.OnBackPressedInteractor
+import com.example.hutorok.routing.RouteToFinishScreenInteractor
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 
@@ -15,7 +16,8 @@ class ExecuteTaskInteractor(
     private val hutorStatusesListInteractor: IHutorStatusesListInteractor,
     private val messageInteractor: IMessageInteractor,
     private val onBackPressedInteractor: OnBackPressedInteractor,
-    private val invisibleStatusNamesListInteractor: IInvisibleStatusNamesListInteractor
+    private val invisibleStatusNamesListInteractor: IInvisibleStatusNamesListInteractor,
+    private val routeToFinishScreenInteractor: RouteToFinishScreenInteractor
 ) : IExecuteTaskInteractor {
 
     companion object {
@@ -38,6 +40,10 @@ class ExecuteTaskInteractor(
                     message += taskResult.makeMessage(workersList)
                 }
 
+                if (hutorStatusesList.find { status -> status.code == "DEFEAT" || status.code == "VICTORY" } != null) {
+                    routeToFinishScreenInteractor.execute()
+                }
+
                 if (!isQuest && task.type != Task.Type.PERSON) {
                     message += makeFineForWorkers(selectedWorkers)
                     message += markWorkersAsWorked(selectedWorkers)
@@ -47,6 +53,7 @@ class ExecuteTaskInteractor(
                     deselectAll(workersList)
                     messageInteractor.update(EXECUTE_TASK_PREFIX + message)
                 }
+
             }
         ).subscribe()
         invisibleStatusNamesListInteractor.refresh()

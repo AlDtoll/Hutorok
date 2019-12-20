@@ -211,6 +211,17 @@
                   "value": 1.0,
                   "visible": false
                 }
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "hasEnemyVICE",
+                  "name": "Имеет темное прошлое",
+                  "description": "Помолодости совершил множество препуступлений, многим насолив",
+                  "value": 1.0,
+                  "visible": true
+                }
               }
             ]
           },
@@ -235,6 +246,17 @@
                 }
               },
               {
+                "target": "HUTOR",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "merchantRANK",
+                  "name": "Торговец",
+                  "description": "Знает, на чем поиметь выгоду",
+                  "value": 1.0,
+                  "visible": false
+                }
+              },
+              {
                 "target": "ONE_SELECTED_WORKER",
                 "action": "SET_STATUS_VALUE",
                 "status": {
@@ -249,11 +271,11 @@
                 "target": "ONE_SELECTED_WORKER",
                 "action": "SET_STATUS_VALUE",
                 "status": {
-                  "code": "hasEnemyVICE",
-                  "name": "Имеет темное прошлое",
-                  "description": "Помолодости совершил множество препуступлений, многим насолив",
+                  "code": "greedVICE",
+                  "name": "Жадность",
+                  "description": "И побольше, побольше",
                   "value": 1.0,
-                  "visible": true
+                  "visible": false
                 }
               }
             ]
@@ -270,9 +292,9 @@
                 "target": "HUTOR",
                 "action": "SET_STATUS_VALUE",
                 "status": {
-                  "code": "DEFEAT",
+                  "code": "VICTORY",
                   "name": "ПОБЕДА",
-                  "description": "Хутор так и не узнал о бароне",
+                  "description": "И оказалось это началом конца. Индоктринировал Жнец подлеца.\nХутор так и не узнал о бароне",
                   "value": 1.0,
                   "visible": true
                 }
@@ -295,7 +317,7 @@
           "nextScene": "home",
           "task": {
             "code": "goHome",
-            "name": "- Заехать за вещами домой разреши!",
+            "name": "- Заехать домой сперва разреши!",
             "results": [
               {
                 "target": "HUTOR",

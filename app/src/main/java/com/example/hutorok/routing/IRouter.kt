@@ -22,4 +22,6 @@ interface IRouter {
     fun routeToHistoryScreen()
 
     fun routeToQuestScreen()
+
+    fun routeToFinishScreen()
 }

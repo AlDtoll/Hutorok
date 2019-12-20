@@ -8,7 +8,21 @@
         tools:background="@color/green">
 
     <TextView
-            android:id="@+id/questSceneText"
+            android:id="@+id/finishScreenGameResultText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_small"
+            android:layout_marginTop="@dimen/padding_big"
+            android:layout_marginEnd="@dimen/padding_small"
+            android:gravity="center_horizontal"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="ПОБЕДА!" />
+
+    <TextView
+            android:id="@+id/finishScreenGameResultDescriptionText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_small"
@@ -17,32 +31,18 @@
             android:gravity="center_horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Описание текущего сюжета" />
-
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/questScreenSelectsList"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/quest_select_block_height"
-            android:layout_marginBottom="@dimen/padding_small"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:itemCount="3"
-            tools:listitem="@layout/task_item" />
+            app:layout_constraintTop_toBottomOf="@id/finishScreenGameResultText"
+            tools:text="В результате была основана могучая империя твилайтов, простоявщаяя, хоть и шатаясь, многие века" />
 
     <Button
-            android:id="@+id/questScreenEndButton"
+            android:id="@+id/finishScreenEndButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/padding_small"
-            android:text="@string/end_quest"
+            android:text="@string/end_game"
             android:textAllCaps="false"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:visibility="visible" />
+            app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

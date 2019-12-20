@@ -14,4 +14,5 @@
     <string name="execute_task_button_text_for_one_worker">Отправить работника</string>
     <string name="execute_task_button_text_without_worker">Выполнить работу</string>
     <string name="end_quest">Завершить квест</string>
+    <string name="end_game">Завершить игру</string>
 </resources>

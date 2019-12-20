@@ -61,6 +61,10 @@ class Router(
         nowScreen.onNext(QUEST_SCREEN)
     }
 
+    override fun routeToFinishScreen() {
+        nowScreen.onNext(FINISH_SCREEN)
+    }
+
     override fun onBackPressed() {
         pressBackButtonEvents.onNext(Unit)
     }
@@ -71,6 +75,7 @@ class Router(
             WORKER_INFO_SCREEN -> WORKERS_SCREEN
             WORKERS_SCREEN -> getPreviousScreenForWorkersScreen(scenario)
             QUEST_SCREEN -> CLOSE_SCREEN
+            FINISH_SCREEN -> CLOSE_SCREEN
             else -> START_SCREEN
         }
     }

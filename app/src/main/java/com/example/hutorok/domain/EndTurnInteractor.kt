@@ -6,6 +6,7 @@ import com.example.hutorok.domain.model.Task.Companion.deselectAll
 import com.example.hutorok.domain.model.Task.Companion.selectAll
 import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.domain.storage.*
+import com.example.hutorok.routing.RouteToFinishScreenInteractor
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 
@@ -15,7 +16,8 @@ class EndTurnInteractor(
     private val endTasksListInteractor: IEndTasksListInteractor,
     private val messageInteractor: IMessageInteractor,
     private val turnNumberInteractor: ITurnNumberInteractor,
-    private val invisibleStatusNamesListInteractor: IInvisibleStatusNamesListInteractor
+    private val invisibleStatusNamesListInteractor: IInvisibleStatusNamesListInteractor,
+    private val routeToFinishScreenInteractor: RouteToFinishScreenInteractor
 ) : IEndTurnInteractor {
 
     companion object {
@@ -37,6 +39,11 @@ class EndTurnInteractor(
                         taskResult.makeAction(hutorStatusesList, point, workers)
                         message += taskResult.makeMessage(workers)
                     }
+
+                    if (hutorStatusesList.find { status -> status.code == "DEFEAT" || status.code == "VICTORY" } != null) {
+                        routeToFinishScreenInteractor.execute()
+                    }
+
                     deselectAll(workers)
                 }
 

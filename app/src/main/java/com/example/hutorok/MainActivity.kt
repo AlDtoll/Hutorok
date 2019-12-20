@@ -1,7 +1,6 @@
 package com.example.hutorok
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
@@ -13,6 +12,7 @@ import com.example.hutorok.domain.model.Task
 import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.ext.replaceFragment
 import com.example.hutorok.screen.builds_screen.BuildsScreen
+import com.example.hutorok.screen.finish_screen.FinishScreen
 import com.example.hutorok.screen.history_screen.HistoryScreen
 import com.example.hutorok.screen.quest_screen.QuestScreen
 import com.example.hutorok.screen.start_screen.StartScreen
@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity() {
         const val APP_PREFERENCES = "mysettings"
     }
 
-    var prefs: SharedPreferences? = null
     private val mainViewModel: IMainViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +46,7 @@ class MainActivity : AppCompatActivity() {
                 NowScreen.WORKER_INFO_SCREEN -> showWorkerInfoScreen()
                 NowScreen.HISTORY_SCREEN -> showHistoryScreen()
                 NowScreen.QUEST_SCREEN -> showQuestScreen()
+                NowScreen.FINISH_SCREEN -> showFinishScreen()
             }
         })
 
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        prefs = App.instance.getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE)
+        val prefs = App.instance.getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE)
         prefs?.run {
             if (this.getBoolean(FIRST_RUN, true)) {
                 mainViewModel.startQuest()
@@ -103,6 +103,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun showQuestScreen() {
         replaceFragment(QuestScreen.newInstance())
+    }
+
+    private fun showFinishScreen() {
+        replaceFragment(FinishScreen.newInstance())
     }
 
     private fun loadFromResources() {
