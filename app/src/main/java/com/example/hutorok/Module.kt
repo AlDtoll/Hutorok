@@ -91,7 +91,7 @@ val appModule = module {
     single { TasksViewModel(get(), get(), get(), get(), get()) as ITasksViewModel }
     single { BuildsViewModel(get()) as IBuildsViewModel }
     single { HistoryViewModel(get()) as IHistoryViewModel }
-    single { QuestViewModel(get(), get(), get(), get()) as IQuestViewModel }
+    single { QuestViewModel(get(), get(), get(), get(), get(), get()) as IQuestViewModel }
     single { FinishViewModel(get(), get()) as IFinishViewModel }
 
     single { WorkersListInteractor(get()) as IWorkersListInteractor }

@@ -54,7 +54,9 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.messageData().observe(this, Observer {
             it?.run {
-                Toast.makeText(this@MainActivity, it, Toast.LENGTH_SHORT).show()
+                if (it.trim().isNotEmpty()) {
+                    Toast.makeText(this@MainActivity, it, Toast.LENGTH_SHORT).show()
+                }
             }
         })
 

@@ -45,6 +45,17 @@ class QuestScreen : Fragment() {
             questViewModel.clickEndButton()
         }
 
+        questViewModel.previousSelectResultData().observe(this, Observer {
+            it?.run {
+                if (it.trim().isEmpty()) {
+                    previousSceneSelectResultText.visibility = View.GONE
+                } else {
+                    previousSceneSelectResultText.visibility = View.VISIBLE
+                    previousSceneSelectResultText.text = it
+                }
+            }
+        })
+
         initRecyclerView()
     }
 
@@ -63,7 +74,7 @@ class QuestScreen : Fragment() {
     }
 
     private fun showData(scene: Scene) {
-        if (scene.type == Scene.Type.BEFORE) {
+        if (scene.type == Scene.Type.TECHNICAL) {
             questViewModel.clickSelect(scene.selects[0])
         } else {
             questSceneText.text = scene.text

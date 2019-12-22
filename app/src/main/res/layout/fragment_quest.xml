@@ -8,6 +8,20 @@
         tools:background="@color/green">
 
     <TextView
+            android:id="@+id/previousSceneSelectResultText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_small"
+            android:layout_marginTop="@dimen/padding_big"
+            android:layout_marginEnd="@dimen/padding_small"
+            android:gravity="center_horizontal"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Результат предыдущего выбора" />
+
+    <TextView
             android:id="@+id/questSceneText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -17,7 +31,7 @@
             android:gravity="center_horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/previousSceneSelectResultText"
             tools:text="Описание текущего сюжета" />
 
     <androidx.recyclerview.widget.RecyclerView

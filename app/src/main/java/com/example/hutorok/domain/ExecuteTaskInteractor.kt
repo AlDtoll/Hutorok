@@ -52,6 +52,8 @@ class ExecuteTaskInteractor(
                 if (!isQuest) {
                     deselectAll(workersList)
                     messageInteractor.update(EXECUTE_TASK_PREFIX + message)
+                } else {
+                    messageInteractor.update(message)
                 }
 
             }

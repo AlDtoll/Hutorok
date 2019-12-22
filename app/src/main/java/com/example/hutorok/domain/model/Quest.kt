@@ -30,7 +30,7 @@ class Quest(
 class Scene(
     val code: String,
     val text: String,
-    val selects: List<Select>,
+    var selects: List<Select>,
     val type: Type = Type.STEP
 ) {
     constructor(jsonObject: JSONObject) : this(
@@ -59,7 +59,7 @@ class Scene(
     }
 
     enum class Type {
-        BEFORE,
+        TECHNICAL,
         STEP,
         END
     }

@@ -179,11 +179,11 @@ class Task(
 
 class TaskFunction(
     val statuses: List<Pair<String, Double>> = emptyList(),
-    val defaultValue: Int = 6
+    val defaultValue: Int = 0
 ) {
     constructor(jsonObject: JSONObject?) : this(
         statuses = parseStatuses(jsonObject?.optJSONArray("statuses")),
-        defaultValue = jsonObject?.optInt("defaultValue") ?: 6
+        defaultValue = jsonObject?.optInt("defaultValue") ?: 0
     )
 
     companion object {
@@ -379,7 +379,10 @@ class TaskResult(
         condition: Triple<String, Task.Symbol, Double>,
         statuses: MutableList<Status>
     ): Boolean {
-        val find = statuses.find { condition.first == it.code }
+        if (condition.first.isEmpty()) {
+            return true
+        }
+        val find = statuses.find { status -> status.code == condition.first }
         val findValue = find?.value ?: 0.0
         when (condition.second) {
             Task.Symbol.MORE -> {
