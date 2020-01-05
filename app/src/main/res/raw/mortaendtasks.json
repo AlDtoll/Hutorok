@@ -1,0 +1,316 @@
+{
+  "tasks": [
+    {
+      "code": "eatFoods",
+      "name": "Кормление населения",
+      "description": "Уменьшает запасы пищи на количество населения",
+      "canBeNegative": true,
+      "hutorFunction": {
+        "statuses": [
+          {
+            "code": "populationsRES",
+            "value": -100.500
+          }
+        ],
+        "defaultValue": 0
+      },
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE",
+          "status": {
+            "code": "foodsRES",
+            "name": "Еда",
+            "value": 0.0,
+            "visible": true
+          },
+          "successMessage": "Было съедено #VALUE еды"
+        }
+      ]
+    },
+    {
+      "code": "discontentFoods",
+      "name": "Голод",
+      "description": "Если запосов пищи недостаточно, то возникает голод и угроза бунта",
+      "canBeNegative": true,
+      "results": [
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "loyaltyRES",
+            "name": "Лояльность",
+            "description": "",
+            "value": -30.0,
+            "visible": true,
+            "canBeNegative": true
+          },
+          "successMessage": "Еды оказалось недостаточно для всех и жителям хутора пришлось голодать. И злиться."
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "GAMER",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "foodsRES",
+          "symbol": "EQUALS",
+          "statusValue": 0.0
+        }
+      ]
+    },
+    {
+      "code": "markWorkersAsRested",
+      "name": "Отдых рабочих",
+      "description": "",
+      "results": [
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "worked",
+            "name": "Работал",
+            "description": "",
+            "value": -1.0,
+            "visible": true
+          },
+          "successMessage": "#WORKER отдохнул"
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "worked",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        }
+      ]
+    },
+    {
+      "code": "spendWeek",
+      "name": "Прошло время",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "weeksRES",
+            "name": "Недель",
+            "description": "",
+            "value": 1.0,
+            "visible": true
+          },
+          "successMessage": "Прошла неделя"
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "worked",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        }
+      ]
+    },
+    {
+      "code": "decreaseLoyalty",
+      "name": "Морта внушает страх",
+      "results": [
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "loyaltyRES",
+            "name": "Лояльность",
+            "description": "",
+            "value": -5.0,
+            "visible": false,
+            "canBeNegative": true
+          },
+          "successMessage": "Пока Морта жива и настроена враждебно лояльность селян к наместнику падает"
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "GAMER",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        }
+      ]
+    },
+    {
+      "code": "makeHaters",
+      "name": "Высказать ненависть к Титу",
+      "results": [
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "isHater",
+            "name": "Ненавидит Тита",
+            "description": "",
+            "value": 1.0,
+            "visible": true
+          },
+          "successMessage": "Теперь #WORKER ненавидит наместника."
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "loyaltyRES",
+          "symbol": "LESS",
+          "statusValue": -100.0
+        },
+        {
+          "statusCode": "isHater",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        }
+      ]
+    },
+    {
+      "code": "makeHelpers",
+      "name": "Высказать лояльность к Титу",
+      "results": [
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "isHelper",
+            "name": "Помощник Тита",
+            "description": "",
+            "value": 1.0,
+            "visible": true
+          },
+          "successMessage": "#WORKER теперь преданный помощник наместника."
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "loyaltyRES",
+          "symbol": "MORE",
+          "statusValue": 100.0
+        },
+        {
+          "statusCode": "isHelper",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        }
+      ]
+    },
+    {
+      "code": "makeCold",
+      "name": "Высказать равнодушие к Титу",
+      "results": [
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "REMOVE_STATUS",
+          "status": {
+            "code": "isHater",
+            "name": "Ненавидит Тита",
+            "description": "",
+            "value": 1.0,
+            "visible": true
+          }
+        },
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "REMOVE_STATUS",
+          "status": {
+            "code": "isHelper",
+            "name": "Помощник Тита",
+            "description": "",
+            "value": 1.0,
+            "visible": true
+          }
+        },
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "isCold",
+            "name": "Равнодушен к Титу",
+            "description": "",
+            "value": 1.0,
+            "visible": true
+          },
+          "successMessage": "#WORKER равнодушен к наместнику."
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "loyaltyRES",
+          "symbol": "LESS",
+          "statusValue": 100.0
+        },
+        {
+          "statusCode": "loyaltyRES",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        },
+        {
+          "statusCode": "isCold",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        },
+        {
+          "statusCode": "GAMER",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        }
+      ]
+    },
+    {
+      "code": "MESSAGE",
+      "name": "Предупреждение о завершении года",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "message",
+            "name": "message",
+            "description": "",
+            "value": 0.0,
+            "visible": false
+          },
+          "successMessage": "Остался месяц до истечения отведенного срока"
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "weeksRES",
+          "symbol": "EQUALS",
+          "statusValue": 49.0
+        }
+      ]
+    },
+    {
+      "code": "MESSAGE",
+      "name": "Предупреждение о завершении года",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "message",
+            "name": "message",
+            "description": "",
+            "value": 0.0,
+            "visible": false
+          },
+          "successMessage": "Прошел отведенный бароном год"
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "weeksRES",
+          "symbol": "EQUALS",
+          "statusValue": 54.0
+        }
+      ]
+    }
+  ]
+}

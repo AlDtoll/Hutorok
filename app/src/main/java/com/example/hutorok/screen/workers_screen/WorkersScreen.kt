@@ -87,6 +87,12 @@ class WorkersScreen : Fragment() {
                 executeTaskButton.isEnabled = it
             }
         })
+
+        workersViewModel.generalDisableStatus().observe(this, Observer {
+            it?.run {
+                workerAdapter.generalDisableConditions = it
+            }
+        })
     }
 
     private fun initToolbar() {
@@ -131,6 +137,7 @@ class WorkersScreen : Fragment() {
             Task.Type.WORK -> getString(R.string.execute_task_button_text)
             Task.Type.BUILD -> getString(R.string.execute_task_button_text_without_worker)
             Task.Type.PERSON -> getString(R.string.execute_task_button_text_for_one_worker)
+            Task.Type.PERSONAL_JOB -> getString(R.string.execute_task_button_text_for_one_worker)
         }
     }
 

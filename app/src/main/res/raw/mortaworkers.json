@@ -1,0 +1,86 @@
+{
+  "workers": [
+    {
+      "name": "Морта",
+      "nickname": "",
+      "age": "OLD",
+      "statuses": [
+        {
+          "code": "MortaNAME",
+          "name": "Имя",
+          "description": "",
+          "value": 1.0,
+          "visible": false
+        }
+      ]
+    },
+    {
+      "name": "Ларс",
+      "nickname": "Кузнец",
+      "age": "ADULT",
+      "statuses": [
+        {
+          "code": "strong",
+          "name": "Плечистый",
+          "description": "",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "craftsmanSKILL",
+          "name": "Рукастый",
+          "description": "",
+          "value": 1.0,
+          "visible": true
+        }
+      ]
+    },
+    {
+      "name": "Ирита",
+      "nickname": "Травница",
+      "age": "ADULT"
+    },
+    {
+      "name": "Эльга",
+      "nickname": "",
+      "age": "CHILDREN"
+    },
+    {
+      "name": "Дион",
+      "nickname": "Сучок",
+      "age": "ADULT"
+    },
+    {
+      "name": "Пит",
+      "nickname": "Береста",
+      "age": "ADULT"
+    },
+    {
+      "name": "Нира",
+      "nickname": "Хромая",
+      "age": "YOUNG"
+    },
+    {
+      "name": "Алундра",
+      "nickname": "Хмельной",
+      "age": "ADULT"
+    },
+    {
+      "name": "Барбара",
+      "nickname": "Бочка",
+      "age": "ADULT"
+    },
+    {
+      "name": "Кен",
+      "nickname": "",
+      "age": "CHILDREN"
+    },
+    {
+      "name": "Тога",
+      "nickname": "",
+      "age": "CHILDREN"
+    }
+  ]
+}
+
+

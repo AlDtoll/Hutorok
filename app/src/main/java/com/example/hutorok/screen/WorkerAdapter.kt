@@ -27,6 +27,7 @@ class WorkerAdapter(
 
     var isOrder = false
     var importantStatusNames = emptyList<String>()
+    var generalDisableConditions = emptyList<Triple<String, Task.Symbol, Double>>()
     lateinit var task: Task
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): RecyclerView.ViewHolder =
@@ -80,7 +81,7 @@ class WorkerAdapter(
         if (task.type == Task.Type.BUILD) {
             return true
         }
-        return if (task.type == Task.Type.PERSON) {
+        return if (task.type == Task.Type.PERSON || task.type == Task.Type.PERSONAL_JOB) {
             val filterWorkers = items.filter { worker -> worker.isSelected }
             filterWorkers.size == 1
         } else {
@@ -92,7 +93,7 @@ class WorkerAdapter(
         if (isOrder && task.type != Task.Type.BUILD && Task.conditionsIsComplete(
                 task.enableConditions,
                 worker.statuses
-            )
+            ) && !Task.conditionsIsComplete(generalDisableConditions, worker.statuses)
         ) {
             return true
         }

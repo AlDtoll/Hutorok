@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
         val workersText = if (isWorkersFilePresent) {
             read("currentworkers.json")
         } else {
-            resources.openRawResource(R.raw.workers)
+            resources.openRawResource(R.raw.mortaworkers)
                 .bufferedReader().use { it.readText() }
         }
         val workers = mutableListOf<Worker>()
@@ -126,7 +126,7 @@ class MainActivity : AppCompatActivity() {
             workers.add(Worker(workersArray.getJSONObject(i)))
         }
 
-        val tasksText = resources.openRawResource(R.raw.tasks)
+        val tasksText = resources.openRawResource(R.raw.mortatasks)
             .bufferedReader().use { it.readText() }
         val tasks = mutableListOf<Task>()
         val tasksObject = JSONObject(tasksText)
@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity() {
         val hutorokText = if (isHutorFilePresent) {
             read("currenthutorok.json")
         } else {
-            resources.openRawResource(R.raw.hutorok)
+            resources.openRawResource(R.raw.mortahutorok)
                 .bufferedReader().use { it.readText() }
         }
         val hutorokStatuses = mutableListOf<Status>()
@@ -150,7 +150,7 @@ class MainActivity : AppCompatActivity() {
             hutorokStatuses.add(Status(statusArray.getJSONObject(i)))
         }
 
-        val endTaskText = resources.openRawResource(R.raw.endtasks)
+        val endTaskText = resources.openRawResource(R.raw.mortaendtasks)
             .bufferedReader().use { it.readText() }
         val endTasks = mutableListOf<Task>()
         val endTasksObject = JSONObject(endTaskText)

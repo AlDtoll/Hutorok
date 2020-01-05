@@ -16,4 +16,5 @@
     <color name="light_green_background_color">#2681D39D</color>
     <color name="green_background_color">#81D39D</color>
     <color name="light_blue_background_color">#264C85FF</color>
+    <color name="blue_background_color">#4C85FF</color>
 </resources>

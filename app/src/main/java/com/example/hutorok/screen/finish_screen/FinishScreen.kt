@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.hutorok.R
@@ -51,5 +52,12 @@ class FinishScreen : Fragment() {
                 exitProcess(0)
             }
         }
+
+        initToolbar()
+    }
+
+    private fun initToolbar() {
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        (activity as AppCompatActivity).title = "Хутор Морты"
     }
 }

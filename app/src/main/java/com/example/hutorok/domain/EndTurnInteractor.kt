@@ -31,21 +31,28 @@ class EndTurnInteractor(
             hutorStatusesListInteractor.get(),
             Function3 { workers: MutableList<Worker>, tasksList: List<Task>, hutorStatusesList: MutableList<Status> ->
                 var message = ""
-                tasksList.forEach { task ->
-                    selectAll(workers, task.enableConditions)
-                    val point = task.countPoint(workers, hutorStatusesList)
-
-                    task.results.forEach { taskResult ->
-                        taskResult.makeAction(hutorStatusesList, point, workers)
-                        message += taskResult.makeMessage(workers)
+                tasksList
+                    .filter { task ->
+                        Task.conditionsIsComplete(
+                            task.permissiveConditions,
+                            hutorStatusesList
+                        )
                     }
+                    .forEach { task ->
+                        selectAll(workers, task.enableConditions)
+                        val point = task.countPoint(workers, hutorStatusesList)
 
-                    if (hutorStatusesList.find { status -> status.code == "DEFEAT" || status.code == "VICTORY" } != null) {
-                        routeToFinishScreenInteractor.execute()
+                        task.results.forEach { taskResult ->
+                            taskResult.makeAction(hutorStatusesList, point, workers)
+                            message += taskResult.makeMessage(workers)
+                        }
+
+                        if (hutorStatusesList.find { status -> status.code == "DEFEAT" || status.code == "VICTORY" } != null) {
+                            routeToFinishScreenInteractor.execute()
+                        }
+
+                        deselectAll(workers)
                     }
-
-                    deselectAll(workers)
-                }
 
                 messageInteractor.update(END_TURN_PREFIX + message)
                 invisibleStatusNamesListInteractor.refresh()

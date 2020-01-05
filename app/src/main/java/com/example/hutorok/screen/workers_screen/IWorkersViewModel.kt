@@ -22,4 +22,6 @@ interface IWorkersViewModel {
 
     fun clickCheckbox(worker: Worker)
 
+    fun generalDisableStatus(): LiveData<List<Triple<String, Task.Symbol, Double>>>
+
 }

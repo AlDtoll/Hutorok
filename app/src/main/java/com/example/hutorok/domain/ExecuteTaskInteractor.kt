@@ -25,6 +25,7 @@ class ExecuteTaskInteractor(
     }
 
     override fun execute(isQuest: Boolean) {
+        var isFinished = false
         Observable.zip(
             workersListInteractor.get(),
             taskInteractor.get(),
@@ -41,6 +42,7 @@ class ExecuteTaskInteractor(
                 }
 
                 if (hutorStatusesList.find { status -> status.code == "DEFEAT" || status.code == "VICTORY" } != null) {
+                    isFinished = true
                     routeToFinishScreenInteractor.execute()
                 }
 
@@ -59,7 +61,7 @@ class ExecuteTaskInteractor(
             }
         ).subscribe()
         invisibleStatusNamesListInteractor.refresh()
-        if (!isQuest) {
+        if (!isQuest && !isFinished) {
             onBackPressedInteractor.execute()
         }
     }

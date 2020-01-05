@@ -15,7 +15,8 @@ class MockLoadDataInteractor(
     private val turnNumberInteractor: ITurnNumberInteractor,
     private val invisibleStatusNamesListInteractor: IInvisibleStatusNamesListInteractor,
     private val historyInteractor: IHistoryInteractor,
-    private val questInteractor: IQuestInteractor
+    private val questInteractor: IQuestInteractor,
+    private val generalDisableStatusListInteractor: IGeneralDisableStatusListInteractor
 ) : ILoadDataInteractor {
 
     override fun update(
@@ -42,6 +43,8 @@ class MockLoadDataInteractor(
         updateInvisibleStatuses()
 
         updateQuest(startQuest)
+
+        updateGeneralDisableStatuses()
     }
 
     private fun updateWorkers(workers: MutableList<Worker>) {
@@ -77,6 +80,17 @@ class MockLoadDataInteractor(
             "?INVISIBLE"
         )
         invisibleStatusNamesListInteractor.update(codes)
+    }
+
+    private fun updateGeneralDisableStatuses() {
+        val conditions = mutableListOf(
+            Triple(
+                "worked",
+                Task.Symbol.MORE,
+                0.0
+            )
+        )
+        generalDisableStatusListInteractor.update(conditions)
     }
 
     private fun updateQuest(quest: Quest) {

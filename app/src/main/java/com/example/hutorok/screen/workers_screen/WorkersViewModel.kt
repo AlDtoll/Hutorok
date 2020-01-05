@@ -5,10 +5,7 @@ import androidx.lifecycle.LiveDataReactiveStreams
 import com.example.hutorok.domain.IExecuteTaskInteractor
 import com.example.hutorok.domain.model.Task
 import com.example.hutorok.domain.model.Worker
-import com.example.hutorok.domain.storage.IImportantStatusNamesListInteractor
-import com.example.hutorok.domain.storage.ITaskInteractor
-import com.example.hutorok.domain.storage.IWorkerInteractor
-import com.example.hutorok.domain.storage.IWorkersListInteractor
+import com.example.hutorok.domain.storage.*
 import com.example.hutorok.routing.IScenarioInteractor
 import com.example.hutorok.routing.RouteToWorkerInfoScreenInteractor
 import com.example.hutorok.routing.Scenario
@@ -23,7 +20,8 @@ class WorkersViewModel(
     private val scenarioInteractor: IScenarioInteractor,
     private val executeTaskInteractor: IExecuteTaskInteractor,
     private val importantStatusNamesListInteractor: IImportantStatusNamesListInteractor,
-    private val taskInteractor: ITaskInteractor
+    private val taskInteractor: ITaskInteractor,
+    private val generalDisableStatusListInteractor: IGeneralDisableStatusListInteractor
 ) : IWorkersViewModel {
 
     override fun workersData(): LiveData<MutableList<Worker>> {
@@ -69,7 +67,7 @@ class WorkersViewModel(
                 if (task.type == Task.Type.BUILD) {
                     return@BiFunction true
                 }
-                if (task.type == Task.Type.PERSON) {
+                if (task.type == Task.Type.PERSON || task.type == Task.Type.PERSONAL_JOB) {
                     val filteredWorkers = workers.filter { worker -> worker.isSelected }
                     return@BiFunction filteredWorkers.size == 1
                 } else {
@@ -85,6 +83,12 @@ class WorkersViewModel(
 
     override fun clickCheckbox(worker: Worker) {
         workersListInteractor.refresh()
+    }
+
+    override fun generalDisableStatus(): LiveData<List<Triple<String, Task.Symbol, Double>>> {
+        return LiveDataReactiveStreams.fromPublisher(
+            generalDisableStatusListInteractor.get().toFlowable(BackpressureStrategy.LATEST)
+        )
     }
 
 }

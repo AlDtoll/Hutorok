@@ -20,6 +20,37 @@
                   "value": 0.0,
                   "visible": true
                 }
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "GAMER",
+                  "name": "Персонаж игрока",
+                  "value": 1.0,
+                  "visible": false
+                }
+              },
+              {
+                "target": "ONE_SELECTED_WORKER",
+                "action": "SET_STATUS_VALUE",
+                "status": {
+                  "code": "isHelper",
+                  "name": "Сам себе помощник",
+                  "value": 1.0,
+                  "visible": false
+                }
+              },
+              {
+                "target": "HUTOR",
+                "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+                "status": {
+                  "code": "populationsRES",
+                  "name": "Население",
+                  "description": "Много-говорит",
+                  "value": 1.0,
+                  "visible": true
+                }
               }
             ]
           },
@@ -46,17 +77,6 @@
                   "description": "Умеет выслеживать зверя, луком там и вот это все",
                   "value": 1.0,
                   "visible": true
-                }
-              },
-              {
-                "target": "HUTOR",
-                "action": "SET_STATUS_VALUE",
-                "status": {
-                  "code": "hunterRANK",
-                  "name": "Охотник",
-                  "description": "Умеет выслеживать зверя, луком там и вот это все",
-                  "value": 1.0,
-                  "visible": false
                 }
               },
               {
@@ -180,17 +200,6 @@
                 }
               },
               {
-                "target": "HUTOR",
-                "action": "SET_STATUS_VALUE",
-                "status": {
-                  "code": "thiefRANK",
-                  "name": "Вор",
-                  "description": "Ловкость рук и всякое мошенничество",
-                  "value": 1.0,
-                  "visible": false
-                }
-              },
-              {
                 "target": "ONE_SELECTED_WORKER",
                 "action": "SET_STATUS_VALUE",
                 "status": {
@@ -265,17 +274,6 @@
                   "description": "Знает, на чем поиметь выгоду",
                   "value": 1.0,
                   "visible": true
-                }
-              },
-              {
-                "target": "HUTOR",
-                "action": "SET_STATUS_VALUE",
-                "status": {
-                  "code": "merchantRANK",
-                  "name": "Торговец",
-                  "description": "Знает, на чем поиметь выгоду",
-                  "value": 1.0,
-                  "visible": false
                 }
               },
               {
@@ -356,7 +354,7 @@
                 "target": "HUTOR",
                 "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
                 "status": {
-                  "code": "weekRES",
+                  "code": "weeksRES",
                   "name": "Прошло недель",
                   "value": 1.0,
                   "visible": true
@@ -691,7 +689,7 @@
                 "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
                 "status": {
                   "code": "goldenCoinsRES",
-                  "name": "Шанс на побег",
+                  "name": "Золотые монеты",
                   "value": -5.0,
                   "visible": true
                 }
@@ -700,7 +698,7 @@
                 "target": "HUTOR",
                 "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
                 "status": {
-                  "code": "weekRES",
+                  "code": "weeksRES",
                   "name": "Прошло недель",
                   "value": 1.0,
                   "visible": true

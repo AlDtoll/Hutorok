@@ -63,6 +63,11 @@ class Task(
                             return false
                         }
                     }
+                    Symbol.EQUALS -> {
+                        if (findValue != condition.third) {
+                            return false
+                        }
+                    }
                 }
             }
             return true
@@ -120,12 +125,14 @@ class Task(
     enum class Type {
         WORK,
         BUILD,
-        PERSON
+        PERSON,
+        PERSONAL_JOB
     }
 
     enum class Symbol {
         MORE,
-        LESS
+        LESS,
+        EQUALS
     }
 
     fun countPoint(workers: List<Worker>, hutorStatues: List<Status>): Double {
@@ -259,14 +266,22 @@ class TaskResult(
         if (this.action == TaskAction.ADD_WORKER) {
             addNewWorker(workers)
         }
+        val allStatuses = mutableListOf<Status>()
+        allStatuses.addAll(hutorStatuses)
+        val selectedWorkers = workers.filter { worker -> worker.isSelected }
+        if (selectedWorkers.isNotEmpty()) {
+            selectedWorkers.forEach { worker ->
+                val workerStatuses = worker.statuses
+                allStatuses.addAll(workerStatuses)
+            }
+        }
         when (target) {
-            TaskTarget.HUTOR -> changeStatuses(hutorStatuses, point)
+            TaskTarget.HUTOR -> changeStatuses(hutorStatuses, point, allStatuses)
             TaskTarget.ALL_SELECTED_WORKER -> {
-                val selectedWorkers = workers.filter { worker -> worker.isSelected }
                 if (selectedWorkers.isNotEmpty()) {
                     selectedWorkers.forEach { worker ->
                         val workerStatuses = worker.statuses
-                        changeStatuses(workerStatuses, point)
+                        changeStatuses(workerStatuses, point, allStatuses)
                         worker.statuses = workerStatuses
                     }
                 }
@@ -275,7 +290,7 @@ class TaskResult(
                 val findWorker = workers.find { worker -> worker.isSelected }
                 if (findWorker != null) {
                     val workerStatuses = findWorker.statuses
-                    changeStatuses(workerStatuses, point)
+                    changeStatuses(workerStatuses, point, allStatuses)
                     findWorker.statuses = workerStatuses
                 }
             }
@@ -306,8 +321,9 @@ class TaskResult(
     }
 
     private fun changeStatuses(
-        statuses: MutableList<Status>,
-        point: Double
+        statusesForChange: MutableList<Status>,
+        point: Double,
+        statusesForCompare: MutableList<Status>
     ) {
         IS_SUCCESS = true
         VALUE = 0.0
@@ -316,8 +332,12 @@ class TaskResult(
             percent = 100.0
         } else {
             this.conditions.forEach { condition ->
-                if (isConditionComplete(condition.first, statuses)) {
-                    percent += condition.second
+                if (isConditionComplete(condition.first, statusesForCompare)) {
+                    percent += when (condition.second) {
+                        ADD_ITSELF_VALUE -> condition.first.third
+                        MINUS_ITSELF_VALUE -> -condition.first.third
+                        else -> condition.second
+                    }
                 }
             }
         }
@@ -327,26 +347,28 @@ class TaskResult(
             return
         }
         when {
-            this.action == TaskAction.ADD_STATUS -> statuses.add(this.status)
+            this.action == TaskAction.ADD_STATUS -> statusesForChange.add(this.status)
             this.action == TaskAction.REMOVE_STATUS -> {
-                val findStatus = statuses.find { status -> this.status.code == status.code }
+                val findStatus =
+                    statusesForChange.find { status -> this.status.code == status.code }
                 findStatus?.run {
-                    statuses.remove(findStatus)
+                    statusesForChange.remove(findStatus)
                 }
             }
             else -> {
-                val findStatus = statuses.find { status -> this.status.code == status.code }
+                val findStatus =
+                    statusesForChange.find { status -> this.status.code == status.code }
                 if (findStatus == null) {
                     val newStatus = Status(this.status)
                     newStatus.value = 0.0
                     newStatus.value = changeStatusValue(newStatus, point)
                     if (newStatus.canBeNegative || newStatus.value > 0.0) {
-                        statuses.add(newStatus)
+                        statusesForChange.add(newStatus)
                     }
                 } else {
                     findStatus.value = changeStatusValue(findStatus, point)
                     if (!findStatus.canBeNegative && findStatus.value <= 0.0) {
-                        statuses.remove(findStatus)
+                        statusesForChange.remove(findStatus)
                     }
                 }
             }
@@ -392,6 +414,11 @@ class TaskResult(
             }
             Task.Symbol.LESS -> {
                 if (findValue >= condition.third) {
+                    return false
+                }
+            }
+            Task.Symbol.EQUALS -> {
+                if (findValue != condition.third) {
                     return false
                 }
             }
@@ -453,6 +480,7 @@ class TaskResult(
         ADD_STATUS,
         REMOVE_STATUS,
         CHANGE_STATUS_BY_RANDOM_VALUE,
-        ADD_WORKER
+        ADD_WORKER,
+        SELECT_WORKER
     }
 }

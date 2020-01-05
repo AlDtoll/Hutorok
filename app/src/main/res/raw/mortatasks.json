@@ -1,0 +1,147 @@
+{
+  "tasks": [
+    {
+      "code": "openKillMorta",
+      "name": "Линчевать старую ведьму!",
+      "description": "Для такого дела нужно юыть уверенным в поддержке остальных селян и как-то обезвредить колдовство ведьмы",
+      "workerFunction": {
+        "statuses": [
+          {
+            "code": "?WEAPON",
+            "value": 1.0
+          }
+        ],
+        "defaultValue": 1
+      },
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE",
+          "status": {
+            "code": "battlePointRES",
+            "name": "Боевые очки",
+            "description": "",
+            "value": 0.0,
+            "visible": false
+          }
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "isHelper",
+          "symbol": "MORE",
+          "statusValue": 1.0
+        }
+      ]
+    },
+    {
+      "code": "talk",
+      "name": "Поговорить с хуторянином, используя врожденное красноречие",
+      "description": "В роли наместника Тит потратит свое время и время работника, чтобы улучшить отношения",
+      "type": "PERSONAL_JOB",
+      "results": [
+        {
+          "target": "ONE_SELECTED_WORKER",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "loyaltyRES",
+            "name": "Лояльность",
+            "value": 100.0,
+            "visible": true
+          }
+        },
+        {
+          "target": "ONE_SELECTED_WORKER",
+          "action": "SELECT_WORKER",
+          "status": {
+            "code": "loyaltyRES",
+            "name": "Лояльность",
+            "value": 100.0,
+            "visible": true
+          }
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "GAMER",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        }
+      ]
+    },
+    {
+      "code": "escapeByOffer",
+      "name": "Сбежать, используя предложение мутного типа из трактира",
+      "type": "BUILD",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "VICTORY",
+            "name": "ПОБЕДА",
+            "description": "Заплатив за \"Растаможку\", Тит был упакован в ящик, а спустя неделю оказался далеко за пределами владений барона. \"Удачи в новой жизни!\"",
+            "value": 1.0,
+            "visible": true
+          },
+          "conditions": [
+            {
+              "statusCode": "",
+              "symbol": "MORE",
+              "statusValue": 0.0,
+              "value": 70.0
+            },
+            {
+              "statusCode": "thiefRANK",
+              "symbol": "MORE",
+              "statusValue": 0.0,
+              "value": -50.0
+            }
+          ]
+        },
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "DEFEAT",
+            "name": "Поражение",
+            "description": "Заплатив за \"Растаможку\", Тит был упакован в ящик, но когда пришла пора вылезать, то он услышал лишь падающую на крышку гроба землю. \"Должно быть кто-то из моих врагов заплатил большую цену...\"",
+            "value": 1.0,
+            "visible": true
+          },
+          "conditions": [
+            {
+              "statusCode": "thiefRANK",
+              "symbol": "MORE",
+              "statusValue": 0.0,
+              "value": 100.0
+            }
+          ]
+        },
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "DEFEAT",
+            "name": "Поражение",
+            "description": "Заплатив за \"Растаможку\", Тит был упакован в ящик, а спустя много недель был доставлен на дальний юг. Где оказался продан с рабского торга. \"Этого стоило ожидать...\"",
+            "value": 1.0,
+            "visible": true
+          }
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "hasSpecialOffer",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        },
+        {
+          "statusCode": "goldenCoinsRES",
+          "symbol": "MORE",
+          "statusValue": 29.0
+        }
+      ]
+    }
+  ]
+}
