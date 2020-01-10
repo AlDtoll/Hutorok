@@ -37,8 +37,7 @@ class ExecuteTaskInteractor(
 
                 var message = ""
                 task.results.forEach { taskResult ->
-                    taskResult.makeAction(hutorStatusesList, point, workersList)
-                    message += taskResult.makeMessage(workersList)
+                    message += taskResult.makeAction(hutorStatusesList, point, workersList)
                 }
 
                 if (hutorStatusesList.find { status -> status.code == "DEFEAT" || status.code == "VICTORY" } != null) {

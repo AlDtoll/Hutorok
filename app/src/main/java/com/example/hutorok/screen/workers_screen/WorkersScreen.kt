@@ -138,6 +138,7 @@ class WorkersScreen : Fragment() {
             Task.Type.BUILD -> getString(R.string.execute_task_button_text_without_worker)
             Task.Type.PERSON -> getString(R.string.execute_task_button_text_for_one_worker)
             Task.Type.PERSONAL_JOB -> getString(R.string.execute_task_button_text_for_one_worker)
+            Task.Type.MASTER_SLAVE_JOB -> getString(R.string.execute_task_button_text_for_two_worker)
         }
     }
 

@@ -126,7 +126,8 @@ class Task(
         WORK,
         BUILD,
         PERSON,
-        PERSONAL_JOB
+        PERSONAL_JOB,
+        MASTER_SLAVE_JOB
     }
 
     enum class Symbol {
@@ -233,7 +234,7 @@ class TaskResult(
     )
 
     companion object {
-        var IS_SUCCESS = true
+        var IS_REPEATED = false
         var VALUE = 0.0
 
         fun parseConditions(jsonArray: JSONArray?): List<Pair<Triple<String, Task.Symbol, Double>, Double>> {
@@ -262,7 +263,9 @@ class TaskResult(
         hutorStatuses: MutableList<Status>,
         point: Double,
         workers: MutableList<Worker>
-    ) {
+    ): String {
+        var message = ""
+        IS_REPEATED = false
         if (this.action == TaskAction.ADD_WORKER) {
             addNewWorker(workers)
         }
@@ -276,12 +279,14 @@ class TaskResult(
             }
         }
         when (target) {
-            TaskTarget.HUTOR -> changeStatuses(hutorStatuses, point, allStatuses)
+            TaskTarget.HUTOR -> message += changeStatuses(hutorStatuses, point, allStatuses, null)
             TaskTarget.ALL_SELECTED_WORKER -> {
                 if (selectedWorkers.isNotEmpty()) {
                     selectedWorkers.forEach { worker ->
                         val workerStatuses = worker.statuses
-                        changeStatuses(workerStatuses, point, allStatuses)
+                        val list = mutableListOf<Status>()
+                        list.addAll(workerStatuses)
+                        message += changeStatuses(workerStatuses, point, list, worker)
                         worker.statuses = workerStatuses
                     }
                 }
@@ -290,11 +295,12 @@ class TaskResult(
                 val findWorker = workers.find { worker -> worker.isSelected }
                 if (findWorker != null) {
                     val workerStatuses = findWorker.statuses
-                    changeStatuses(workerStatuses, point, allStatuses)
+                    message += changeStatuses(workerStatuses, point, allStatuses, findWorker)
                     findWorker.statuses = workerStatuses
                 }
             }
         }
+        return prepareMessage(message)
     }
 
     private fun addNewWorker(workers: MutableList<Worker>) {
@@ -323,9 +329,9 @@ class TaskResult(
     private fun changeStatuses(
         statusesForChange: MutableList<Status>,
         point: Double,
-        statusesForCompare: MutableList<Status>
-    ) {
-        IS_SUCCESS = true
+        statusesForCompare: MutableList<Status>,
+        worker: Worker?
+    ): String {
         VALUE = 0.0
         var percent = 0.0
         if (this.conditions.isEmpty()) {
@@ -343,8 +349,7 @@ class TaskResult(
         }
         val d = Random(Date().time).nextInt(100).toDouble() + 1
         if (percent <= d) {
-            IS_SUCCESS = false
-            return
+            return makeMessage(worker, false)
         }
         when {
             this.action == TaskAction.ADD_STATUS -> statusesForChange.add(this.status)
@@ -373,6 +378,7 @@ class TaskResult(
                 }
             }
         }
+        return makeMessage(worker, true)
     }
 
     private fun changeStatusValue(status: Status, point: Double): Double {
@@ -441,31 +447,35 @@ class TaskResult(
         }
     }
 
-    fun makeMessage(
-        workers: List<Worker>
+    private fun makeMessage(
+        worker: Worker?,
+        isSuccess: Boolean
     ): String {
         var message = this.successMessage
-        if (!IS_SUCCESS) {
+        if (!isSuccess) {
             message = this.failMessage
         }
-        if (message.contains("#VALUE")) {
-            return message.replace("#VALUE", VALUE.toString()) + "\n"
+        if (message.isEmpty()) {
+            return ""
         }
-        if (message.contains("#WORKER") && workers.isNotEmpty()) {
-            val selectedWorkers = workers.filter { worker -> worker.isSelected }
-            if (selectedWorkers.isNotEmpty()) {
-                var name = ""
-                selectedWorkers.forEach {
-                    name = name + it.name + " "
-                }
-                return message.replace("#WORKER", name) + "\n"
-            } else {
+        if (message.contains("#VALUE")) {
+            message = message.replace("#VALUE", VALUE.toString())
+        }
+        if (message.contains("#WORKER") && worker != null) {
+            message = message.replace("#WORKER", worker.name)
+            IS_REPEATED = false
+        } else {
+            if (IS_REPEATED) {
                 return ""
             }
+            IS_REPEATED = true
         }
         return message + "\n"
     }
 
+    private fun prepareMessage(message: String): String {
+        return message
+    }
 
     enum class TaskTarget {
         HUTOR,
@@ -480,7 +490,6 @@ class TaskResult(
         ADD_STATUS,
         REMOVE_STATUS,
         CHANGE_STATUS_BY_RANDOM_VALUE,
-        ADD_WORKER,
-        SELECT_WORKER
+        ADD_WORKER
     }
 }

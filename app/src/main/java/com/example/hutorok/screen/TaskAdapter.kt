@@ -51,6 +51,7 @@ class TaskAdapter(
             Task.Type.BUILD -> R.color.green_background_color
             Task.Type.PERSONAL_JOB -> R.color.light_blue_background_color
             Task.Type.PERSON -> R.color.blue_background_color
+            Task.Type.MASTER_SLAVE_JOB -> R.color.red_background_color
         }
     }
 

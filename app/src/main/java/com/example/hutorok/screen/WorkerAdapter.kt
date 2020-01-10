@@ -61,7 +61,11 @@ class WorkerAdapter(
             } else {
                 checkbox.visibility = View.GONE
             }
+            //todo crunch
+            checkbox.setOnCheckedChangeListener(null)
+            checkbox.isChecked = item.isSelected
             checkbox.setOnCheckedChangeListener { _, isChecked ->
+                notifyDataSetChanged()
                 item.isSelected = isChecked
                 callback.isExecuteTaskButtonEnable(isExecuteTaskButtonEnable())
             }
@@ -81,6 +85,10 @@ class WorkerAdapter(
         if (task.type == Task.Type.BUILD) {
             return true
         }
+        if (task.type == Task.Type.MASTER_SLAVE_JOB) {
+            val filterWorkers = items.filter { worker -> worker.isSelected }
+            return filterWorkers.size == 2
+        }
         return if (task.type == Task.Type.PERSON || task.type == Task.Type.PERSONAL_JOB) {
             val filterWorkers = items.filter { worker -> worker.isSelected }
             filterWorkers.size == 1
@@ -90,14 +98,63 @@ class WorkerAdapter(
     }
 
     private fun isCheckboxVisible(worker: Worker): Boolean {
-        if (isOrder && task.type != Task.Type.BUILD && Task.conditionsIsComplete(
-                task.enableConditions,
-                worker.statuses
-            ) && !Task.conditionsIsComplete(generalDisableConditions, worker.statuses)
+        if (worker.isSelected) {
+            return true
+        }
+        if (isOrder && task.type != Task.Type.BUILD
+            && isTaskEnableConditionsInComplete(worker)
+            && !Task.conditionsIsComplete(generalDisableConditions, worker.statuses)
+            && !isExceededLimitOfSelectedWorker()
         ) {
             return true
         }
         return false
+    }
+
+    private fun isExceededLimitOfSelectedWorker(): Boolean {
+        return when (task.type) {
+            Task.Type.WORK -> false
+            Task.Type.BUILD -> true
+            Task.Type.PERSON -> items.filter { worker -> worker.isSelected }.size == 1
+            Task.Type.PERSONAL_JOB -> items.filter { worker -> worker.isSelected }.size == 1
+            Task.Type.MASTER_SLAVE_JOB -> items.filter { worker -> worker.isSelected }.size == 2
+        }
+    }
+
+    private fun isTaskEnableConditionsInComplete(worker: Worker): Boolean {
+        return if (task.type == Task.Type.MASTER_SLAVE_JOB) {
+            val masterEnableConditions = mutableListOf<Triple<String, Task.Symbol, Double>>()
+            task.enableConditions.filter { condition -> condition.first.contains("MASTER_") }
+                .forEach {
+                    masterEnableConditions.add(
+                        Triple(
+                            it.first.replace("MASTER_", ""),
+                            it.second,
+                            it.third
+                        )
+                    )
+                }
+
+            val slaveEnableConditions = mutableListOf<Triple<String, Task.Symbol, Double>>()
+            task.enableConditions.filter { condition -> condition.first.contains("SLAVE_") }
+                .forEach {
+                    slaveEnableConditions.add(
+                        Triple(
+                            it.first.replace("SLAVE_", ""),
+                            it.second,
+                            it.third
+                        )
+                    )
+                }
+
+            return if (items.none { worker -> worker.isSelected }) {
+                Task.conditionsIsComplete(masterEnableConditions, worker.statuses)
+            } else {
+                Task.conditionsIsComplete(slaveEnableConditions, worker.statuses)
+            }
+        } else {
+            Task.conditionsIsComplete(task.enableConditions, worker.statuses)
+        }
     }
 
     class WorkerHolder(itemView: View) : RecyclerView.ViewHolder(itemView)

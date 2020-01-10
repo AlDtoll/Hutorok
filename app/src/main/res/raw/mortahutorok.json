@@ -22,6 +22,13 @@
       "visible": false
     },
     {
+      "code": "MortaHasPower",
+      "name": "У Морты все еще есть колдовство",
+      "description": "Тит пока не нашел надежного способа обезвредить колдовство ведмы",
+      "value": 1.0,
+      "visible": true
+    },
+    {
       "code": "populationsRES",
       "name": "Население",
       "description": "Количество людей",
@@ -53,6 +60,13 @@
       "code": "houseBUILDING",
       "name": "Небольшой домик со следами постоянного ремонта",
       "description": "Тут живет семейство Алундры",
+      "value": 1.0,
+      "visible": true
+    },
+    {
+      "code": "barnBUILDING",
+      "name": "Амбар для хранения зерна",
+      "description": "Тут хранится зерно для всего хутора",
       "value": 1.0,
       "visible": true
     },

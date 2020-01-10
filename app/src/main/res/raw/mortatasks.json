@@ -23,14 +23,15 @@
             "description": "",
             "value": 0.0,
             "visible": false
-          }
+          },
+          "successMessage": "#VALUE боевых очков"
         }
       ],
       "enableConditions": [
         {
           "statusCode": "isHelper",
           "symbol": "MORE",
-          "statusValue": 1.0
+          "statusValue": 0.0
         }
       ]
     },
@@ -38,32 +39,36 @@
       "code": "talk",
       "name": "Поговорить с хуторянином, используя врожденное красноречие",
       "description": "В роли наместника Тит потратит свое время и время работника, чтобы улучшить отношения",
-      "type": "PERSONAL_JOB",
+      "type": "MASTER_SLAVE_JOB",
       "results": [
         {
-          "target": "ONE_SELECTED_WORKER",
+          "target": "ALL_SELECTED_WORKER",
           "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
           "status": {
             "code": "loyaltyRES",
             "name": "Лояльность",
             "value": 100.0,
             "visible": true
-          }
-        },
-        {
-          "target": "ONE_SELECTED_WORKER",
-          "action": "SELECT_WORKER",
-          "status": {
-            "code": "loyaltyRES",
-            "name": "Лояльность",
-            "value": 100.0,
-            "visible": true
-          }
+          },
+          "successMessage": "Тит поговорил с хуторянином и улучшил взаимоотношения, но на сколько станет понятно в конце недели",
+          "conditions": [
+            {
+              "statusCode": "GAMER",
+              "symbol": "LESS",
+              "statusValue": 1.0,
+              "value": 100.0
+            }
+          ]
         }
       ],
       "enableConditions": [
         {
-          "statusCode": "GAMER",
+          "statusCode": "MASTER_GAMER",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        },
+        {
+          "statusCode": "SLAVE_MortaNAME",
           "symbol": "LESS",
           "statusValue": 1.0
         }
@@ -92,7 +97,7 @@
               "value": 70.0
             },
             {
-              "statusCode": "thiefRANK",
+              "statusCode": "hasEnemyVICE",
               "symbol": "MORE",
               "statusValue": 0.0,
               "value": -50.0
@@ -111,7 +116,7 @@
           },
           "conditions": [
             {
-              "statusCode": "thiefRANK",
+              "statusCode": "hasEnemyVICE",
               "symbol": "MORE",
               "statusValue": 0.0,
               "value": 100.0
@@ -140,6 +145,31 @@
           "statusCode": "goldenCoinsRES",
           "symbol": "MORE",
           "statusValue": 29.0
+        }
+      ]
+    },
+    {
+      "code": "completeMission",
+      "name": "Закончить с миссией",
+      "type": "BUILD",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "VICTORY",
+            "name": "ПОБЕДА",
+            "description": "Тит успешно выполнил поручение барона, сумев выжить на хуторе Морты и собрав 100 монет, за что был произведен в рыцари",
+            "value": 1.0,
+            "visible": true
+          }
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "goldenCoinsRES",
+          "symbol": "MORE",
+          "statusValue": 99.0
         }
       ]
     }

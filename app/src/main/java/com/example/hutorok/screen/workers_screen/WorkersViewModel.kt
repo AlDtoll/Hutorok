@@ -64,11 +64,14 @@ class WorkersViewModel(
             taskInteractor.get(),
             workersListInteractor.get(),
             BiFunction { task: Task, workers: List<Worker> ->
+                val filteredWorkers = workers.filter { worker -> worker.isSelected }
                 if (task.type == Task.Type.BUILD) {
                     return@BiFunction true
                 }
+                if (task.type == Task.Type.MASTER_SLAVE_JOB) {
+                    return@BiFunction filteredWorkers.size == 2
+                }
                 if (task.type == Task.Type.PERSON || task.type == Task.Type.PERSONAL_JOB) {
-                    val filteredWorkers = workers.filter { worker -> worker.isSelected }
                     return@BiFunction filteredWorkers.size == 1
                 } else {
                     return@BiFunction workers.any { worker -> worker.isSelected }

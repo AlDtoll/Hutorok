@@ -391,7 +391,7 @@
           "nextScene": "traktir",
           "task": {
             "code": "goToTraktir",
-            "name": "Собрать вещи",
+            "name": "Собрать вещи и направить свои мощи дальше",
             "workerFunction": {
               "statuses": [
                 {
