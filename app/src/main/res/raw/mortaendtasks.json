@@ -407,6 +407,103 @@
     },
     {
       "code": "MESSAGE",
+      "name": "Предупреждение о скором начале жатвы",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "message",
+            "name": "message",
+            "description": "",
+            "value": 0.0,
+            "visible": false
+          },
+          "successMessage": "Через месяц придет пора собирать урожай"
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "weeksRES",
+          "symbol": "EQUALS",
+          "statusValue": 20.0
+        }
+      ]
+    },
+    {
+      "code": "MESSAGE",
+      "name": "Предупреждение о начале жатвы",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "message",
+            "name": "message",
+            "description": "",
+            "value": 0.0,
+            "visible": false
+          },
+          "successMessage": "Пришла пора собирать урожай"
+        },
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "harvestTime",
+            "name": "Время обирать урожай",
+            "description": "",
+            "value": 1.0,
+            "visible": true
+          }
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "weeksRES",
+          "symbol": "EQUALS",
+          "statusValue": 25.0
+        }
+      ]
+    },
+    {
+      "code": "MESSAGE",
+      "name": "Предупреждение о конце жатвы",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "message",
+            "name": "message",
+            "description": "",
+            "value": 0.0,
+            "visible": false
+          },
+          "successMessage": "Пора сборки урожая закончилась"
+        },
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "harvestTime",
+            "name": "Время обирать урожай",
+            "description": "",
+            "value": 0.0,
+            "visible": true
+          }
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "weeksRES",
+          "symbol": "EQUALS",
+          "statusValue": 31.0
+        }
+      ]
+    },
+    {
+      "code": "MESSAGE",
       "name": "Предупреждение о завершении года",
       "results": [
         {

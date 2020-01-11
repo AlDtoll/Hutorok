@@ -51,6 +51,28 @@
                   "value": 1.0,
                   "visible": true
                 }
+              },
+              {
+                "target": "HUTOR",
+                "action": "CHANGE_STATUS_BY_RANDOM_VALUE",
+                "status": {
+                  "code": "foodsRES",
+                  "name": "Продовольствие",
+                  "description": "",
+                  "value": 40.0,
+                  "visible": true
+                }
+              },
+              {
+                "target": "HUTOR",
+                "action": "CHANGE_STATUS_BY_RANDOM_VALUE",
+                "status": {
+                  "code": "foodsRES",
+                  "name": "Продовольствие",
+                  "description": "",
+                  "value": -40.0,
+                  "visible": true
+                }
               }
             ]
           },

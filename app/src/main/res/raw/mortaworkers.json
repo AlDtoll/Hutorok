@@ -43,7 +43,15 @@
     {
       "name": "Эльга",
       "nickname": "",
-      "age": "CHILDREN"
+      "age": "CHILDREN",
+      "statuses": [
+        {
+          "code": "CHILDREN",
+          "name": "Ребенок",
+          "value": 1.0,
+          "visible": false
+        }
+      ]
     },
     {
       "name": "Дион",
@@ -137,22 +145,66 @@
     {
       "name": "Алундра",
       "nickname": "Хмельной",
-      "age": "ADULT"
+      "age": "ADULT",
+      "statuses": [
+        {
+          "code": "farmer",
+          "name": "Фермер",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "useChildrenForHarvest",
+          "name": "Использует детей для помощи по хозяйству",
+          "value": 1.0,
+          "visible": false
+        }
+      ]
     },
     {
       "name": "Барбара",
       "nickname": "Бочка",
-      "age": "ADULT"
+      "age": "ADULT",
+      "statuses": [
+        {
+          "code": "farmer",
+          "name": "Фермер",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "useChildrenForHarvest",
+          "name": "Использует детей для помощи по хозяйству",
+          "value": 1.0,
+          "visible": false
+        }
+      ]
     },
     {
       "name": "Кен",
       "nickname": "",
-      "age": "YOUNG"
+      "age": "CHILDREN",
+      "statuses": [
+        {
+          "code": "CHILDREN",
+          "name": "Ребенок",
+          "value": 1.0,
+          "visible": false
+        }
+      ]
     },
     {
       "name": "Тога",
       "nickname": "",
-      "age": "CHILDREN"
+      "age": "CHILDREN",
+      "statuses": [
+        {
+          "code": "CHILDREN",
+          "name": "Ребенок",
+          "value": 1.0,
+          "visible": false
+        }
+      ]
     }
   ]
 }

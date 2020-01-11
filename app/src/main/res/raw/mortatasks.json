@@ -3,7 +3,7 @@
     {
       "code": "openKillMorta",
       "name": "Линчевать старую ведьму!",
-      "description": "Для такого дела нужно юыть уверенным в поддержке остальных селян и как-то обезвредить колдовство ведьмы",
+      "description": "Для такого дела нужно быть уверенным в поддержке остальных селян и как-то обезвредить колдовство ведьмы",
       "workerFunction": {
         "statuses": [
           {
@@ -394,6 +394,137 @@
           "statusCode": "goldenCoinsRES",
           "symbol": "MORE",
           "statusValue": 99.0
+        }
+      ]
+    },
+    {
+      "code": "harvest",
+      "name": "Проводить пахотные работы",
+      "description": "Расчищать поляны вокруг хутора, подготваливать землю, сеять семена и пропалывать",
+      "workerFunction": {
+        "statuses": [
+          {
+            "code": "farmer",
+            "value": 2.0
+          },
+          {
+            "code": "useChildrenForHarvest",
+            "value": 2.0
+          }
+        ],
+        "defaultValue": 6
+      },
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE",
+          "status": {
+            "code": "arableRES",
+            "name": "Пашня, с которой потенциально можно собрать зерна на единиц еды:",
+            "value": 0.0,
+            "visible": true
+          },
+          "successMessage": "!!Пахотные работы успешно проведены на #VALUE"
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "harvestTime",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        }
+      ]
+    },
+    {
+      "code": "harvest",
+      "name": "Собирать урожай",
+      "description": "В среднем один рабочий собирает 20 единиц пищи, представленной зерном",
+      "workerFunction": {
+        "statuses": [
+          {
+            "code": "farmer",
+            "value": 10.0
+          },
+          {
+            "code": "useChildrenForHarvest",
+            "value": 10.0
+          }
+        ],
+        "defaultValue": 40
+      },
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE",
+          "status": {
+            "code": "foodsRES",
+            "name": "Продовольствие",
+            "value": 0.0,
+            "visible": true
+          },
+          "successMessage": "С пашни было собрано #VALUE еды"
+        },
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_MINUS",
+          "status": {
+            "code": "arableRES",
+            "name": "Пашня, с которой потенциально можно собрать зерна на единиц еды:",
+            "value": 0.0,
+            "visible": false
+          }
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "harvestTime",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        },
+        {
+          "statusCode": "arableRES",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        }
+      ]
+    },
+    {
+      "code": "hunt",
+      "name": "Отправиться на охоту в лес",
+      "description": "Для этой цели лучше всего подходят охотники, как ни странно",
+      "type": "PERSONAL_JOB",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "beefsRES",
+            "name": "Туша какого-то крупного животного: белкозла, крысобыка или т.д",
+            "value": 1.0,
+            "visible": true
+          },
+          "successMessage": "Охотник успешно поохотился и добыл тушу",
+          "failMessage": "Охотник оказался неудачлив или дичь ушла в глубину леса",
+          "conditions": [
+            {
+              "statusCode": "",
+              "symbol": "MORE",
+              "statusValue": 0.0,
+              "value": 30.0
+            },
+            {
+              "statusCode": "rangerSKILL",
+              "symbol": "MORE",
+              "statusValue": 0.0,
+              "value": 30.0
+            },
+            {
+              "statusCode": "bowWEAPON",
+              "symbol": "MORE",
+              "statusValue": 0.0,
+              "value": 30.0
+            }
+          ]
         }
       ]
     }
