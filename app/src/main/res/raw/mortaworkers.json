@@ -48,12 +48,86 @@
     {
       "name": "Дион",
       "nickname": "Сучок",
-      "age": "ADULT"
+      "age": "ADULT",
+      "statuses": [
+        {
+          "code": "rangerSKILL",
+          "name": "Следопыт",
+          "description": "Позволяет читать следы",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "bowSKILL",
+          "name": "Стрельба из лука",
+          "description": "Умеет стрелять из лука",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "carveSKILL",
+          "name": "Свежевание",
+          "description": "Умеет разделывать туши",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "survivalSKILL",
+          "name": "Выживание",
+          "description": "Приспособлен к выживанию в дикой природе",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "bowWEAPON",
+          "name": "Лук",
+          "description": "Яйца и бесконечные стрелы прилагаются",
+          "value": 1.0,
+          "visible": true
+        }
+      ]
     },
     {
       "name": "Пит",
       "nickname": "Береста",
-      "age": "ADULT"
+      "age": "ADULT",
+      "statuses": [
+        {
+          "code": "rangerSKILL",
+          "name": "Следопыт",
+          "description": "Позволяет читать следы",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "bowSKILL",
+          "name": "Стрельба из лука",
+          "description": "Умеет стрелять из лука",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "carveSKILL",
+          "name": "Свежевание",
+          "description": "Умеет разделывать туши",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "survivalSKILL",
+          "name": "Выживание",
+          "description": "Приспособлен к выживанию в дикой природе",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "bowWEAPON",
+          "name": "Лук",
+          "description": "Яйца и бесконечные стрелы прилагаются",
+          "value": 1.0,
+          "visible": true
+        }
+      ]
     },
     {
       "name": "Нира",

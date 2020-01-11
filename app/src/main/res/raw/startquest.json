@@ -142,7 +142,7 @@
                   "name": "Суеверный",
                   "description": "Верит в колдовство и приметы",
                   "value": 1.0,
-                  "visible": false
+                  "visible": true
                 }
               },
               {
@@ -437,7 +437,7 @@
               },
               {
                 "target": "ONE_SELECTED_WORKER",
-                "action": "CHANGE_STATUS_VALUE",
+                "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
                 "status": {
                   "code": "passkey",
                   "name": "Отмычки",
@@ -455,7 +455,7 @@
               },
               {
                 "target": "ONE_SELECTED_WORKER",
-                "action": "CHANGE_STATUS_VALUE",
+                "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
                 "status": {
                   "code": "daggerWEAPON",
                   "name": "Кинжал",
@@ -473,7 +473,7 @@
               },
               {
                 "target": "ONE_SELECTED_WORKER",
-                "action": "CHANGE_STATUS_VALUE",
+                "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
                 "status": {
                   "code": "bowWEAPON",
                   "name": "Лук",
@@ -492,7 +492,7 @@
               },
               {
                 "target": "ONE_SELECTED_WORKER",
-                "action": "CHANGE_STATUS_VALUE",
+                "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
                 "status": {
                   "code": "spearWEAPON",
                   "name": "Копье",

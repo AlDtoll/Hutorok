@@ -9,9 +9,22 @@
           {
             "code": "?WEAPON",
             "value": 1.0
+          },
+          {
+            "code": "?strong",
+            "value": 1.0
           }
         ],
-        "defaultValue": 1
+        "defaultValue": 2
+      },
+      "hutorFunction": {
+        "statuses": [
+          {
+            "code": "MortaHasPower",
+            "value": -3.0
+          }
+        ],
+        "defaultValue": 0
       },
       "results": [
         {
@@ -24,12 +37,197 @@
             "value": 0.0,
             "visible": false
           },
-          "successMessage": "#VALUE боевых очков"
+          "successMessage": "!!!#VALUE боевых очков"
+        },
+        {
+          "target": "SPECIAL_WORKER",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "murderedINVISIBLE",
+            "name": "Убита",
+            "description": "MortaNAME$Забита толпой под предводительством наместника",
+            "value": 1.0,
+            "visible": true
+          },
+          "successMessage": "Морта была убита толпой",
+          "conditions": [
+            {
+              "statusCode": "battlePointRES",
+              "symbol": "MORE",
+              "statusValue": 6.0,
+              "value": 100.0
+            }
+          ]
+        },
+        {
+          "target": "HUTOR",
+          "action": "REMOVE_STATUS",
+          "status": {
+            "code": "MortaLive",
+            "name": "",
+            "description": "",
+            "value": 0.0,
+            "visible": false
+          },
+          "conditions": [
+            {
+              "statusCode": "battlePointRES",
+              "symbol": "MORE",
+              "statusValue": 6.0,
+              "value": 100.0
+            }
+          ]
+        },
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "populationsRES",
+            "name": "Количество людей",
+            "description": "",
+            "value": -1.0,
+            "visible": true
+          },
+          "conditions": [
+            {
+              "statusCode": "battlePointRES",
+              "symbol": "MORE",
+              "statusValue": 6.0,
+              "value": 100.0
+            }
+          ]
+        },
+        {
+          "target": "HUTOR",
+          "action": "REMOVE_STATUS",
+          "status": {
+            "code": "MortaHutorName",
+            "name": "",
+            "description": "",
+            "value": 0.0,
+            "visible": false
+          },
+          "conditions": [
+            {
+              "statusCode": "battlePointRES",
+              "symbol": "MORE",
+              "statusValue": 6.0,
+              "value": 100.0
+            }
+          ]
+        },
+        {
+          "target": "HUTOR",
+          "action": "REMOVE_STATUS",
+          "status": {
+            "code": "MortaIsEnemy",
+            "name": "",
+            "description": "",
+            "value": 0.0,
+            "visible": false
+          },
+          "conditions": [
+            {
+              "statusCode": "battlePointRES",
+              "symbol": "MORE",
+              "statusValue": 6.0,
+              "value": 100.0
+            }
+          ]
+        },
+        {
+          "target": "SPECIAL_WORKER",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "cursedByMorta",
+            "name": "Предсмертное проклятие Морты",
+            "description": "GAMER$Проклят предсмертным заклятием",
+            "value": 1.0,
+            "visible": false
+          },
+          "conditions": [
+            {
+              "statusCode": "MortaHasPower",
+              "symbol": "MORE",
+              "statusValue": 0.0,
+              "value": 50.0
+            },
+            {
+              "statusCode": "superstitiousVICE",
+              "symbol": "MORE",
+              "statusValue": 0.0,
+              "value": 20.0
+            }
+          ]
+        },
+        {
+          "target": "HUTOR",
+          "action": "REMOVE_STATUS",
+          "status": {
+            "code": "MortaHasPower",
+            "name": "",
+            "description": "",
+            "value": 0.0,
+            "visible": false
+          },
+          "conditions": [
+            {
+              "statusCode": "battlePointRES",
+              "symbol": "MORE",
+              "statusValue": 6.0,
+              "value": 100.0
+            }
+          ]
+        },
+        {
+          "target": "HUTOR",
+          "action": "ADD_STATUS",
+          "status": {
+            "code": "TitHutorName",
+            "name": "Отныне это хутор Тита",
+            "description": "И наместник может претендовать на золото поселян",
+            "value": 1.0,
+            "visible": true
+          },
+          "conditions": [
+            {
+              "statusCode": "battlePointRES",
+              "symbol": "MORE",
+              "statusValue": 6.0,
+              "value": 100.0
+            }
+          ]
+        },
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "DEFEAT",
+            "name": "ПОРАЖЕНИЕ",
+            "description": "Крепкие руки и закаленная сталь не смогли преодолеть колдовство ведьмы и Тит был растерзан злыми духами",
+            "value": 1.0,
+            "visible": true
+          },
+          "conditions": [
+            {
+              "statusCode": "battlePointRES",
+              "symbol": "LESS",
+              "statusValue": 7.0,
+              "value": 100.0
+            }
+          ]
         }
       ],
       "enableConditions": [
         {
           "statusCode": "isHelper",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "MortaLive",
           "symbol": "MORE",
           "statusValue": 0.0
         }
@@ -55,6 +253,32 @@
             {
               "statusCode": "GAMER",
               "symbol": "LESS",
+              "statusValue": 1.0,
+              "value": 100.0
+            }
+          ]
+        },
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "loyaltyRES",
+            "name": "Лояльность",
+            "value": -50.0,
+            "visible": true,
+            "canBeNegative": true
+          },
+          "successMessage": "Хотя косноязычие наместника сыграло против него",
+          "conditions": [
+            {
+              "statusCode": "GAMER",
+              "symbol": "LESS",
+              "statusValue": 1.0,
+              "value": 100.0
+            },
+            {
+              "statusCode": "illiterateVICE",
+              "symbol": "MORE",
               "statusValue": 1.0,
               "value": 100.0
             }

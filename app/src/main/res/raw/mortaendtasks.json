@@ -53,6 +53,11 @@
           "statusCode": "GAMER",
           "symbol": "LESS",
           "statusValue": 1.0
+        },
+        {
+          "statusCode": "MortaNAME",
+          "symbol": "LESS",
+          "statusValue": 1.0
         }
       ],
       "permissiveConditions": [
@@ -137,6 +142,18 @@
           "statusCode": "GAMER",
           "symbol": "LESS",
           "statusValue": 1.0
+        },
+        {
+          "statusCode": "MortaNAME",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "MortaIsEnemy",
+          "symbol": "MORE",
+          "statusValue": 0.0
         }
       ]
     },
@@ -259,6 +276,132 @@
           "statusCode": "GAMER",
           "symbol": "LESS",
           "statusValue": 1.0
+        }
+      ]
+    },
+    {
+      "code": "tax",
+      "name": "Доход с хутора",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "goldenCoinsRES",
+            "name": "Золотые монеты",
+            "description": "",
+            "value": 1.0,
+            "visible": true
+          },
+          "successMessage": "Владельцу хутора и монета в карман"
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "TitHutorName",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        }
+      ]
+    },
+    {
+      "code": "damagedByCurse",
+      "name": "Чахнет от проклятия",
+      "results": [
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "cursePointsRES",
+            "name": "Сила проклятия",
+            "description": "",
+            "value": 1.0,
+            "visible": false
+          }
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "cursedByMorta",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        }
+      ]
+    },
+    {
+      "code": "MESSAGE",
+      "name": "Действие проклятия стало заметно",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "message",
+            "name": "message",
+            "description": "",
+            "value": 0.0,
+            "visible": false
+          },
+          "successMessage": "Последнюю неделю Тит чувствует себя нехорошо: тело ломит, и чудятся тени по углам",
+          "conditions": [
+            {
+              "statusCode": "cursePointsRES",
+              "symbol": "EQUALS",
+              "statusValue": 1.0,
+              "value": 100.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "MESSAGE",
+      "name": "Скоро каюк от проклятия",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "message",
+            "name": "message",
+            "description": "",
+            "value": 0.0,
+            "visible": false
+          },
+          "successMessage": "Тит чувствует себя отвратно: похудел, посерел и не может есть",
+          "conditions": [
+            {
+              "statusCode": "cursePointsRES",
+              "symbol": "EQUALS",
+              "statusValue": 3.0,
+              "value": 100.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "MESSAGE",
+      "name": "Тит умер от проклятия",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "DEFEAT",
+            "name": "ПОРАЖЕНИЕ",
+            "description": "В одну ночь лихорадка взяла свое и Тит выгорел изнутри от проклятия, как и многие другие прежде покушавшиеся на хутор Морты",
+            "value": 1.0,
+            "visible": false
+          },
+          "conditions": [
+            {
+              "statusCode": "cursePointsRES",
+              "symbol": "EQUALS",
+              "statusValue": 5.0,
+              "value": 100.0
+            }
+          ]
         }
       ]
     },
