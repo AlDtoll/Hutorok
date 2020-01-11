@@ -21,6 +21,7 @@ import org.koin.android.ext.android.inject
 class WorkersScreen : Fragment() {
 
     private val workersViewModel: IWorkersViewModel by inject()
+    private var isOrder = false
 
     companion object {
         fun newInstance(): WorkersScreen = WorkersScreen()
@@ -53,6 +54,7 @@ class WorkersScreen : Fragment() {
 
         workersViewModel.isOrderScenario().observe(this, Observer {
             it?.run {
+                isOrder = it
                 if (it) {
                     workerAdapter.isOrder = true
                     executeTaskButton.visibility = View.VISIBLE
@@ -77,7 +79,9 @@ class WorkersScreen : Fragment() {
         workersViewModel.taskData().observe(this, Observer {
             it?.run {
                 workerAdapter.task = it
-                changeToolbarTitle(it.name)
+                if (isOrder) {
+                    changeToolbarTitle(it.name)
+                }
                 changeExecuteButtonText(it.type)
             }
         })

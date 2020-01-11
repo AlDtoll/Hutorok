@@ -172,16 +172,17 @@ class Task(
         statuses: List<Status>,
         pair: Pair<String, Double>
     ): Double {
+        var point = 0.0
         statuses.forEach { status ->
             if (status.isCoincide(pair.first)) {
-                return when (pair.second) {
+                point += when (pair.second) {
                     ADD_ITSELF_VALUE -> status.value
                     MINUS_ITSELF_VALUE -> -status.value
                     else -> pair.second
                 }
             }
         }
-        return 0.0
+        return point
     }
 }
 
@@ -293,6 +294,20 @@ class TaskResult(
             }
             TaskTarget.ONE_SELECTED_WORKER -> {
                 val findWorker = workers.find { worker -> worker.isSelected }
+                if (findWorker != null) {
+                    val workerStatuses = findWorker.statuses
+                    message += changeStatuses(workerStatuses, point, allStatuses, findWorker)
+                    findWorker.statuses = workerStatuses
+                }
+            }
+            TaskTarget.SPECIAL_WORKER -> {
+                val statusCodeForFindWorker = this.status.description.substringBefore("$")
+                val findWorker =
+                    workers.find { worker ->
+                        worker.statuses.any { status ->
+                            status.code == statusCodeForFindWorker
+                        }
+                    }
                 if (findWorker != null) {
                     val workerStatuses = findWorker.statuses
                     message += changeStatuses(workerStatuses, point, allStatuses, findWorker)
@@ -460,6 +475,7 @@ class TaskResult(
         }
         if (message.contains("#VALUE")) {
             message = message.replace("#VALUE", VALUE.toString())
+            IS_REPEATED = false
         }
         if (message.contains("#WORKER") && worker != null) {
             message = message.replace("#WORKER", worker.name)
@@ -480,7 +496,8 @@ class TaskResult(
     enum class TaskTarget {
         HUTOR,
         ONE_SELECTED_WORKER,
-        ALL_SELECTED_WORKER
+        ALL_SELECTED_WORKER,
+        SPECIAL_WORKER
     }
 
     enum class TaskAction {
