@@ -103,7 +103,7 @@ class WorkerAdapter(
         }
         if (isOrder && task.type != Task.Type.BUILD
             && isTaskEnableConditionsInComplete(worker)
-            && !Task.conditionsIsComplete(generalDisableConditions, worker.statuses)
+            && !Task.anyConditionIsComplete(generalDisableConditions, worker.statuses)
             && !isExceededLimitOfSelectedWorker()
         ) {
             return true
@@ -148,12 +148,12 @@ class WorkerAdapter(
                 }
 
             return if (items.none { worker -> worker.isSelected }) {
-                Task.conditionsIsComplete(masterEnableConditions, worker.statuses)
+                Task.allConditionsIsComplete(masterEnableConditions, worker.statuses)
             } else {
-                Task.conditionsIsComplete(slaveEnableConditions, worker.statuses)
+                Task.allConditionsIsComplete(slaveEnableConditions, worker.statuses)
             }
         } else {
-            Task.conditionsIsComplete(task.enableConditions, worker.statuses)
+            Task.allConditionsIsComplete(task.enableConditions, worker.statuses)
         }
     }
 

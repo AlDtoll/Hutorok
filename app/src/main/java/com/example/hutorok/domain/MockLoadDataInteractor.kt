@@ -88,6 +88,16 @@ class MockLoadDataInteractor(
                 "worked",
                 Task.Symbol.MORE,
                 0.0
+            ),
+            Triple(
+                "CHILDREN",
+                Task.Symbol.MORE,
+                0.0
+            ),
+            Triple(
+                "MortaNAME",
+                Task.Symbol.MORE,
+                0.0
             )
         )
         generalDisableStatusListInteractor.update(conditions)

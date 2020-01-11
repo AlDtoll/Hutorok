@@ -69,7 +69,7 @@ class QuestViewModel(
                         )
                     } else {
                         val filter = scene.selects.filter { select ->
-                            Task.conditionsIsComplete(
+                            Task.allConditionsIsComplete(
                                 select.task.permissiveConditions,
                                 statusesList
                             )

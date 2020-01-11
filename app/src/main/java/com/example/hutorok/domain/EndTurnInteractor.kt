@@ -33,7 +33,7 @@ class EndTurnInteractor(
                 var message = ""
                 tasksList
                     .filter { task ->
-                        Task.conditionsIsComplete(
+                        Task.allConditionsIsComplete(
                             task.permissiveConditions,
                             hutorStatusesList
                         )

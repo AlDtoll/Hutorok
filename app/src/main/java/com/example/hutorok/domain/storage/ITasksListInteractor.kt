@@ -8,4 +8,6 @@ interface ITasksListInteractor {
     fun update(tasks: List<Task>)
 
     fun get(): Observable<List<Task>>
+
+    fun refresh()
 }

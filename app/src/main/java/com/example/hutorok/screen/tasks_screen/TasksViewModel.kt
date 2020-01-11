@@ -30,7 +30,7 @@ class TasksViewModel(
             hutorStatusesListInteractor.get(),
             BiFunction { tasksList: List<Task>, statusesList: List<Status> ->
                 tasksList.filter { task ->
-                    Task.conditionsIsComplete(
+                    Task.allConditionsIsComplete(
                         task.permissiveConditions,
                         statusesList
                     )
@@ -66,6 +66,7 @@ class TasksViewModel(
 
     override fun clickEndTurnButton() {
         endTurnInteractor.execute()
+        tasksListInteractor.refresh()
     }
 
     override fun searchChange(searchData: String) {

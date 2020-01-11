@@ -42,7 +42,7 @@ class Task(
     )
 
     companion object {
-        fun conditionsIsComplete(
+        fun allConditionsIsComplete(
             conditions: List<Triple<String, Symbol, Double>>,
             statusesList: List<Status>
         ): Boolean {
@@ -71,6 +71,37 @@ class Task(
                 }
             }
             return true
+        }
+
+        fun anyConditionIsComplete(
+            conditions: List<Triple<String, Symbol, Double>>,
+            statusesList: List<Status>
+        ): Boolean {
+            if (conditions.isEmpty()) {
+                return true
+            }
+            conditions.forEach { condition ->
+                val find = statusesList.find { condition.first == it.code }
+                val findValue = find?.value ?: 0.0
+                when (condition.second) {
+                    Symbol.MORE -> {
+                        if (findValue > condition.third) {
+                            return true
+                        }
+                    }
+                    Symbol.LESS -> {
+                        if (findValue < condition.third) {
+                            return true
+                        }
+                    }
+                    Symbol.EQUALS -> {
+                        if (findValue == condition.third) {
+                            return true
+                        }
+                    }
+                }
+            }
+            return false
         }
 
         fun parseTaskResults(jsonArray: JSONArray?): MutableList<TaskResult> {
@@ -107,7 +138,7 @@ class Task(
             enableConditions: List<Triple<String, Symbol, Double>>
         ) {
             workers.forEach { worker ->
-                if (!worker.isInvisible && conditionsIsComplete(
+                if (!worker.isInvisible && allConditionsIsComplete(
                         enableConditions,
                         worker.statuses
                     )
@@ -402,6 +433,10 @@ class TaskResult(
                 VALUE = point
                 status.value + point
             }
+            TaskAction.CHANGE_STATUS_VALUE_MINUS -> {
+                VALUE = -point
+                status.value - point
+            }
             TaskAction.SET_STATUS_VALUE -> {
                 VALUE = this.status.value
                 this.status.value
@@ -502,6 +537,7 @@ class TaskResult(
 
     enum class TaskAction {
         CHANGE_STATUS_VALUE,
+        CHANGE_STATUS_VALUE_MINUS,
         SET_STATUS_VALUE,
         CHANGE_STATUS_VALUE_BY_FIXED_POINT,
         ADD_STATUS,

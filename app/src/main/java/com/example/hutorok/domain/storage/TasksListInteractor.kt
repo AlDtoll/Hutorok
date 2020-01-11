@@ -14,4 +14,8 @@ class TasksListInteractor : ITasksListInteractor {
 
     override fun get(): Observable<List<Task>> = list
 
+    override fun refresh() {
+        list.onNext(list.value ?: mutableListOf())
+    }
+
 }
