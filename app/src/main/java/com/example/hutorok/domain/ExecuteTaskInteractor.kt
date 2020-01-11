@@ -33,10 +33,9 @@ class ExecuteTaskInteractor(
             Function3 { workersList: MutableList<Worker>, task: Task, hutorStatusesList: MutableList<Status> ->
                 val selectedWorkers = workersList.filter { it.isSelected }
 
-                val point = task.countPoint(selectedWorkers, hutorStatusesList)
-
                 var message = ""
                 task.results.forEach { taskResult ->
+                    val point = taskResult.countPoint(selectedWorkers, hutorStatusesList)
                     message += taskResult.makeAction(hutorStatusesList, point, workersList)
                 }
 

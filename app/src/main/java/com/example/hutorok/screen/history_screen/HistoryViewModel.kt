@@ -22,7 +22,7 @@ class HistoryViewModel(
                     list
                 } else {
                     list.filter { it.contains(search, true) }
-                }.reversed()
+                }.reversed().filter { it.isNotEmpty() }
             })
         return LiveDataReactiveStreams
             .fromPublisher(filtered.toFlowable(BackpressureStrategy.LATEST))

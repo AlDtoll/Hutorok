@@ -4,20 +4,20 @@
       "code": "eatFoods",
       "name": "Кормление населения",
       "description": "Уменьшает запасы пищи на количество населения",
-      "canBeNegative": true,
-      "hutorFunction": {
-        "statuses": [
-          {
-            "code": "populationsRES",
-            "value": -100.500
-          }
-        ],
-        "defaultValue": 0
-      },
       "results": [
         {
           "target": "HUTOR",
           "action": "CHANGE_STATUS_VALUE",
+          "hutorFunction": {
+            "statuses": [
+              {
+                "code": "populationsRES",
+                "value": -100.500
+              }
+            ],
+            "defaultValue": 0
+          },
+          "canBeNegative": true,
           "status": {
             "code": "foodsRES",
             "name": "Еда",
@@ -32,11 +32,11 @@
       "code": "discontentFoods",
       "name": "Голод",
       "description": "Если запасов пищи недостаточно, то возникает голод и угроза бунта",
-      "canBeNegative": true,
       "results": [
         {
           "target": "ALL_SELECTED_WORKER",
           "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "canBeNegative": true,
           "status": {
             "code": "loyaltyRES",
             "name": "Лояльность",

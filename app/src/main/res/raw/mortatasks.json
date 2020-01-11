@@ -4,32 +4,32 @@
       "code": "openKillMorta",
       "name": "Линчевать старую ведьму!",
       "description": "Для такого дела нужно быть уверенным в поддержке остальных селян и как-то обезвредить колдовство ведьмы",
-      "workerFunction": {
-        "statuses": [
-          {
-            "code": "?WEAPON",
-            "value": 1.0
-          },
-          {
-            "code": "?strong",
-            "value": 1.0
-          }
-        ],
-        "defaultValue": 2
-      },
-      "hutorFunction": {
-        "statuses": [
-          {
-            "code": "MortaHasPower",
-            "value": -3.0
-          }
-        ],
-        "defaultValue": 0
-      },
       "results": [
         {
           "target": "HUTOR",
           "action": "CHANGE_STATUS_VALUE",
+          "workerFunction": {
+            "statuses": [
+              {
+                "code": "?WEAPON",
+                "value": 1.0
+              },
+              {
+                "code": "?strong",
+                "value": 1.0
+              }
+            ],
+            "defaultValue": 2
+          },
+          "hutorFunction": {
+            "statuses": [
+              {
+                "code": "MortaHasPower",
+                "value": -3.0
+              }
+            ],
+            "defaultValue": 0
+          },
           "status": {
             "code": "battlePointRES",
             "name": "Боевые очки",
@@ -401,23 +401,23 @@
       "code": "harvest",
       "name": "Проводить пахотные работы",
       "description": "Расчищать поляны вокруг хутора, подготваливать землю, сеять семена и пропалывать",
-      "workerFunction": {
-        "statuses": [
-          {
-            "code": "farmer",
-            "value": 2.0
-          },
-          {
-            "code": "useChildrenForHarvest",
-            "value": 2.0
-          }
-        ],
-        "defaultValue": 6
-      },
       "results": [
         {
           "target": "HUTOR",
           "action": "CHANGE_STATUS_VALUE",
+          "workerFunction": {
+            "statuses": [
+              {
+                "code": "farmer",
+                "value": 2.0
+              },
+              {
+                "code": "useChildrenForHarvest",
+                "value": 2.0
+              }
+            ],
+            "defaultValue": 6
+          },
           "status": {
             "code": "arableRES",
             "name": "Пашня, с которой потенциально можно собрать зерна на единиц еды:",
@@ -439,23 +439,23 @@
       "code": "harvest",
       "name": "Собирать урожай",
       "description": "В среднем один рабочий собирает 20 единиц пищи, представленной зерном",
-      "workerFunction": {
-        "statuses": [
-          {
-            "code": "farmer",
-            "value": 10.0
-          },
-          {
-            "code": "useChildrenForHarvest",
-            "value": 10.0
-          }
-        ],
-        "defaultValue": 40
-      },
       "results": [
         {
           "target": "HUTOR",
           "action": "CHANGE_STATUS_VALUE",
+          "workerFunction": {
+            "statuses": [
+              {
+                "code": "farmer",
+                "value": 10.0
+              },
+              {
+                "code": "useChildrenForHarvest",
+                "value": 10.0
+              }
+            ],
+            "defaultValue": 40
+          },
           "status": {
             "code": "foodsRES",
             "name": "Продовольствие",

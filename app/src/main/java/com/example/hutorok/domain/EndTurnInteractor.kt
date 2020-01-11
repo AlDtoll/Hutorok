@@ -40,9 +40,9 @@ class EndTurnInteractor(
                     }
                     .forEach { task ->
                         selectAll(workers, task.enableConditions)
-                        val point = task.countPoint(workers, hutorStatusesList)
 
                         task.results.forEach { taskResult ->
+                            val point = taskResult.countPoint(workers, hutorStatusesList)
                             message += taskResult.makeAction(hutorStatusesList, point, workers)
                         }
 
