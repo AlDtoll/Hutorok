@@ -17,6 +17,10 @@
               {
                 "code": "?strong",
                 "value": 1.0
+              },
+              {
+                "code": "superstitiousVICE",
+                "value": -0.5
               }
             ],
             "defaultValue": 2
@@ -247,11 +251,11 @@
             "statuses": [
               {
                 "code": "GAMER",
-                "value": 100.0
+                "value": 30.0
               },
               {
                 "code": "illiterateVICE",
-                "value": -50.0
+                "value": -10.0
               }
             ],
             "defaultValue": 0

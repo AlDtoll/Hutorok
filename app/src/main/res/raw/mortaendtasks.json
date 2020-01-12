@@ -1,6 +1,145 @@
 {
   "tasks": [
     {
+      "code": "MESSAGE",
+      "name": "Тит умер от проклятия",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "DEFEAT",
+            "name": "ПОРАЖЕНИЕ",
+            "description": "В одну ночь лихорадка взяла свое и Тит выгорел изнутри от проклятия, как и многие другие прежде покушавшиеся на хутор Морты",
+            "value": 1.0,
+            "visible": false
+          },
+          "conditions": [
+            {
+              "statusCode": "cursePointsRES",
+              "symbol": "MORE",
+              "statusValue": 4.0,
+              "value": 100.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "revolt",
+      "name": "Бунтуем",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE",
+          "workerFunction": {
+            "statuses": [
+              {
+                "code": "",
+                "value": 1.0
+              },
+              {
+                "code": "?strong",
+                "value": 1.0
+              },
+              {
+                "code": "?weapon",
+                "value": 1.0
+              },
+              {
+                "code": "CHILDREN",
+                "value": -1.0
+              }
+            ],
+            "defaultValue": 0
+          },
+          "status": {
+            "code": "revoltsRES",
+            "name": "Очки бунта",
+            "description": "",
+            "value": 0.0,
+            "visible": false
+          },
+          "successMessage": "!!!#VALUE очков бунта"
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "isHater",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        }
+      ]
+    },
+    {
+      "code": "suppress",
+      "name": "Подавляем",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE",
+          "workerFunction": {
+            "statuses": [
+              {
+                "code": "",
+                "value": -1.0
+              },
+              {
+                "code": "?strong",
+                "value": -1.0
+              },
+              {
+                "code": "?weapon",
+                "value": -1.0
+              }
+            ],
+            "defaultValue": 0
+          },
+          "status": {
+            "code": "revoltsRES",
+            "name": "Боевые очки",
+            "description": "",
+            "value": 0.0,
+            "visible": false,
+            "canBeNegative": true
+          },
+          "successMessage": "!!!#VALUE очков бунта подавлено"
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "isHelper",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        }
+      ]
+    },
+    {
+      "code": "MESSAGE",
+      "name": "Тит был забит толпой",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "DEFEAT",
+            "name": "ПОРАЖЕНИЕ",
+            "description": "Наместник был линчеван недовольной толпой, а его тело бросили на подъезде к хутору. Хутору Морты",
+            "value": 1.0,
+            "visible": false
+          },
+          "conditions": [
+            {
+              "statusCode": "revoltsRES",
+              "symbol": "MORE",
+              "statusValue": 4.0,
+              "value": 100.0
+            }
+          ]
+        }
+      ]
+    },
+    {
       "code": "eatFoods",
       "name": "Кормление населения",
       "description": "Уменьшает запасы пищи на количество населения",
@@ -172,6 +311,28 @@
             "visible": true
           },
           "successMessage": "Теперь #WORKER ненавидит наместника."
+        },
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "REMOVE_STATUS",
+          "status": {
+            "code": "isHelper",
+            "name": "Помощник Тита",
+            "description": "",
+            "value": 1.0,
+            "visible": true
+          }
+        },
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "REMOVE_STATUS",
+          "status": {
+            "code": "isCold",
+            "name": "равнодушен к Титу",
+            "description": "",
+            "value": 1.0,
+            "visible": true
+          }
         }
       ],
       "enableConditions": [
@@ -202,6 +363,28 @@
             "visible": true
           },
           "successMessage": "#WORKER теперь преданный помощник наместника."
+        },
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "REMOVE_STATUS",
+          "status": {
+            "code": "isHater",
+            "name": "Ненавидит Тита",
+            "description": "",
+            "value": 1.0,
+            "visible": true
+          }
+        },
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "REMOVE_STATUS",
+          "status": {
+            "code": "isCold",
+            "name": "равнодушен к Титу",
+            "description": "",
+            "value": 1.0,
+            "visible": true
+          }
         }
       ],
       "enableConditions": [
@@ -382,31 +565,6 @@
     },
     {
       "code": "MESSAGE",
-      "name": "Тит умер от проклятия",
-      "results": [
-        {
-          "target": "HUTOR",
-          "action": "SET_STATUS_VALUE",
-          "status": {
-            "code": "DEFEAT",
-            "name": "ПОРАЖЕНИЕ",
-            "description": "В одну ночь лихорадка взяла свое и Тит выгорел изнутри от проклятия, как и многие другие прежде покушавшиеся на хутор Морты",
-            "value": 1.0,
-            "visible": false
-          },
-          "conditions": [
-            {
-              "statusCode": "cursePointsRES",
-              "symbol": "EQUALS",
-              "statusValue": 5.0,
-              "value": 100.0
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "code": "MESSAGE",
       "name": "Предупреждение о скором начале жатвы",
       "results": [
         {
@@ -499,6 +657,57 @@
           "statusCode": "weeksRES",
           "symbol": "EQUALS",
           "statusValue": 31.0
+        }
+      ]
+    },
+    {
+      "code": "fineForIlliterate",
+      "name": "Поскольку наместник безграмотен, то не может быть уверен в том, сколько у него монет",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_BY_RANDOM_VALUE",
+          "status": {
+            "code": "goldenCoinsRES",
+            "name": "Золотые монеты",
+            "description": "",
+            "value": 3.0,
+            "visible": true
+          },
+          "conditions": [
+            {
+              "statusCode": "illiterateVICE",
+              "symbol": "MORE",
+              "statusValue": 0.0,
+              "value": 100.0
+            }
+          ]
+        },
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_BY_RANDOM_VALUE",
+          "status": {
+            "code": "goldenCoinsRES",
+            "name": "Продовольствие",
+            "description": "",
+            "value": -4.0,
+            "visible": true,
+            "conditions": [
+              {
+                "statusCode": "illiterateVICE",
+                "symbol": "MORE",
+                "statusValue": 0.0,
+                "value": 100.0
+              }
+            ]
+          }
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "GAMER",
+          "symbol": "MORE",
+          "statusValue": 0.0
         }
       ]
     },
