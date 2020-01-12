@@ -265,7 +265,7 @@
         {
           "statusCode": "loyaltyRES",
           "symbol": "MORE",
-          "statusValue": 0.0
+          "statusValue": -100.0
         },
         {
           "statusCode": "isCold",

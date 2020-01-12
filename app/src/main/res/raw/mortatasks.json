@@ -241,11 +241,25 @@
       "results": [
         {
           "target": "ALL_SELECTED_WORKER",
-          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "action": "CHANGE_STATUS_VALUE",
+          "canBeNegative": true,
+          "workerFunction": {
+            "statuses": [
+              {
+                "code": "GAMER",
+                "value": 100.0
+              },
+              {
+                "code": "illiterateVICE",
+                "value": -50.0
+              }
+            ],
+            "defaultValue": 0
+          },
           "status": {
             "code": "loyaltyRES",
             "name": "Лояльность",
-            "value": 100.0,
+            "value": 0.0,
             "visible": true
           },
           "successMessage": "Тит поговорил с хуторянином и улучшил взаимоотношения, но на сколько станет понятно в конце недели",
@@ -260,13 +274,12 @@
         },
         {
           "target": "ALL_SELECTED_WORKER",
-          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "action": "SET_STATUS_VALUE",
           "status": {
-            "code": "loyaltyRES",
-            "name": "Лояльность",
-            "value": -50.0,
-            "visible": true,
-            "canBeNegative": true
+            "code": "message",
+            "name": "Если наместник безграмотен",
+            "value": 0.0,
+            "visible": true
           },
           "successMessage": "Хотя косноязычие наместника сыграло против него",
           "conditions": [
@@ -274,12 +287,12 @@
               "statusCode": "GAMER",
               "symbol": "LESS",
               "statusValue": 1.0,
-              "value": 100.0
+              "value": -1000.0
             },
             {
               "statusCode": "illiterateVICE",
               "symbol": "MORE",
-              "statusValue": 1.0,
+              "statusValue": 0.0,
               "value": 100.0
             }
           ]
@@ -499,7 +512,7 @@
           "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
           "status": {
             "code": "beefsRES",
-            "name": "Туша какого-то крупного животного: белкозла, крысобыка или т.д",
+            "name": "Туша какого-то крупного животного: белкозла, крысобаки или т.д",
             "value": 1.0,
             "visible": true
           },
@@ -525,6 +538,102 @@
               "value": 30.0
             }
           ]
+        }
+      ]
+    },
+    {
+      "code": "carveBeef",
+      "name": "Разделать туши",
+      "description": "Работники с прямыми руками, могу сохранить шкуры целыми",
+      "type": "PERSONAL_JOB",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE",
+          "hutorFunction": {
+            "statuses": [
+              {
+                "code": "2*beefsRES%5",
+                "value": 100.50
+              }
+            ],
+            "defaultValue": 0
+          },
+          "successMessage": "От разделки туш было получено #VALUE еды",
+          "status": {
+            "code": "foodsRES",
+            "name": "Продовольствие",
+            "description": "",
+            "value": 0.0,
+            "visible": true
+          }
+        },
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE",
+          "workerFunction": {
+            "statuses": [
+              {
+                "code": "",
+                "value": -3.0
+              },
+              {
+                "code": "carveSKILL",
+                "value": 3.0
+              },
+              {
+                "code": "craftsmanSKILL",
+                "value": 2.0
+              }
+            ],
+            "defaultValue": 0
+          },
+          "hutorFunction": {
+            "statuses": [
+              {
+                "code": "beefsRES%5",
+                "value": 100.50
+              }
+            ],
+            "defaultValue": 0
+          },
+          "successMessage": "Было получено #VALUE пригодных шкур",
+          "status": {
+            "code": "fursRES",
+            "name": "Кожа или меха, пригодные к поделке",
+            "description": "",
+            "value": 1.0,
+            "visible": true
+          }
+        },
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE",
+          "canBeNegative": true,
+          "hutorFunction": {
+            "statuses": [
+              {
+                "code": "beefsRES%5",
+                "value": -100.50
+              }
+            ],
+            "defaultValue": 0
+          },
+          "successMessage": "Было разделано #VALUE туш",
+          "status": {
+            "code": "beefsRES",
+            "name": "Туша какого-то крупного животного: белкозла, крысобаки или т.д",
+            "description": "",
+            "value": 0.0,
+            "visible": true
+          }
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "beefsRES",
+          "symbol": "MORE",
+          "statusValue": 0.0
         }
       ]
     }

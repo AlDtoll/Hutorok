@@ -95,16 +95,45 @@ class TaskResult(
         pair: Pair<String, Double>
     ): Double {
         var point = 0.0
+        val codeForCompare = pair.first.substringAfter("*").substringBefore("%")
+        val limit = if (pair.first.contains("%")) {
+            pair.first.substringAfter("%").toDouble()
+        } else {
+            5000.0
+        }
+        val multi = if (pair.first.contains("*")) {
+            pair.first.substringBefore("*").toDouble()
+        } else {
+            1.0
+        }
+        if (codeForCompare.isEmpty()) {
+            return multi * when (pair.second) {
+                TaskFunction.ADD_ITSELF_VALUE -> getValueWithLimit(status.value, limit)
+                TaskFunction.MINUS_ITSELF_VALUE -> -getValueWithLimit(status.value, limit)
+                else -> getValueWithLimit(pair.second, limit)
+            }
+        }
         statuses.forEach { status ->
-            if (status.isCoincide(pair.first)) {
-                point += when (pair.second) {
-                    TaskFunction.ADD_ITSELF_VALUE -> status.value
-                    TaskFunction.MINUS_ITSELF_VALUE -> -status.value
-                    else -> pair.second
+            if (status.isCoincide(codeForCompare)) {
+                point += multi * when (pair.second) {
+                    TaskFunction.ADD_ITSELF_VALUE -> getValueWithLimit(status.value, limit)
+                    TaskFunction.MINUS_ITSELF_VALUE -> -getValueWithLimit(status.value, limit)
+                    else -> getValueWithLimit(pair.second, limit)
                 }
             }
         }
         return point
+    }
+
+    private fun getValueWithLimit(
+        value: Double,
+        limit: Double
+    ): Double {
+        return if (value > limit) {
+            limit
+        } else {
+            value
+        }
     }
 
     fun makeAction(
@@ -134,6 +163,7 @@ class TaskResult(
                         val workerStatuses = worker.statuses
                         val list = mutableListOf<Status>()
                         list.addAll(workerStatuses)
+                        list.addAll(hutorStatuses)
                         message += changeStatuses(workerStatuses, point, list, worker)
                         worker.statuses = workerStatuses
                     }
