@@ -640,6 +640,178 @@
           "statusValue": 0.0
         }
       ]
+    },
+    {
+      "code": "sellFood",
+      "name": "Продать пищу торговцу",
+      "description": "Продать этому торговцу 10 единиц пищи за 1 золотую монету",
+      "type": "BUILD",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "successMessage": "Было продано #VALUE еды",
+          "status": {
+            "code": "foodsRES",
+            "name": "Продовольствие",
+            "description": "",
+            "value": -10.0,
+            "visible": true
+          }
+        },
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "successMessage": "за #VALUE золотых монет",
+          "status": {
+            "code": "goldenCoinsRES",
+            "name": "Золотые монеты",
+            "value": 1.0,
+            "visible": true
+          }
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "isBarterEnable",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        },
+        {
+          "statusCode": "foodsRES",
+          "symbol": "MORE",
+          "statusValue": 9.0
+        }
+      ]
+    },
+    {
+      "code": "sellFood",
+      "name": "Продать пищу торговцу крупной партией",
+      "description": "Продать этому торговцу 50 единиц пищи за 5 золотых монет",
+      "type": "BUILD",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "successMessage": "Было продано #VALUE еды",
+          "status": {
+            "code": "foodsRES",
+            "name": "Продовольствие",
+            "description": "",
+            "value": -50.0,
+            "visible": true
+          }
+        },
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "successMessage": "за #VALUE золотых монет",
+          "status": {
+            "code": "goldenCoinsRES",
+            "name": "Золотые монеты",
+            "value": 5.0,
+            "visible": true
+          }
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "isBarterEnable",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        },
+        {
+          "statusCode": "foodsRES",
+          "symbol": "MORE",
+          "statusValue": 49.0
+        }
+      ]
+    },
+    {
+      "code": "buyFood",
+      "name": "Купить пищу у торговца",
+      "description": "Купить пищу у этого торговца 10 единиц пищи за 2 золотые монеты",
+      "type": "BUILD",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "successMessage": "Было куплено #VALUE еды",
+          "status": {
+            "code": "foodsRES",
+            "name": "Продовольствие",
+            "description": "",
+            "value": 10.0,
+            "visible": true
+          }
+        },
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "successMessage": "за #VALUE золотых монет",
+          "status": {
+            "code": "goldenCoinsRES",
+            "name": "Золотые монеты",
+            "value": -2.0,
+            "visible": true
+          }
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "isBarterEnable",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        },
+        {
+          "statusCode": "goldenCoinsRES",
+          "symbol": "MORE",
+          "statusValue": 1.9
+        }
+      ]
+    },
+    {
+      "code": "buyFood",
+      "name": "Купить пищу у торговца",
+      "description": "Купить пищу у этого торговца 50 единиц пищи за 10 золотых монет",
+      "type": "BUILD",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "successMessage": "Было куплено #VALUE еды",
+          "status": {
+            "code": "foodsRES",
+            "name": "Продовольствие",
+            "description": "",
+            "value": 50.0,
+            "visible": true
+          }
+        },
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "successMessage": "за #VALUE золотых монет",
+          "status": {
+            "code": "goldenCoinsRES",
+            "name": "Золотые монеты",
+            "value": -10.0,
+            "visible": true
+          }
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "isBarterEnable",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        },
+        {
+          "statusCode": "goldenCoinsRES",
+          "symbol": "MORE",
+          "statusValue": 9.9
+        }
+      ]
     }
   ]
 }

@@ -32,25 +32,27 @@ class EndTurnInteractor(
             Function3 { workers: MutableList<Worker>, tasksList: List<Task>, hutorStatusesList: MutableList<Status> ->
                 var message = ""
                 tasksList
-                    .filter { task ->
-                        Task.allConditionsIsComplete(
-                            task.permissiveConditions,
-                            hutorStatusesList
-                        )
-                    }
                     .forEach { task ->
-                        selectAll(workers, task.enableConditions)
+                        if (Task.allConditionsIsComplete(
+                                task.permissiveConditions,
+                                hutorStatusesList
+                            )
+                        ) {
+                            selectAll(workers, task.enableConditions)
+                            val selectedWorkers = workers.filter { it.isSelected }
 
-                        task.results.forEach { taskResult ->
-                            val point = taskResult.countPoint(workers, hutorStatusesList)
-                            message += taskResult.makeAction(hutorStatusesList, point, workers)
+                            task.results.forEach { taskResult ->
+                                val point =
+                                    taskResult.countPoint(selectedWorkers, hutorStatusesList)
+                                message += taskResult.makeAction(hutorStatusesList, point, workers)
+                            }
+
+                            if (hutorStatusesList.find { status -> status.code == "DEFEAT" || status.code == "VICTORY" } != null) {
+                                routeToFinishScreenInteractor.execute()
+                            }
+
+                            deselectAll(workers)
                         }
-
-                        if (hutorStatusesList.find { status -> status.code == "DEFEAT" || status.code == "VICTORY" } != null) {
-                            routeToFinishScreenInteractor.execute()
-                        }
-
-                        deselectAll(workers)
                     }
 
                 messageInteractor.update(END_TURN_PREFIX + message)

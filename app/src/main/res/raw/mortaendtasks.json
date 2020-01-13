@@ -66,8 +66,8 @@
       "enableConditions": [
         {
           "statusCode": "isHater",
-          "symbol": "LESS",
-          "statusValue": 1.0
+          "symbol": "MORE",
+          "statusValue": 0.0
         }
       ]
     },
@@ -78,6 +78,7 @@
         {
           "target": "HUTOR",
           "action": "CHANGE_STATUS_VALUE",
+          "canBeNegative": true,
           "workerFunction": {
             "statuses": [
               {
@@ -97,11 +98,10 @@
           },
           "status": {
             "code": "revoltsRES",
-            "name": "Боевые очки",
+            "name": "Очки бунта",
             "description": "",
             "value": 0.0,
-            "visible": false,
-            "canBeNegative": true
+            "visible": false
           },
           "successMessage": "!!!#VALUE очков бунта подавлено"
         }
@@ -109,8 +109,8 @@
       "enableConditions": [
         {
           "statusCode": "isHelper",
-          "symbol": "LESS",
-          "statusValue": 1.0
+          "symbol": "MORE",
+          "statusValue": 0.0
         }
       ]
     },
@@ -136,6 +136,16 @@
               "value": 100.0
             }
           ]
+        },
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "revoltsRES",
+            "name": "Очки бунта",
+            "value": 0.0,
+            "visible": false
+          }
         }
       ]
     },
@@ -758,6 +768,93 @@
           "statusCode": "weeksRES",
           "symbol": "EQUALS",
           "statusValue": 54.0
+        }
+      ]
+    },
+    {
+      "code": "MESSAGE",
+      "name": "Торговец уехал",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "isBarterEnable",
+            "name": "На хутор прибыл торговец",
+            "description": "С этим парнем можно торговать едой и шкурами",
+            "value": 0.0,
+            "visible": false
+          },
+          "successMessage": "Торговец уехал обратно"
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "isBarterEnable",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        }
+      ]
+    },
+    {
+      "code": "merchantApproach",
+      "name": "Приближение торговца",
+      "description": "Когда значение достигнет порогового, на хутор пребудет торговец",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE",
+          "hutorFunction": {
+            "statuses": [
+              {
+                "code": "10*attractive",
+                "value": 100.500
+              }
+            ],
+            "defaultValue": 0
+          },
+          "status": {
+            "code": "merchantsRES",
+            "name": "Очки торговца",
+            "value": 0.0,
+            "visible": false
+          },
+          "successMessage": "!!Заработано #VALUE очков торговца"
+        }
+      ]
+    },
+    {
+      "code": "MESSAGE",
+      "name": "Прибыл торговец",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "isBarterEnable",
+            "name": "На хутор прибыл торговец",
+            "description": "С этим парнем можно торговать едой и шкурами",
+            "value": 1.0,
+            "visible": false
+          },
+          "successMessage": "Торговец прибыл на хутор"
+        },
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "merchantsRES",
+            "name": "Очки торговца",
+            "value": -100.0,
+            "visible": false
+          }
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "merchantsRES",
+          "symbol": "MORE",
+          "statusValue": 99.0
         }
       ]
     }

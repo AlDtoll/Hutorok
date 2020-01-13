@@ -414,23 +414,23 @@
           "task": {
             "code": "goToTraktir",
             "name": "Собрать вещи и направить свои мощи дальше",
-            "workerFunction": {
-              "statuses": [
-                {
-                  "code": "thiefRANK",
-                  "value": 4
-                },
-                {
-                  "code": "merchantRANK",
-                  "value": 20.0
-                }
-              ],
-              "defaultValue": 3
-            },
             "results": [
               {
                 "target": "HUTOR",
                 "action": "CHANGE_STATUS_VALUE",
+                "workerFunction": {
+                  "statuses": [
+                    {
+                      "code": "thiefRANK",
+                      "value": 4
+                    },
+                    {
+                      "code": "merchantRANK",
+                      "value": 20.0
+                    }
+                  ],
+                  "defaultValue": 3
+                },
                 "status": {
                   "code": "goldenCoinsRES",
                   "name": "Золотые монеты",
@@ -539,19 +539,19 @@
           "task": {
             "code": "escape",
             "name": "Срочно бежать! Не дело тирану в таком помогать!",
-            "workerFunction": {
-              "statuses": [
-                {
-                  "code": "agilitySTATUS",
-                  "value": 1
-                }
-              ],
-              "defaultValue": 0
-            },
             "results": [
               {
                 "target": "HUTOR",
                 "action": "CHANGE_STATUS_VALUE",
+                "workerFunction": {
+                  "statuses": [
+                    {
+                      "code": "agilitySTATUS",
+                      "value": 1
+                    }
+                  ],
+                  "defaultValue": 0
+                },
                 "status": {
                   "code": "chanceToEscape",
                   "name": "Шанс на побег",
@@ -634,19 +634,19 @@
           "task": {
             "code": "escape",
             "name": "Вот глушь впереди, а барон позади. Погляди, благодать - пора мне линять!",
-            "workerFunction": {
-              "statuses": [
-                {
-                  "code": "agilitySTATUS",
-                  "value": 1
-                }
-              ],
-              "defaultValue": 0
-            },
             "results": [
               {
                 "target": "HUTOR",
                 "action": "CHANGE_STATUS_VALUE",
+                "workerFunction": {
+                  "statuses": [
+                    {
+                      "code": "agilitySTATUS",
+                      "value": 1
+                    }
+                  ],
+                  "defaultValue": 0
+                },
                 "status": {
                   "code": "chanceToEscape",
                   "name": "Шанс на побег",
