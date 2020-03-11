@@ -1,5 +1,6 @@
 package com.example.hutorok.domain.model
 
+import com.example.hutorok.BuildConfig
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
@@ -441,7 +442,14 @@ class TaskResult(
             }
             IS_REPEATED = true
         }
-        return message + "\n"
+        if (BuildConfig.DEBUG) {
+            return "$message $PERCENT\n"
+        }
+        return if (message.contains("!!")) {
+            ""
+        } else {
+            "$message\n"
+        }
     }
 
     private fun prepareMessage(message: String): String {

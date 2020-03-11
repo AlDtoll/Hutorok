@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.hutorok.BuildConfig
 import com.example.hutorok.R
 import com.example.hutorok.domain.model.Status
 import kotlinx.android.synthetic.main.status_item.view.*
@@ -37,7 +38,13 @@ class StatusAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             if (item.code.contains("RES")) {
                 description.text = item.value.toString()
             } else {
-                description.text = item.description
+                if (BuildConfig.DEBUG) {
+                    val desc =
+                        item.description.substringAfter("$").substringBefore("*") + " Значение: " + item.value.toString()
+                    description.text = desc
+                } else {
+                    description.text = item.description
+                }
             }
         }
     }

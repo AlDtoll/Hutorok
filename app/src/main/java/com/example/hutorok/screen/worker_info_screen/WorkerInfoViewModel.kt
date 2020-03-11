@@ -2,6 +2,7 @@ package com.example.hutorok.screen.worker_info_screen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
+import com.example.hutorok.BuildConfig
 import com.example.hutorok.domain.model.Status
 import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.domain.storage.IWorkerInteractor
@@ -20,7 +21,11 @@ class WorkerInfoViewModel(
 
     override fun statusesData(): LiveData<List<Status>> {
         val observable = workerInteractor.get().map {
-            it.statuses.filter { status -> status.visible }
+            if (BuildConfig.DEBUG) {
+                it.statuses.toList()
+            } else {
+                it.statuses.filter { status -> status.visible }
+            }
         }
         return LiveDataReactiveStreams.fromPublisher(
             observable.toFlowable(BackpressureStrategy.LATEST)
