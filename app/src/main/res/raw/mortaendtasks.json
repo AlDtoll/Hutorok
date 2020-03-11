@@ -43,7 +43,7 @@
                 "value": 1.0
               },
               {
-                "code": "?weapon",
+                "code": "?WEAPON",
                 "value": 1.0
               },
               {
@@ -90,7 +90,7 @@
                 "value": -1.0
               },
               {
-                "code": "?weapon",
+                "code": "?WEAPON",
                 "value": -1.0
               }
             ],
@@ -204,6 +204,11 @@
           "statusValue": 1.0
         },
         {
+          "statusCode": "CHILDREN",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        },
+        {
           "statusCode": "MortaNAME",
           "symbol": "LESS",
           "statusValue": 1.0
@@ -259,13 +264,6 @@
           },
           "successMessage": "Прошла неделя"
         }
-      ],
-      "enableConditions": [
-        {
-          "statusCode": "worked",
-          "symbol": "MORE",
-          "statusValue": 0.0
-        }
       ]
     },
     {
@@ -289,6 +287,11 @@
       "enableConditions": [
         {
           "statusCode": "GAMER",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        },
+        {
+          "statusCode": "CHILDREN",
           "symbol": "LESS",
           "statusValue": 1.0
         },
@@ -482,11 +485,10 @@
           "status": {
             "code": "goldenCoinsRES",
             "name": "Золотые монеты",
-            "description": "",
             "value": 1.0,
             "visible": true
           },
-          "successMessage": "Владельцу хутора и монета в карман"
+          "successMessage": "Тит как владелец хутора получил #VALUE монет"
         }
       ],
       "permissiveConditions": [
@@ -531,7 +533,6 @@
           "status": {
             "code": "message",
             "name": "message",
-            "description": "",
             "value": 0.0,
             "visible": false
           },
@@ -680,8 +681,7 @@
           "status": {
             "code": "goldenCoinsRES",
             "name": "Золотые монеты",
-            "description": "",
-            "value": 3.0,
+            "value": -1.0,
             "visible": true
           },
           "conditions": [
@@ -689,28 +689,10 @@
               "statusCode": "illiterateVICE",
               "symbol": "MORE",
               "statusValue": 0.0,
-              "value": 100.0
+              "value": 20.0
             }
-          ]
-        },
-        {
-          "target": "HUTOR",
-          "action": "CHANGE_STATUS_BY_RANDOM_VALUE",
-          "status": {
-            "code": "goldenCoinsRES",
-            "name": "Продовольствие",
-            "description": "",
-            "value": -4.0,
-            "visible": true,
-            "conditions": [
-              {
-                "statusCode": "illiterateVICE",
-                "symbol": "MORE",
-                "statusValue": 0.0,
-                "value": 100.0
-              }
-            ]
-          }
+          ],
+          "successMessage": "!! #VALUE монет потеряно из-за неграмотности"
         }
       ],
       "enableConditions": [
@@ -809,6 +791,18 @@
               {
                 "code": "10*attractive",
                 "value": 100.500
+              },
+              {
+                "code": "defend",
+                "value": 100.500
+              },
+              {
+                "code": "0.3*threatBeastRES",
+                "value": -100.500
+              },
+              {
+                "code": "threatBaronRES",
+                "value": -100.500
               }
             ],
             "defaultValue": 0
@@ -853,6 +847,902 @@
       "permissiveConditions": [
         {
           "statusCode": "merchantsRES",
+          "symbol": "MORE",
+          "statusValue": 99.0
+        }
+      ]
+    },
+    {
+      "code": "forgetForest",
+      "name": "Изменение лесных троп",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "scoutPointsRES",
+            "name": "Разведано леса",
+            "value": -1.0,
+            "visible": false
+          },
+          "successMessage": "!!Лес зарастает тайнами"
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "scoutPointsRES",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        }
+      ]
+    },
+    {
+      "code": "terraIncognita",
+      "name": "Ограничение сверху изведанности леса",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "scoutPointsRES",
+            "name": "Разведано леса",
+            "value": 70.0,
+            "visible": false
+          },
+          "successMessage": "!!Нельзя познать лес полностью"
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "scoutPointsRES",
+          "symbol": "MORE",
+          "statusValue": 69.0
+        }
+      ]
+    },
+    {
+      "code": "spoilWoods",
+      "name": "Портить древесину",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "woodsRES",
+            "name": "Древесина",
+            "value": -1.0,
+            "visible": true
+          },
+          "successMessage": "Непогода портит древесину, лежащую под открытым небом"
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "shedBUILDING",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        },
+        {
+          "statusCode": "woodsRES",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        }
+      ]
+    },
+    {
+      "code": "sicknessStart",
+      "name": "Начало заболевания",
+      "results": [
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "sicknessPointsRES",
+            "name": "Болезнь",
+            "value": 5.0,
+            "visible": true
+          },
+          "conditions": [
+            {
+              "statusCode": "",
+              "symbol": "MORE",
+              "statusValue": 0.0,
+              "value": 5.0
+            },
+            {
+              "statusCode": "?HURT",
+              "symbol": "MORE",
+              "statusValue": 0.0,
+              "value": 75.0
+            }
+          ],
+          "successMessage": "!!#WORKER заболел"
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "MortaNAME",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        },
+        {
+          "statusCode": "CHILDREN",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        },
+        {
+          "statusCode": "sicknessPointsRES",
+          "symbol": "LESS",
+          "statusValue": 5.0
+        }
+      ]
+    },
+    {
+      "code": "sicknessStop",
+      "name": "Заболевание ослабло само",
+      "results": [
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "sicknessPointsRES",
+            "name": "Болезнь",
+            "value": -5.0,
+            "visible": true
+          },
+          "conditions": [
+            {
+              "statusCode": "",
+              "symbol": "MORE",
+              "statusValue": 0.0,
+              "value": 60.0
+            },
+            {
+              "statusCode": "?HURT",
+              "symbol": "MORE",
+              "statusValue": 0.0,
+              "value": -50.0
+            }
+          ],
+          "successMessage": "!!Заболевание #WORKER ослабло"
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "MortaNAME",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        },
+        {
+          "statusCode": "CHILDREN",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        },
+        {
+          "statusCode": "sicknessPointsRES",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        }
+      ]
+    },
+    {
+      "code": "sicknessProgress",
+      "name": "Заболевание прогрессирует",
+      "results": [
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "sicknessPointsRES",
+            "name": "Болезнь",
+            "value": 5.0,
+            "visible": true
+          },
+          "conditions": [
+            {
+              "statusCode": "sicknessPointsRES",
+              "symbol": "MORE",
+              "statusValue": 4.0,
+              "value": 40.0
+            },
+            {
+              "statusCode": "?HURT",
+              "symbol": "MORE",
+              "statusValue": 0.0,
+              "value": 30.0
+            }
+          ],
+          "successMessage": "!!Заболевание #WORKER прогрессирует"
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "MortaNAME",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        },
+        {
+          "statusCode": "CHILDREN",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        }
+      ]
+    },
+    {
+      "code": "sicknessNotice",
+      "name": "Извещение о заболевании",
+      "results": [
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "noticeAboutSickness",
+            "name": "Заметные признаки болезни",
+            "value": 1.0,
+            "visible": true
+          },
+          "successMessage": "У #WORKER появился жар"
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "MortaNAME",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        },
+        {
+          "statusCode": "CHILDREN",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        },
+        {
+          "statusCode": "sicknessPointsRES",
+          "symbol": "MORE",
+          "statusValue": 14.0
+        },
+        {
+          "statusCode": "noticeAboutSickness",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        }
+      ]
+    },
+    {
+      "code": "removeSicknessNotice",
+      "name": "Убираем извещение о заболевании",
+      "results": [
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "noticeAboutSickness",
+            "name": "Заметные признаки болезни",
+            "value": 0.0,
+            "visible": true
+          },
+          "successMessage": "!!#WORKER здоров"
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "MortaNAME",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        },
+        {
+          "statusCode": "CHILDREN",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        },
+        {
+          "statusCode": "sicknessPointsRES",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        },
+        {
+          "statusCode": "noticeAboutSickness",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        }
+      ]
+    },
+    {
+      "code": "sicknessDead",
+      "name": "Смерть от болезни",
+      "results": [
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "willBeDeadBySickness",
+            "name": "Умрет от болезни",
+            "value": 1.0,
+            "visible": false
+          },
+          "conditions": [
+            {
+              "statusCode": "sicknessPointsRES",
+              "symbol": "MORE",
+              "statusValue": 30.0,
+              "value": 100.500
+            }
+          ],
+          "successMessage": "!!#WORKER умрет от болезни"
+        },
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE",
+          "canBeNegative": true,
+          "workerFunction": {
+            "statuses": [
+              {
+                "code": "willBeDeadBySickness",
+                "value": -1.0
+              }
+            ],
+            "defaultValue": 0
+          },
+          "status": {
+            "code": "populationsRES",
+            "name": "Количество людей",
+            "description": "",
+            "value": 0.0,
+            "visible": true
+          }
+        },
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "sicknessDeadINVISIBLE",
+            "name": "Смерть от болезни",
+            "value": 1.0,
+            "visible": true
+          },
+          "conditions": [
+            {
+              "statusCode": "willBeDeadBySickness",
+              "symbol": "MORE",
+              "statusValue": 0.0,
+              "value": 100.0
+            }
+          ],
+          "successMessage": "#WORKER скончался из-за болезни"
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "MortaNAME",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        }
+      ]
+    },
+    {
+      "code": "defeatByTitDead",
+      "name": "Поражение из-за смерти Тита",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE",
+          "workerFunction": {
+            "statuses": [
+              {
+                "code": "?INVISIBLE",
+                "value": 1.0
+              }
+            ],
+            "defaultValue": 0
+          },
+          "status": {
+            "code": "DEFEAT",
+            "name": "Поражение",
+            "description": "Наместник погиб и на его похорнах было мало сказано, потому что погиб Тит Много-говорит.",
+            "value": 1.0,
+            "visible": true
+          }
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "GAMER",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        }
+      ]
+    },
+    {
+      "code": "victoryByTime",
+      "name": "Тит продержался на хуторе два года",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE",
+          "status": {
+            "code": "VICTORY",
+            "name": "Победа",
+            "description": "Неважно, что стало с бароном и ведьмой, но Тит сумел продераться на хуторе два года, а значит не пропадет",
+            "value": 1.0,
+            "visible": true
+          }
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "yearsRES",
+          "symbol": "MORE",
+          "statusValue": 1.0
+        }
+      ]
+    },
+    {
+      "code": "noticeAboutNeedWorkOnField",
+      "name": "Предупреждение о необходимости возделывать поля",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "needWorkOnField",
+            "name": "Предупреждение о необходимости возделывать поля",
+            "value": 1.0,
+            "visible": false
+          },
+          "successMessage": "Через полгода придет пора собирать урожай, но поля нужно подготавливать уже сейчас"
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "needWorkOnField",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        }
+      ]
+    },
+    {
+      "code": "removeNoticeAboutNeedWorkOnField",
+      "name": "Убираем предупреждение о необходимости возделывать поля",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "needWorkOnField",
+            "name": "Предупреждение о необходимости возделывать поля",
+            "value": 0.0,
+            "visible": false
+          },
+          "successMessage": "!!Убрали предупреждение"
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "weeksRES",
+          "symbol": "EQUALS",
+          "statusValue": 54.0
+        }
+      ]
+    },
+    {
+      "code": "spendYear",
+      "name": "Прошел год",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "weeksRES",
+            "name": "Прошло недель",
+            "value": 0.0,
+            "visible": true
+          }
+        },
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "yearsRES",
+            "name": "Прошло лет",
+            "value": 1.0,
+            "visible": true
+          }
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "weeksRES",
+          "symbol": "EQUALS",
+          "statusValue": 54.0
+        }
+      ]
+    },
+    {
+      "code": "beastThreatIncrease",
+      "name": "Животный уровень угрозы увелилчился",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE",
+          "hutorFunction": {
+            "statuses": [
+              {
+                "code": "0.3*threatBeastRES",
+                "value": 100.50
+              },
+              {
+                "code": "defend",
+                "value": -100.50
+              }
+            ],
+            "defaultValue": 0
+          },
+          "status": {
+            "code": "threatBeastRES",
+            "name": "Животный уровень угрозы",
+            "description": "Волки, медведи, дикие ежи и совы. Все что может угрожать человеку",
+            "value": 1.0,
+            "visible": false
+          },
+          "successMessage": "!!Опасность от животных выросла на #VALUE"
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "needWorkOnField",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        }
+      ]
+    },
+    {
+      "code": "messageAboutBeastTraces",
+      "name": "Сообщение о следах животных",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "noticeAboutBeastTraces",
+            "name": "Оповещение о следах животных",
+            "value": 1.0,
+            "visible": false
+          },
+          "successMessage": "Возле хутора были обнаружены следы опасных животных"
+        },
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "noticeAboutBeastAway",
+            "name": "Оповещение об уходе животных",
+            "value": 0.0,
+            "visible": false
+          }
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "noticeAboutBeastTraces",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        },
+        {
+          "statusCode": "threatBeastRES",
+          "symbol": "MORE",
+          "statusValue": 29.0
+        }
+      ]
+    },
+    {
+      "code": "messageAboutBeastTraces",
+      "name": "Сообщение о пропаже следов животных",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "noticeAboutBeastTraces",
+            "name": "Оповещение о следах животных",
+            "value": 0.0,
+            "visible": false
+          },
+          "successMessage": "Кажется, что опасные животные отошли дальше от человеческого жилья"
+        },
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "noticeAboutBeastAway",
+            "name": "Оповещение об уходе животных",
+            "value": 1.0,
+            "visible": false
+          }
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "threatBeastRES",
+          "symbol": "LESS",
+          "statusValue": 20.0
+        },
+        {
+          "statusCode": "noticeAboutBeastAway",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        }
+      ]
+    },
+    {
+      "code": "messageAboutBaronAnger",
+      "name": "Сообщение о гневе барона",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE",
+          "hutorFunction": {
+            "statuses": [
+              {
+                "code": "attractive",
+                "value": 100.50
+              },
+              {
+                "code": "defend",
+                "value": -100.50
+              }
+            ],
+            "defaultValue": 10
+          },
+          "successMessage": "Барон будет недоволен промедлением наместника",
+          "status": {
+            "code": "threatBaronRES",
+            "name": "Недовольство барона",
+            "value": 0.0,
+            "visible": false
+          }
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "yearsRES",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        }
+      ]
+    },
+    {
+      "code": "messageAboutGuardIncoming",
+      "name": "Сообщение о приближении стражников",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "noticeAboutGuards",
+            "name": "Оповещение о стражниках",
+            "value": 1.0,
+            "visible": false
+          },
+          "successMessage": "До хутора доползли слухи о том, что барно направил нескольких стражников, за непокорным наместником"
+        },
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "noticeAboutGuardsAway",
+            "name": "Оповещение об уходе стражников",
+            "value": 0.0,
+            "visible": false
+          }
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "noticeAboutGuards",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        },
+        {
+          "statusCode": "threatBaronRES",
+          "symbol": "MORE",
+          "statusValue": 29.0
+        }
+      ]
+    },
+    {
+      "code": "messageAboutGuardAway",
+      "name": "Сообщение об уходе стражников",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "noticeAboutGuards",
+            "name": "Оповещение о стражниках",
+            "value": 0.0,
+            "visible": false
+          },
+          "successMessage": "!!Пока стражники ушли ни с чем"
+        },
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "noticeAboutGuardsAway",
+            "name": "Оповещение об уходе стражников",
+            "value": 1.0,
+            "visible": false
+          }
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "threatBaronRES",
+          "symbol": "LESS",
+          "statusValue": 20.0
+        },
+        {
+          "statusCode": "noticeAboutGuardsAway",
+          "symbol": "LESS",
+          "statusValue": 1.0
+        }
+      ]
+    },
+    {
+      "code": "guardsAttack",
+      "name": "Нападение стражников",
+      "description": "Сила защитников хутора должна быть больше, чем стражников",
+      "results": [
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE",
+          "workerFunction": {
+            "statuses": [
+              {
+                "code": "?WEAPON",
+                "value": 1.0
+              },
+              {
+                "code": "?strong",
+                "value": 1.0
+              }
+            ],
+            "defaultValue": 2
+          },
+          "hutorFunction": {
+            "statuses": [
+              {
+                "code": "MortaHasPower",
+                "value": 3.0
+              },
+              {
+                "code": "MortaIsEnemy",
+                "value": -3.0
+              },
+              {
+                "code": "defend",
+                "value": -100.50
+              }
+            ],
+            "defaultValue": 0
+          },
+          "status": {
+            "code": "battlePointRES",
+            "name": "Боевые очки",
+            "value": 0.0,
+            "visible": false
+          },
+          "successMessage": "!!#VALUE боевых очков выставил хутор"
+        },
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "battlePointRES",
+            "name": "Боевые очки",
+            "value": -4.0,
+            "visible": false
+          }
+        },
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_BY_RANDOM_VALUE",
+          "status": {
+            "code": "battlePointRES",
+            "name": "Боевые очки",
+            "value": -6.0,
+            "visible": false
+          },
+          "successMessage": "!!#VALUE боевых очков выставили стражники, сверх 4"
+        },
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "DEFEAT",
+            "name": "ПОРАЖЕНИЕ",
+            "description": "Стражникам барона удалось сломить сопротивление хуторян и доставить Тита на суд",
+            "value": 1.0,
+            "visible": true
+          },
+          "conditions": [
+            {
+              "statusCode": "battlePointRES",
+              "symbol": "EQUALS",
+              "statusValue": 0.0,
+              "value": 100.0
+            }
+          ]
+        },
+        {
+          "target": "ALL_SELECTED_WORKER",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "HURT",
+            "name": "Ранен",
+            "value": 1.0,
+            "visible": true
+          },
+          "conditions": [
+            {
+              "statusCode": "",
+              "symbol": "MORE",
+              "statusValue": 0.0,
+              "value": 70.0
+            },
+            {
+              "statusCode": "?strong",
+              "symbol": "MORE",
+              "statusValue": 0.0,
+              "value": -20.0
+            },
+            {
+              "statusCode": "survivalSKILL",
+              "symbol": "MORE",
+              "statusValue": 0.0,
+              "value": -20.0
+            },
+            {
+              "statusCode": "agilitySTATUS",
+              "symbol": "MORE",
+              "statusValue": 0.0,
+              "value": -20.0
+            }
+          ],
+          "successMessage": "во время атаки стражников #WORKER был ранен"
+        },
+        {
+          "target": "HUTOR",
+          "action": "SET_STATUS_VALUE",
+          "status": {
+            "code": "battlePointRES",
+            "name": "Боевые очки",
+            "value": 0.0,
+            "visible": false
+          },
+          "successMessage": "стражники барона были отброшены"
+        },
+        {
+          "target": "HUTOR",
+          "action": "CHANGE_STATUS_VALUE_BY_FIXED_POINT",
+          "status": {
+            "code": "threatBaronRES",
+            "name": "Боевые очки",
+            "value": -100.0,
+            "visible": false
+          },
+          "successMessage": "это поумерит пыл барона на какое-то время"
+        }
+      ],
+      "enableConditions": [
+        {
+          "statusCode": "isHelper",
+          "symbol": "MORE",
+          "statusValue": 0.0
+        }
+      ],
+      "permissiveConditions": [
+        {
+          "statusCode": "threatBaronRES",
           "symbol": "MORE",
           "statusValue": 99.0
         }

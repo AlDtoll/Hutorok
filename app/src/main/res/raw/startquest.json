@@ -47,7 +47,7 @@
                 "status": {
                   "code": "populationsRES",
                   "name": "Население",
-                  "description": "Много-говорит",
+                  "description": "Количество людей",
                   "value": 1.0,
                   "visible": true
                 }
@@ -436,7 +436,8 @@
                   "name": "Золотые монеты",
                   "value": 0.0,
                   "visible": true
-                }
+                },
+                "successMessage": "В доме нашлось #VALUE монет"
               },
               {
                 "target": "HUTOR",
@@ -448,6 +449,7 @@
                   "value": 1.0,
                   "visible": true
                 },
+                "successMessage": "Телега",
                 "conditions": [
                   {
                     "statusCode": "merchantRANK",
@@ -466,6 +468,7 @@
                   "value": 1.0,
                   "visible": true
                 },
+                "successMessage": "Отмычки",
                 "conditions": [
                   {
                     "statusCode": "thiefRANK",
@@ -484,6 +487,7 @@
                   "value": 1.0,
                   "visible": true
                 },
+                "successMessage": "Кинжал",
                 "conditions": [
                   {
                     "statusCode": "thiefRANK",
@@ -503,6 +507,7 @@
                   "value": 1.0,
                   "visible": true
                 },
+                "successMessage": "Лук",
                 "conditions": [
                   {
                     "statusCode": "hunterRANK",
@@ -522,6 +527,7 @@
                   "value": 1.0,
                   "visible": true
                 },
+                "successMessage": "Копье",
                 "conditions": [
                   {
                     "statusCode": "hunterRANK",
@@ -769,7 +775,7 @@
                 "action": "CHANGE_STATUS_BY_RANDOM_VALUE",
                 "status": {
                   "code": "goldenCoinsRES",
-                  "name": "Шанс на побег",
+                  "name": "Золотые монеты",
                   "value": 5.0,
                   "visible": true
                 },

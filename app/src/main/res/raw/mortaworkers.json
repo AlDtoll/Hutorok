@@ -11,6 +11,34 @@
           "description": "",
           "value": 1.0,
           "visible": false
+        },
+        {
+          "code": "witch",
+          "name": "Ведьма",
+          "description": "Владеет темными обрядами, темной силой, насылает проклятия и злых духов",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "hasWarts",
+          "name": "Бородавки",
+          "description": "Как и положено мерзкой ведьме имеет бородавки",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "hasCat",
+          "name": "Черный кот",
+          "description": "Ведьминский атрибут",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "hasMop",
+          "name": "Помело",
+          "description": "Ведьминский атрибут",
+          "value": 1.0,
+          "visible": true
         }
       ]
     },
@@ -32,13 +60,43 @@
           "description": "",
           "value": 1.0,
           "visible": true
+        },
+        {
+          "code": "marital",
+          "name": "Муж Ниры и отец Эльги",
+          "description": "",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "illiterateVICE",
+          "name": "Неграмотный",
+          "description": "Плохо считает, почти не читает",
+          "value": 1.0,
+          "visible": true
         }
       ]
     },
     {
       "name": "Ирита",
       "nickname": "Травница",
-      "age": "ADULT"
+      "age": "ADULT",
+      "statuses": [
+        {
+          "code": "herbalistSKILL",
+          "name": "Травница",
+          "description": "Знает полезные травы и умеет их использовать",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "marital",
+          "name": "Жена Ларса и мать Эльги",
+          "description": "",
+          "value": 1.0,
+          "visible": true
+        }
+      ]
     },
     {
       "name": "Эльга",
@@ -50,6 +108,20 @@
           "name": "Ребенок",
           "value": 1.0,
           "visible": false
+        },
+        {
+          "code": "marital",
+          "name": "Дочь Ларса и Эльги",
+          "description": "",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "hasCurls",
+          "name": "Кудрявая",
+          "description": "",
+          "value": 1.0,
+          "visible": true
         }
       ]
     },
@@ -90,6 +162,27 @@
           "code": "bowWEAPON",
           "name": "Лук",
           "description": "Яйца и бесконечные стрелы прилагаются",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "marital",
+          "name": "Брат Пита",
+          "description": "Этот брат суровее",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "hasScar",
+          "name": "Есть шрам ",
+          "description": "Лицо перекошено от удара зверя",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "HURTByBeast",
+          "name": "Ранен зверем ",
+          "description": "Укусы и царапины",
           "value": 1.0,
           "visible": true
         }
@@ -134,13 +227,43 @@
           "description": "Яйца и бесконечные стрелы прилагаются",
           "value": 1.0,
           "visible": true
+        },
+        {
+          "code": "marital",
+          "name": "Брат Диона",
+          "description": "Этот брат симпатичнее",
+          "value": 1.0,
+          "visible": true
         }
       ]
     },
     {
       "name": "Нира",
       "nickname": "Хромая",
-      "age": "YOUNG"
+      "age": "YOUNG",
+      "statuses": [
+        {
+          "code": "herbalistSKILL",
+          "name": "Травница",
+          "description": "Знает полезные травы и умеет их использовать",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "marital",
+          "name": "Ученица Морты",
+          "description": "",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "lameDEFECT",
+          "name": "Хромает на правую ногу",
+          "description": "Вероятно последствия какой-то болезни",
+          "value": 1.0,
+          "visible": true
+        }
+      ]
     },
     {
       "name": "Алундра",
@@ -158,6 +281,20 @@
           "name": "Использует детей для помощи по хозяйству",
           "value": 1.0,
           "visible": false
+        },
+        {
+          "code": "marital",
+          "name": "Муж Барбары, отец Кена и Тоги",
+          "description": "",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "redhead",
+          "name": "Рыжий",
+          "description": "",
+          "value": 1.0,
+          "visible": true
         }
       ]
     },
@@ -177,6 +314,20 @@
           "name": "Использует детей для помощи по хозяйству",
           "value": 1.0,
           "visible": false
+        },
+        {
+          "code": "marital",
+          "name": "Жена Алундры, мать Кена и Тоги",
+          "description": "",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "fat",
+          "name": "Толстая",
+          "description": "",
+          "value": 1.0,
+          "visible": true
         }
       ]
     },
@@ -190,6 +341,34 @@
           "name": "Ребенок",
           "value": 1.0,
           "visible": false
+        },
+        {
+          "code": "marital",
+          "name": "Сын Барбары и Алундры",
+          "description": "",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "redhead",
+          "name": "Рыжий",
+          "description": "",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "hasWoodHorse",
+          "name": "Палка с черепом коня",
+          "description": "Скачет на ней по хутору",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "dadsHelper",
+          "name": "При деле",
+          "description": "Помогает семье по хозяйству",
+          "value": 1.0,
+          "visible": true
         }
       ]
     },
@@ -203,6 +382,27 @@
           "name": "Ребенок",
           "value": 1.0,
           "visible": false
+        },
+        {
+          "code": "redhead",
+          "name": "Рыжая",
+          "description": "",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "marital",
+          "name": "Дочь Барбары и Алундры",
+          "description": "",
+          "value": 1.0,
+          "visible": true
+        },
+        {
+          "code": "strangeVICE",
+          "name": "Странная",
+          "description": "Иногда разговаривает сама с собой",
+          "value": 1.0,
+          "visible": true
         }
       ]
     }
