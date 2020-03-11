@@ -35,6 +35,7 @@ class TaskResult(
     companion object {
         var IS_REPEATED = false
         var VALUE = 0.0
+        var PERCENT = ""
 
         fun parseConditions(jsonArray: JSONArray?): List<Pair<Triple<String, Task.Symbol, Double>, Double>> {
             jsonArray?.run {
@@ -58,13 +59,13 @@ class TaskResult(
         }
     }
 
-    fun countPoint(workers: List<Worker>, hutorStatues: List<Status>): Double {
+    private fun countPoint(selectedWorkers: List<Worker>, hutorStatues: List<Status>): Double {
         var workersPoints = 0.0
-        workers.forEach { worker ->
-            workersPoints += getPointsFromFunction(this.workerFunction, worker.statuses)
+        selectedWorkers.forEach { worker ->
+            workersPoints += getPointsFromWorker(this.workerFunction, worker)
         }
 
-        val hutorPoints: Double = getPointsFromFunction(this.hutorFunction, hutorStatues)
+        val hutorPoints: Double = getPointsFromHutor(this.hutorFunction, hutorStatues)
         return if (!this.canBeNegative && workersPoints + hutorPoints < 0) {
             0.0
         } else {
@@ -72,7 +73,7 @@ class TaskResult(
         }
     }
 
-    private fun getPointsFromFunction(
+    private fun getPointsFromHutor(
         taskFunction: TaskFunction,
         statuses: List<Status>
     ): Double {
@@ -90,12 +91,37 @@ class TaskResult(
         return usualPoint + specialPoint
     }
 
+    private fun getPointsFromWorker(
+        taskFunction: TaskFunction,
+        worker: Worker
+    ): Double {
+        var usualPoint = 0.0
+        var specialPoint = 0.0
+        val upEdge = if (taskFunction.defaultValue <= 0) {
+            1
+        } else {
+            taskFunction.defaultValue
+        }
+        usualPoint += Random(Date().time).nextInt(upEdge)
+        taskFunction.statuses.forEach { pair ->
+            val code = pair.first
+            val masterStatus = if (code.contains("_")) code.substringBefore("_") else ""
+            if (masterStatus.isEmpty() ||
+                masterStatus == "MASTER" && worker.isMaster ||
+                masterStatus == "SLAVE" && !worker.isMaster
+            ) {
+                specialPoint += getPointsFromStatus(worker.statuses, pair)
+            }
+        }
+        return usualPoint + specialPoint
+    }
+
     private fun getPointsFromStatus(
         statuses: List<Status>,
         pair: Pair<String, Double>
     ): Double {
         var point = 0.0
-        val codeForCompare = pair.first.substringAfter("*").substringBefore("%")
+        val codeForCompare = pair.first.substringAfter("_").substringAfter("*").substringBefore("%")
         val limit = if (pair.first.contains("%")) {
             pair.first.substringAfter("%").toDouble()
         } else {
@@ -107,11 +133,7 @@ class TaskResult(
             1.0
         }
         if (codeForCompare.isEmpty()) {
-            return multi * when (pair.second) {
-                TaskFunction.ADD_ITSELF_VALUE -> getValueWithLimit(status.value, limit)
-                TaskFunction.MINUS_ITSELF_VALUE -> -getValueWithLimit(status.value, limit)
-                else -> getValueWithLimit(pair.second, limit)
-            }
+            return getPoint(multi, pair.second, limit)
         }
         statuses.forEach { status ->
             if (status.isCoincide(codeForCompare)) {
@@ -123,6 +145,18 @@ class TaskResult(
             }
         }
         return point
+    }
+
+    private fun getPoint(
+        multi: Double,
+        value: Double,
+        limit: Double
+    ): Double {
+        return multi * when (value) {
+            TaskFunction.ADD_ITSELF_VALUE -> getValueWithLimit(status.value, limit)
+            TaskFunction.MINUS_ITSELF_VALUE -> -getValueWithLimit(status.value, limit)
+            else -> getValueWithLimit(value, limit)
+        }
     }
 
     private fun getValueWithLimit(
@@ -138,7 +172,6 @@ class TaskResult(
 
     fun makeAction(
         hutorStatuses: MutableList<Status>,
-        point: Double,
         workers: MutableList<Worker>
     ): String {
         var message = ""
@@ -146,9 +179,10 @@ class TaskResult(
         if (this.action == TaskAction.ADD_WORKER) {
             addNewWorker(workers)
         }
+        val selectedWorkers = workers.filter { worker -> worker.isSelected }
+        val point = countPoint(selectedWorkers, hutorStatuses)
         val allStatuses = mutableListOf<Status>()
         allStatuses.addAll(hutorStatuses)
-        val selectedWorkers = workers.filter { worker -> worker.isSelected }
         if (selectedWorkers.isNotEmpty()) {
             selectedWorkers.forEach { worker ->
                 val workerStatuses = worker.statuses
@@ -170,24 +204,33 @@ class TaskResult(
                 }
             }
             TaskTarget.ONE_SELECTED_WORKER -> {
-                val findWorker = workers.find { worker -> worker.isSelected }
-                if (findWorker != null) {
-                    val workerStatuses = findWorker.statuses
-                    message += changeStatuses(workerStatuses, point, allStatuses, findWorker)
-                    findWorker.statuses = workerStatuses
+                if (selectedWorkers.isNotEmpty()) {
+                    selectedWorkers.forEach { worker ->
+                        val workerStatuses = worker.statuses
+                        val list = mutableListOf<Status>()
+                        list.addAll(workerStatuses)
+                        list.addAll(hutorStatuses)
+                        message += changeStatuses(workerStatuses, point, list, worker)
+                        worker.statuses = workerStatuses
+                    }
                 }
             }
             TaskTarget.SPECIAL_WORKER -> {
-                val statusCodeForFindWorker = this.status.description.substringBefore("$")
+                val description = this.status.description
+                val statusCodeForFindWorker =
+                    if (description.contains("$")) description.substringBefore("$") else ""
                 val findWorker =
                     workers.find { worker ->
                         worker.statuses.any { status ->
-                            status.code == statusCodeForFindWorker
+                            status.isCoincide(statusCodeForFindWorker)
                         }
                     }
                 if (findWorker != null) {
                     val workerStatuses = findWorker.statuses
-                    message += changeStatuses(workerStatuses, point, allStatuses, findWorker)
+                    val list = mutableListOf<Status>()
+                    list.addAll(workerStatuses)
+                    list.addAll(hutorStatuses)
+                    message += changeStatuses(workerStatuses, point, list, findWorker)
                     findWorker.statuses = workerStatuses
                 }
             }
@@ -226,20 +269,50 @@ class TaskResult(
     ): String {
         VALUE = 0.0
         var percent = 0.0
+        PERCENT = ""
         if (this.conditions.isEmpty()) {
             percent = 100.0
         } else {
             this.conditions.forEach { condition ->
-                if (isConditionComplete(condition.first, statusesForCompare)) {
-                    percent += when (condition.second) {
-                        TaskFunction.ADD_ITSELF_VALUE -> condition.first.third
-                        TaskFunction.MINUS_ITSELF_VALUE -> -condition.first.third
-                        else -> condition.second
+                if (worker != null) {
+                    val code = condition.first.first
+                    val masterStatus = if (code.contains("_")) code.substringBefore("_") else ""
+                    if (masterStatus.isEmpty() ||
+                        masterStatus == "MASTER" && worker.isMaster ||
+                        masterStatus == "SLAVE" && !worker.isMaster
+                    ) {
+                        if (isConditionComplete(condition.first, statusesForCompare)) {
+                            percent += if (condition.second == TaskFunction.ADD_ITSELF_VALUE
+                                || condition.second == TaskFunction.ADD_ITSELF_VALUE
+                            ) {
+                                getPointsFromStatus(
+                                    worker.statuses,
+                                    Pair(condition.first.first, condition.second)
+                                )
+                            } else {
+                                condition.second
+                            }
+                        }
+                    }
+                } else {
+                    if (isConditionComplete(condition.first, statusesForCompare)) {
+                        percent += when (condition.second) {
+                            TaskFunction.ADD_ITSELF_VALUE -> getPointsFromStatus(
+                                statusesForChange,
+                                Pair(condition.first.first, condition.second)
+                            )
+                            TaskFunction.MINUS_ITSELF_VALUE -> -getPointsFromStatus(
+                                statusesForChange,
+                                Pair(condition.first.first, condition.second)
+                            )
+                            else -> condition.second
+                        }
                     }
                 }
             }
         }
-        val d = Random(Date().time).nextInt(100).toDouble() + 1
+        val d = Random(Date().time).nextInt(100).toDouble()
+        PERCENT = "$percent/$d"
         if (percent <= d) {
             return makeMessage(worker, false)
         }
@@ -247,14 +320,14 @@ class TaskResult(
             this.action == TaskAction.ADD_STATUS -> statusesForChange.add(this.status)
             this.action == TaskAction.REMOVE_STATUS -> {
                 val findStatus =
-                    statusesForChange.find { status -> this.status.code == status.code }
+                    statusesForChange.find { status -> status.isCoincide(this.status.code) }
                 findStatus?.run {
                     statusesForChange.remove(findStatus)
                 }
             }
             else -> {
                 val findStatus =
-                    statusesForChange.find { status -> this.status.code == status.code }
+                    statusesForChange.find { status -> status.isCoincide(this.status.code) }
                 if (findStatus == null) {
                     val newStatus = Status(this.status)
                     newStatus.value = 0.0
@@ -303,10 +376,11 @@ class TaskResult(
         condition: Triple<String, Task.Symbol, Double>,
         statuses: MutableList<Status>
     ): Boolean {
-        if (condition.first.isEmpty()) {
+        val codeForCompare = condition.first.substringAfter("_")
+        if (codeForCompare.isEmpty()) {
             return true
         }
-        val find = statuses.find { status -> status.code == condition.first }
+        val find = statuses.find { status -> status.isCoincide(codeForCompare) }
         val findValue = find?.value ?: 0.0
         when (condition.second) {
             Task.Symbol.MORE -> {

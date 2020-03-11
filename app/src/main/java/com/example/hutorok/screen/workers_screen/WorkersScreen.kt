@@ -112,12 +112,17 @@ class WorkersScreen : Fragment() {
 
     private val callback = object : WorkerAdapter.Callback {
 
-        override fun selectWorker(worker: Worker) {
+        override fun clickWorker(worker: Worker) {
             workersViewModel.clickWorker(worker)
         }
 
         override fun isExecuteTaskButtonEnable(isEnable: Boolean) {
             executeTaskButton.isEnabled = isEnable
+        }
+
+        override fun selectWorker(worker: Worker) {
+            worker.isSelected = !worker.isSelected
+            workersViewModel.clickCheckbox(worker)
         }
     }
 

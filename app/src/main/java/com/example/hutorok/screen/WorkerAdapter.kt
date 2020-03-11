@@ -3,6 +3,7 @@ package com.example.hutorok.screen
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hutorok.R
 import com.example.hutorok.domain.model.Task
@@ -14,6 +15,10 @@ class WorkerAdapter(
     private val callback: Callback
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    companion object {
+        var MASTER_ALREADY_SELECTED = false
+    }
+
     var items = ArrayList<Worker>()
         set(data) {
             field = data
@@ -21,6 +26,7 @@ class WorkerAdapter(
         }
 
     fun clear() {
+        MASTER_ALREADY_SELECTED = false
         items.clear()
         notifyDataSetChanged()
     }
@@ -44,12 +50,12 @@ class WorkerAdapter(
         holder.itemView.run {
             if (isOrder) {
                 this.setOnLongClickListener {
-                    callback.selectWorker(item)
+                    callback.clickWorker(item)
                     true
                 }
             } else {
                 this.onClick {
-                    callback.selectWorker(item)
+                    callback.clickWorker(item)
                 }
             }
             name.text = item.name
@@ -64,9 +70,30 @@ class WorkerAdapter(
             //todo crunch
             checkbox.setOnCheckedChangeListener(null)
             checkbox.isChecked = item.isSelected
+            if (item.isMaster) {
+                (this as CardView).setCardBackgroundColor(resources.getColor(R.color.light_red_background_color))
+            } else {
+                (this as CardView).setCardBackgroundColor(resources.getColor(R.color.white))
+            }
             checkbox.setOnCheckedChangeListener { _, isChecked ->
                 notifyDataSetChanged()
                 item.isSelected = isChecked
+                if (item.isMaster) {
+                    item.isMaster = isChecked
+                    MASTER_ALREADY_SELECTED = isChecked
+                }
+                if (task.type == Task.Type.MASTER_SLAVE_JOB &&
+                    !MASTER_ALREADY_SELECTED &&
+                    Task.allConditionsIsComplete(filterByPrefix("MASTER_"), item.statuses)
+                ) {
+                    item.isMaster = isChecked
+                    MASTER_ALREADY_SELECTED = isChecked
+                    if (item.isMaster) {
+                        this.setCardBackgroundColor(resources.getColor(R.color.light_red_background_color))
+                    } else {
+                        this.setCardBackgroundColor(resources.getColor(R.color.white))
+                    }
+                }
                 callback.isExecuteTaskButtonEnable(isExecuteTaskButtonEnable())
             }
             var importantStatusesText = ""
@@ -123,29 +150,8 @@ class WorkerAdapter(
 
     private fun isTaskEnableConditionsInComplete(worker: Worker): Boolean {
         return if (task.type == Task.Type.MASTER_SLAVE_JOB) {
-            val masterEnableConditions = mutableListOf<Triple<String, Task.Symbol, Double>>()
-            task.enableConditions.filter { condition -> condition.first.contains("MASTER_") }
-                .forEach {
-                    masterEnableConditions.add(
-                        Triple(
-                            it.first.replace("MASTER_", ""),
-                            it.second,
-                            it.third
-                        )
-                    )
-                }
-
-            val slaveEnableConditions = mutableListOf<Triple<String, Task.Symbol, Double>>()
-            task.enableConditions.filter { condition -> condition.first.contains("SLAVE_") }
-                .forEach {
-                    slaveEnableConditions.add(
-                        Triple(
-                            it.first.replace("SLAVE_", ""),
-                            it.second,
-                            it.third
-                        )
-                    )
-                }
+            val masterEnableConditions = filterByPrefix("MASTER_")
+            val slaveEnableConditions = filterByPrefix("SLAVE_")
 
             return if (items.none { worker -> worker.isSelected }) {
                 Task.allConditionsIsComplete(masterEnableConditions, worker.statuses)
@@ -157,12 +163,29 @@ class WorkerAdapter(
         }
     }
 
+    private fun filterByPrefix(prefix: String): MutableList<Triple<String, Task.Symbol, Double>> {
+        val enableCondition = mutableListOf<Triple<String, Task.Symbol, Double>>()
+        task.enableConditions.filter { condition -> condition.first.contains(prefix) }
+            .forEach {
+                enableCondition.add(
+                    Triple(
+                        it.first.replace(prefix, ""),
+                        it.second,
+                        it.third
+                    )
+                )
+            }
+        return enableCondition
+    }
+
     class WorkerHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     interface Callback {
-        fun selectWorker(worker: Worker)
+        fun clickWorker(worker: Worker)
 
         fun isExecuteTaskButtonEnable(isEnable: Boolean)
+
+        fun selectWorker(worker: Worker)
     }
 }
 

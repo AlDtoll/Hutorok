@@ -31,7 +31,7 @@ class Status(
     fun isCoincide(codeForCompare: String): Boolean {
         if (codeForCompare.contains("?")) {
             val keyWord = codeForCompare.replace("?", "")
-            return this.code.contains(keyWord)
+            return this.code.contains(keyWord, true)
         }
         return this.code == codeForCompare
     }

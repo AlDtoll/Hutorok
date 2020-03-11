@@ -35,8 +35,7 @@ class ExecuteTaskInteractor(
 
                 var message = ""
                 task.results.forEach { taskResult ->
-                    val point = taskResult.countPoint(selectedWorkers, hutorStatusesList)
-                    message += taskResult.makeAction(hutorStatusesList, point, workersList)
+                    message += taskResult.makeAction(hutorStatusesList, workersList)
                 }
 
                 if (hutorStatusesList.find { status -> status.code == "DEFEAT" || status.code == "VICTORY" } != null) {

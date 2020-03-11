@@ -39,12 +39,8 @@ class EndTurnInteractor(
                             )
                         ) {
                             selectAll(workers, task.enableConditions)
-                            val selectedWorkers = workers.filter { it.isSelected }
-
                             task.results.forEach { taskResult ->
-                                val point =
-                                    taskResult.countPoint(selectedWorkers, hutorStatusesList)
-                                message += taskResult.makeAction(hutorStatusesList, point, workers)
+                                message += taskResult.makeAction(hutorStatusesList, workers)
                             }
 
                             if (hutorStatusesList.find { status -> status.code == "DEFEAT" || status.code == "VICTORY" } != null) {

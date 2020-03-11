@@ -11,7 +11,8 @@ class Worker(
     var age: Age,
     var statuses: MutableList<Status> = mutableListOf(),
     var isSelected: Boolean = false,
-    var isInvisible: Boolean = false
+    var isInvisible: Boolean = false,
+    var isMaster: Boolean = false
 ) {
     constructor() : this(
         name = "Новый хуторянин",

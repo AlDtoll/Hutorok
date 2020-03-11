@@ -36,7 +36,7 @@ class Task(
                 return true
             }
             conditions.forEach { condition ->
-                val find = statusesList.find { condition.first == it.code }
+                val find = statusesList.find { it.isCoincide(condition.first) }
                 val findValue = find?.value ?: 0.0
                 when (condition.second) {
                     Symbol.MORE -> {
@@ -67,7 +67,7 @@ class Task(
                 return true
             }
             conditions.forEach { condition ->
-                val find = statusesList.find { condition.first == it.code }
+                val find = statusesList.find { it.isCoincide(condition.first) }
                 val findValue = find?.value ?: 0.0
                 when (condition.second) {
                     Symbol.MORE -> {
@@ -135,7 +135,10 @@ class Task(
         }
 
         fun deselectAll(workers: List<Worker>) {
-            workers.forEach { worker -> worker.isSelected = false }
+            workers.forEach { worker ->
+                worker.isSelected = false
+                worker.isMaster = false
+            }
         }
     }
 
