@@ -13,7 +13,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_small"
             android:layout_marginTop="@dimen/padding_small"
-            android:drawableStart="@drawable/ic_chat"
+            android:drawableStart="@drawable/ic_peasant"
             android:drawablePadding="@dimen/padding_small"
             android:text="@string/workers_button_text"
             android:textAllCaps="false"

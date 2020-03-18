@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Hutorok</string>
-    <string name="workers_button_text">Пообщаться с хуторянами</string>
-    <string name="builds_button_text">Прогуляться по хутору</string>
-    <string name="tasks_button_text">Работать работу</string>
-    <string name="history_button_text">Посмотреть историю</string>
+    <string name="workers_button_text">Работники</string>
+    <string name="builds_button_text">Хутор</string>
+    <string name="tasks_button_text">Действия</string>
+    <string name="history_button_text">История</string>
     <string name="end_turn_button_text">Закончить ход</string>
 
     <string name="workers_screen_toolbar_title">Хуторяне</string>

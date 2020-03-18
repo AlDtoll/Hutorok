@@ -15,7 +15,8 @@ class Router(
     private val pressBackButtonEvents = PublishSubject.create<Unit>()
 
     override fun nowScreen(): Observable<NowScreen> {
-        val observable = Observable.combineLatest(nowScreen.startWith(START_SCREEN),
+        val observable = Observable.combineLatest(
+            nowScreen.startWith(TASKS_SCREEN),
             scenarioInteractor.get().startWith(Scenario.SPEAK),
             BiFunction { nowScreen: NowScreen, scenario: Scenario ->
                 nowScreen to scenario
@@ -71,18 +72,15 @@ class Router(
 
     private fun getPreviousScreen(nowScreen: NowScreen, scenario: Scenario): NowScreen {
         return when (nowScreen) {
-            START_SCREEN -> CLOSE_SCREEN
             WORKER_INFO_SCREEN -> WORKERS_SCREEN
             WORKERS_SCREEN -> getPreviousScreenForWorkersScreen(scenario)
-            QUEST_SCREEN -> CLOSE_SCREEN
-            FINISH_SCREEN -> CLOSE_SCREEN
-            else -> START_SCREEN
+            else -> CLOSE_SCREEN
         }
     }
 
     private fun getPreviousScreenForWorkersScreen(scenario: Scenario): NowScreen {
         return when (scenario) {
-            Scenario.SPEAK -> START_SCREEN
+            Scenario.SPEAK -> CLOSE_SCREEN
             Scenario.ORDER -> TASKS_SCREEN
         }
     }

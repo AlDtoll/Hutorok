@@ -5,7 +5,6 @@ import com.example.hutorok.domain.model.Task
 import com.example.hutorok.domain.model.Task.Companion.deselectAll
 import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.domain.storage.*
-import com.example.hutorok.routing.OnBackPressedInteractor
 import com.example.hutorok.routing.RouteToFinishScreenInteractor
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
@@ -15,7 +14,6 @@ class ExecuteTaskInteractor(
     private val taskInteractor: ITaskInteractor,
     private val hutorStatusesListInteractor: IHutorStatusesListInteractor,
     private val messageInteractor: IMessageInteractor,
-    private val onBackPressedInteractor: OnBackPressedInteractor,
     private val invisibleStatusNamesListInteractor: IInvisibleStatusNamesListInteractor,
     private val routeToFinishScreenInteractor: RouteToFinishScreenInteractor
 ) : IExecuteTaskInteractor {
@@ -25,7 +23,6 @@ class ExecuteTaskInteractor(
     }
 
     override fun execute(isQuest: Boolean) {
-        var isFinished = false
         Observable.zip(
             workersListInteractor.get(),
             taskInteractor.get(),
@@ -39,7 +36,6 @@ class ExecuteTaskInteractor(
                 }
 
                 if (hutorStatusesList.find { status -> status.code == "DEFEAT" || status.code == "VICTORY" } != null) {
-                    isFinished = true
                     routeToFinishScreenInteractor.execute()
                 }
 
@@ -58,9 +54,6 @@ class ExecuteTaskInteractor(
             }
         ).subscribe()
         invisibleStatusNamesListInteractor.refresh()
-        if (!isQuest && !isFinished) {
-            onBackPressedInteractor.execute()
-        }
     }
 
     private fun makeFineForWorkers(workers: List<Worker>): String {

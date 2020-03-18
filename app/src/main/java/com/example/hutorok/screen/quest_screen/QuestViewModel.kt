@@ -11,7 +11,7 @@ import com.example.hutorok.domain.storage.IHutorStatusesListInteractor
 import com.example.hutorok.domain.storage.IMessageInteractor
 import com.example.hutorok.domain.storage.IQuestInteractor
 import com.example.hutorok.domain.storage.ITaskInteractor
-import com.example.hutorok.routing.RouteToStartScreenInteractor
+import com.example.hutorok.routing.RouteToTasksScreenInteractor
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
@@ -19,7 +19,7 @@ import io.reactivex.subjects.BehaviorSubject
 
 class QuestViewModel(
     private val questInteractor: IQuestInteractor,
-    private val routeToStartScreenInteractor: RouteToStartScreenInteractor,
+    private val routeToTasksScreenInteractor: RouteToTasksScreenInteractor,
     private val taskInteractor: ITaskInteractor,
     private val executeTaskInteractor: IExecuteTaskInteractor,
     private val hutorStatusesListInteractor: IHutorStatusesListInteractor,
@@ -95,7 +95,7 @@ class QuestViewModel(
                 this.edit().putBoolean(MainActivity.FIRST_RUN, false).apply()
             }
         }
-        routeToStartScreenInteractor.execute()
+        routeToTasksScreenInteractor.execute()
     }
 
     override fun previousSelectResultData(): LiveData<String> {

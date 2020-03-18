@@ -23,7 +23,21 @@ import org.koin.dsl.module.module
 
 val appModule = module {
     single { this }
-    single { MainViewModel(get(), get(), get(), get(), get()) as IMainViewModel }
+    single {
+        MainViewModel(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        ) as IMainViewModel
+    }
 
     single { Router(get()) as IRouter }
     single { GetNowScreenInteractor(get()) as IGetNowScreenInteractor }
@@ -55,7 +69,6 @@ val appModule = module {
     single { ScenarioInteractor() as IScenarioInteractor }
     single {
         ExecuteTaskInteractor(
-            get(),
             get(),
             get(),
             get(),
@@ -109,4 +122,5 @@ val appModule = module {
     single { InvisibleStatusNamesListInteractor(get()) as IInvisibleStatusNamesListInteractor }
     single { QuestInteractor() as IQuestInteractor }
     single { GeneralDisableStatusListInteractor() as IGeneralDisableStatusListInteractor }
+    single { NavigationBarVisibilityInteractor(get()) as INavigationBarVisibilityInteractor }
 }
