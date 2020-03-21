@@ -74,6 +74,7 @@ class BuildsScreen : Fragment() {
     }
 
     private fun initToolbar() {
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         (activity as AppCompatActivity).title = getString(R.string.builds_screen_toolbar_title)
     }
 

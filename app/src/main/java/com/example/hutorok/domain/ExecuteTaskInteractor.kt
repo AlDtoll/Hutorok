@@ -7,27 +7,36 @@ import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.domain.storage.*
 import com.example.hutorok.routing.RouteToFinishScreenInteractor
 import io.reactivex.Observable
-import io.reactivex.functions.Function3
+import io.reactivex.functions.Function5
+import io.reactivex.subjects.PublishSubject
 
 class ExecuteTaskInteractor(
     private val workersListInteractor: IWorkersListInteractor,
     private val taskInteractor: ITaskInteractor,
-    private val hutorStatusesListInteractor: IHutorStatusesListInteractor,
+    private val buildsListInteractor: IBuildsListInteractor,
     private val messageInteractor: IMessageInteractor,
     private val invisibleStatusNamesListInteractor: IInvisibleStatusNamesListInteractor,
-    private val routeToFinishScreenInteractor: RouteToFinishScreenInteractor
+    private val routeToFinishScreenInteractor: RouteToFinishScreenInteractor,
+    private val questInteractor: IQuestInteractor
 ) : IExecuteTaskInteractor {
 
     companion object {
         const val EXECUTE_TASK_PREFIX = "Работа сделана. В результате: "
     }
 
-    override fun execute(isQuest: Boolean) {
-        Observable.zip(
+    private val event = PublishSubject.create<Unit>()
+
+    override fun execute() {
+        event.onNext(Unit)
+    }
+
+    override fun get(): Observable<Unit> {
+        val observable = event.withLatestFrom(
+            questInteractor.get(),
             workersListInteractor.get(),
             taskInteractor.get(),
-            hutorStatusesListInteractor.get(),
-            Function3 { workersList: MutableList<Worker>, task: Task, hutorStatusesList: MutableList<Status> ->
+            buildsListInteractor.get(),
+            Function5 { _: Unit, isQuest: Boolean, workersList: MutableList<Worker>, task: Task, hutorStatusesList: MutableList<Status> ->
                 val selectedWorkers = workersList.filter { it.isSelected }
 
                 var message = ""
@@ -50,10 +59,11 @@ class ExecuteTaskInteractor(
                 } else {
                     messageInteractor.update(message)
                 }
-
+                //todo сомнительное место
+                invisibleStatusNamesListInteractor.refresh()
             }
-        ).subscribe()
-        invisibleStatusNamesListInteractor.refresh()
+        )
+        return observable
     }
 
     private fun makeFineForWorkers(workers: List<Worker>): String {

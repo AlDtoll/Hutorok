@@ -3,7 +3,7 @@ package com.example.hutorok.domain.storage
 import com.example.hutorok.domain.model.Status
 import io.reactivex.Observable
 
-interface IHutorStatusesListInteractor {
+interface IBuildsListInteractor {
 
     fun update(statuses: MutableList<Status>)
 

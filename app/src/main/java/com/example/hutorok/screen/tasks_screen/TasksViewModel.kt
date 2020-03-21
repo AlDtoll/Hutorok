@@ -3,9 +3,10 @@ package com.example.hutorok.screen.tasks_screen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import com.example.hutorok.domain.IEndTurnInteractor
+import com.example.hutorok.domain.ILoadDataInteractor
 import com.example.hutorok.domain.model.Status
 import com.example.hutorok.domain.model.Task
-import com.example.hutorok.domain.storage.IHutorStatusesListInteractor
+import com.example.hutorok.domain.storage.IBuildsListInteractor
 import com.example.hutorok.domain.storage.ITaskInteractor
 import com.example.hutorok.domain.storage.ITasksListInteractor
 import com.example.hutorok.routing.RouteToTaskInfoInteractor
@@ -18,16 +19,17 @@ class TasksViewModel(
     private val tasksListInteractor: ITasksListInteractor,
     private val taskInteractor: ITaskInteractor,
     private val routeToTaskInfoInteractor: RouteToTaskInfoInteractor,
-    private val hutorStatusesListInteractor: IHutorStatusesListInteractor,
-    private val endTurnInteractor: IEndTurnInteractor
+    private val buildsListInteractor: IBuildsListInteractor,
+    private val endTurnInteractor: IEndTurnInteractor,
+    private val loadDataInteractor: ILoadDataInteractor
 ) : ITasksViewModel {
 
-    private var search = PublishSubject.create<String>()
+    private val search = PublishSubject.create<String>()
 
     override fun tasksData(): LiveData<List<Task>> {
         val observable = Observable.combineLatest(
             tasksListInteractor.get(),
-            hutorStatusesListInteractor.get(),
+            buildsListInteractor.get(),
             BiFunction { tasksList: List<Task>, statusesList: List<Status> ->
                 tasksList.filter { task ->
                     Task.allConditionsIsComplete(
@@ -69,6 +71,13 @@ class TasksViewModel(
         tasksListInteractor.refresh()
     }
 
+    override fun endTurnDataResponse(): LiveData<Unit> =
+        LiveDataReactiveStreams.fromPublisher(
+            endTurnInteractor.get().toFlowable(
+                BackpressureStrategy.LATEST
+            )
+        )
+
     override fun searchChange(searchData: String) {
         search.onNext(searchData)
     }
@@ -79,5 +88,9 @@ class TasksViewModel(
 
     override fun searchData(): LiveData<String> =
         LiveDataReactiveStreams.fromPublisher(search.toFlowable(BackpressureStrategy.LATEST))
+
+    override fun loadAdventure() {
+        loadDataInteractor.execute()
+    }
 
 }

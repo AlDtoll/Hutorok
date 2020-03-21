@@ -1,19 +1,13 @@
 package com.example.hutorok.screen.start_screen
 
 import androidx.lifecycle.LiveData
+import com.example.hutorok.domain.model.Adventure
 
 interface IStartViewModel {
 
-    fun clickWorkersButton()
+    fun clickAdventure(adventure: Adventure)
 
-    fun clickBuildsButton()
+    fun adventuresData(): LiveData<List<Adventure>>
 
-    fun clickTasksButton()
-
-    fun clickEndTurnButton()
-
-    fun clickHistoryButton()
-
-    fun turnNumberData(): LiveData<Int>
-
+    fun loadAdventuresData(): LiveData<Unit>
 }

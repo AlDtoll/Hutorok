@@ -1,63 +1,32 @@
 package com.example.hutorok.domain.model
 
 import com.example.hutorok.BuildConfig
-import org.json.JSONArray
-import org.json.JSONObject
 import java.util.*
 import kotlin.random.Random
 
 class TaskResult(
     val target: TaskTarget = TaskTarget.HUTOR,
     val action: TaskAction = TaskAction.CHANGE_STATUS_VALUE,
-    val status: Status,
+    val status: Status = Status(),
     val successMessage: String = "",
-    val conditions: List<Pair<Triple<String, Task.Symbol, Double>, Double>> = emptyList(),
+    val conditions: List<TaskResultCondition> = emptyList(),
     val failMessage: String = "",
-    val workerFunction: TaskFunction,
-    val hutorFunction: TaskFunction,
+    val workerFunction: TaskFunction = TaskFunction.nothing(),
+    val hutorFunction: TaskFunction = TaskFunction.nothing(),
     val canBeNegative: Boolean = false
 ) {
-    constructor(jsonObject: JSONObject) : this(
-        target = TaskTarget.valueOf(jsonObject.optString("target")),
-        action = TaskAction.valueOf(jsonObject.optString("action")),
-        status = Status(jsonObject.getJSONObject("status")),
-        successMessage = jsonObject.optString("successMessage"),
-        conditions = parseConditions(jsonObject.optJSONArray("conditions")),
-        failMessage = jsonObject.optString("failMessage"),
-        workerFunction = if (jsonObject.optJSONObject("workerFunction") != null) {
-            TaskFunction(jsonObject.optJSONObject("workerFunction"))
-        } else {
-            TaskFunction.nothing()
-        },
-        hutorFunction = TaskFunction(jsonObject.optJSONObject("hutorFunction")),
-        canBeNegative = jsonObject.optBoolean("canBeNegative")
+
+    class TaskResultCondition(
+        val statusCode: String = "",
+        val symbol: Task.Symbol = Task.Symbol.MORE,
+        val statusValue: Double = 0.0,
+        val value: Double = 0.0
     )
 
     companion object {
         var IS_REPEATED = false
         var VALUE = 0.0
         var PERCENT = ""
-
-        fun parseConditions(jsonArray: JSONArray?): List<Pair<Triple<String, Task.Symbol, Double>, Double>> {
-            jsonArray?.run {
-                val conditions = mutableListOf<Pair<Triple<String, Task.Symbol, Double>, Double>>()
-                for (i in 0 until jsonArray.length()) {
-                    val jsonObject = jsonArray.getJSONObject(i)
-                    conditions.add(
-                        Pair(
-                            Triple(
-                                jsonObject.optString("statusCode"),
-                                Task.Symbol.valueOf(jsonObject.optString("symbol")),
-                                jsonObject.getDouble("statusValue")
-                            ),
-                            jsonObject.getDouble("value")
-                        )
-                    )
-                }
-                return conditions
-            }
-            return emptyList()
-        }
     }
 
     private fun countPoint(selectedWorkers: List<Worker>, hutorStatues: List<Status>): Double {
@@ -86,8 +55,8 @@ class TaskResult(
             taskFunction.defaultValue
         }
         usualPoint += Random(Date().time).nextInt(upEdge)
-        taskFunction.statuses.forEach { pair ->
-            specialPoint += getPointsFromStatus(statuses, pair)
+        taskFunction.statuses.forEach { expression ->
+            specialPoint += getPointsFromStatus(statuses, expression)
         }
         return usualPoint + specialPoint
     }
@@ -104,14 +73,14 @@ class TaskResult(
             taskFunction.defaultValue
         }
         usualPoint += Random(Date().time).nextInt(upEdge)
-        taskFunction.statuses.forEach { pair ->
-            val code = pair.first
+        taskFunction.statuses.forEach { expression ->
+            val code = expression.code
             val masterStatus = if (code.contains("_")) code.substringBefore("_") else ""
             if (masterStatus.isEmpty() ||
                 masterStatus == "MASTER" && worker.isMaster ||
                 masterStatus == "SLAVE" && !worker.isMaster
             ) {
-                specialPoint += getPointsFromStatus(worker.statuses, pair)
+                specialPoint += getPointsFromStatus(worker.statuses, expression)
             }
         }
         return usualPoint + specialPoint
@@ -119,29 +88,30 @@ class TaskResult(
 
     private fun getPointsFromStatus(
         statuses: List<Status>,
-        pair: Pair<String, Double>
+        expression: TaskFunction.Expression
     ): Double {
         var point = 0.0
-        val codeForCompare = pair.first.substringAfter("_").substringAfter("*").substringBefore("%")
-        val limit = if (pair.first.contains("%")) {
-            pair.first.substringAfter("%").toDouble()
+        val codeForCompare =
+            expression.code.substringAfter("_").substringAfter("*").substringBefore("%")
+        val limit = if (expression.code.contains("%")) {
+            expression.code.substringAfter("%").toDouble()
         } else {
             5000.0
         }
-        val multi = if (pair.first.contains("*")) {
-            pair.first.substringBefore("*").toDouble()
+        val multi = if (expression.code.contains("*")) {
+            expression.code.substringBefore("*").toDouble()
         } else {
             1.0
         }
         if (codeForCompare.isEmpty()) {
-            return getPoint(multi, pair.second, limit)
+            return getPoint(multi, expression.value, limit)
         }
         statuses.forEach { status ->
             if (status.isCoincide(codeForCompare)) {
-                point += multi * when (pair.second) {
+                point += multi * when (expression.value) {
                     TaskFunction.ADD_ITSELF_VALUE -> getValueWithLimit(status.value, limit)
                     TaskFunction.MINUS_ITSELF_VALUE -> -getValueWithLimit(status.value, limit)
-                    else -> getValueWithLimit(pair.second, limit)
+                    else -> getValueWithLimit(expression.value, limit)
                 }
             }
         }
@@ -276,37 +246,46 @@ class TaskResult(
         } else {
             this.conditions.forEach { condition ->
                 if (worker != null) {
-                    val code = condition.first.first
+                    val code = condition.statusCode
                     val masterStatus = if (code.contains("_")) code.substringBefore("_") else ""
                     if (masterStatus.isEmpty() ||
                         masterStatus == "MASTER" && worker.isMaster ||
                         masterStatus == "SLAVE" && !worker.isMaster
                     ) {
-                        if (isConditionComplete(condition.first, statusesForCompare)) {
-                            percent += if (condition.second == TaskFunction.ADD_ITSELF_VALUE
-                                || condition.second == TaskFunction.ADD_ITSELF_VALUE
+                        if (isConditionComplete(Task.Condition(condition), statusesForCompare)) {
+                            percent += if (condition.value == TaskFunction.ADD_ITSELF_VALUE
+                                || condition.value == TaskFunction.ADD_ITSELF_VALUE
                             ) {
                                 getPointsFromStatus(
                                     worker.statuses,
-                                    Pair(condition.first.first, condition.second)
+                                    TaskFunction.Expression(
+                                        condition.statusCode,
+                                        condition.value
+                                    )
                                 )
                             } else {
-                                condition.second
+                                condition.value
                             }
                         }
                     }
                 } else {
-                    if (isConditionComplete(condition.first, statusesForCompare)) {
-                        percent += when (condition.second) {
+                    if (isConditionComplete(Task.Condition(condition), statusesForCompare)) {
+                        percent += when (condition.value) {
                             TaskFunction.ADD_ITSELF_VALUE -> getPointsFromStatus(
                                 statusesForChange,
-                                Pair(condition.first.first, condition.second)
+                                TaskFunction.Expression(
+                                    condition.statusCode,
+                                    condition.value
+                                )
                             )
                             TaskFunction.MINUS_ITSELF_VALUE -> -getPointsFromStatus(
                                 statusesForChange,
-                                Pair(condition.first.first, condition.second)
+                                TaskFunction.Expression(
+                                    condition.statusCode,
+                                    condition.value
+                                )
                             )
-                            else -> condition.second
+                            else -> condition.value
                         }
                     }
                 }
@@ -374,28 +353,28 @@ class TaskResult(
     }
 
     private fun isConditionComplete(
-        condition: Triple<String, Task.Symbol, Double>,
+        condition: Task.Condition,
         statuses: MutableList<Status>
     ): Boolean {
-        val codeForCompare = condition.first.substringAfter("_")
+        val codeForCompare = condition.statusCode.substringAfter("_")
         if (codeForCompare.isEmpty()) {
             return true
         }
         val find = statuses.find { status -> status.isCoincide(codeForCompare) }
         val findValue = find?.value ?: 0.0
-        when (condition.second) {
+        when (condition.symbol) {
             Task.Symbol.MORE -> {
-                if (findValue <= condition.third) {
+                if (findValue <= condition.statusValue) {
                     return false
                 }
             }
             Task.Symbol.LESS -> {
-                if (findValue >= condition.third) {
+                if (findValue >= condition.statusValue) {
                     return false
                 }
             }
             Task.Symbol.EQUALS -> {
-                if (findValue != condition.third) {
+                if (findValue != condition.statusValue) {
                     return false
                 }
             }

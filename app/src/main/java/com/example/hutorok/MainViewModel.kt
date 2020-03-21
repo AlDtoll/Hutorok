@@ -4,28 +4,25 @@ import android.view.MenuItem
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import com.example.hutorok.domain.ILoadDataInteractor
-import com.example.hutorok.domain.model.Quest
-import com.example.hutorok.domain.model.Status
-import com.example.hutorok.domain.model.Task
-import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.domain.storage.IMessageInteractor
-import com.example.hutorok.domain.storage.INavigationBarVisibilityInteractor
+import com.example.hutorok.domain.storage.INavigationElementsVisibilityInteractor
 import com.example.hutorok.domain.storage.ITurnNumberInteractor
 import com.example.hutorok.routing.*
 import io.reactivex.BackpressureStrategy
 
 class MainViewModel(
+    //todo очень толстая модель
     private val getNowScreenInteractor: IGetNowScreenInteractor,
     private val onBackPressedInteractor: OnBackPressedInteractor,
     private val loadDataInteractor: ILoadDataInteractor,
     private val messageInteractor: IMessageInteractor,
-    private val routeToQuestScreenInteractor: RouteToQuestScreenInteractor,
+    private val routeToStartScreenInteractor: RouteToStartScreenInteractor,
     private val routeToWorkersScreenInteractor: RouteToWorkersScreenInteractor,
     private val routeToBuildsScreenInteractor: RouteToBuildsScreenInteractor,
     private val routeToTasksScreenInteractor: RouteToTasksScreenInteractor,
     private val routeToHistoryScreenInteractor: RouteToHistoryScreenInteractor,
     private val turnNumberInteractor: ITurnNumberInteractor,
-    private val navigationBarVisibilityInteractor: INavigationBarVisibilityInteractor
+    private val navigationElementsVisibilityInteractor: INavigationElementsVisibilityInteractor
 ) : IMainViewModel {
 
     override fun nowScreen(): LiveData<NowScreen> {
@@ -38,34 +35,14 @@ class MainViewModel(
         onBackPressedInteractor.execute()
     }
 
-    override fun loadData(
-        workers: MutableList<Worker>,
-        tasks: MutableList<Task>,
-        hutorokStatuses: MutableList<Status>,
-        endTasks: MutableList<Task>,
-        events: MutableList<String>,
-        turnNumber: Int,
-        startQuest: Quest
-    ) {
-        loadDataInteractor.update(
-            workers,
-            tasks,
-            hutorokStatuses,
-            endTasks,
-            events,
-            turnNumber,
-            startQuest
-        )
-    }
-
     override fun messageData(): LiveData<String> {
         return LiveDataReactiveStreams.fromPublisher(
             messageInteractor.get().toFlowable(BackpressureStrategy.LATEST)
         )
     }
 
-    override fun startQuest() {
-        routeToQuestScreenInteractor.execute()
+    override fun showAdventures() {
+        routeToStartScreenInteractor.execute()
     }
 
     override fun clickAction(menuItem: MenuItem) {
@@ -74,6 +51,7 @@ class MainViewModel(
             R.id.action_builds -> routeToBuildsScreenInteractor.execute()
             R.id.action_tasks -> routeToTasksScreenInteractor.execute()
             R.id.action_history -> routeToHistoryScreenInteractor.execute()
+            android.R.id.home -> onBackPressed()
         }
     }
 
@@ -83,14 +61,20 @@ class MainViewModel(
                 .toFlowable(BackpressureStrategy.LATEST)
         )
 
-    override fun getNavigationBarVisibility(): LiveData<Boolean> {
+    override fun getNavigationElementsVisibility(): LiveData<Boolean> {
         return LiveDataReactiveStreams.fromPublisher(
-            navigationBarVisibilityInteractor.get().toFlowable(BackpressureStrategy.LATEST)
+            navigationElementsVisibilityInteractor.get().toFlowable(BackpressureStrategy.LATEST)
         )
     }
 
     override fun onClose() {
         routeToTasksScreenInteractor.execute()
+    }
+
+    override fun loadDataResponse(): LiveData<Unit> {
+        return LiveDataReactiveStreams.fromPublisher(
+            loadDataInteractor.get().toFlowable(BackpressureStrategy.LATEST)
+        )
     }
 
 }

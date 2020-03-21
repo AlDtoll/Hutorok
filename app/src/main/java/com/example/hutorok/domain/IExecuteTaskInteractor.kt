@@ -1,6 +1,10 @@
 package com.example.hutorok.domain
 
+import io.reactivex.Observable
+
 interface IExecuteTaskInteractor {
 
-    fun execute(isQuest: Boolean)
+    fun get(): Observable<Unit>
+
+    fun execute()
 }

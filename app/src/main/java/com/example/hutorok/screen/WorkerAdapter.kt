@@ -163,15 +163,15 @@ class WorkerAdapter(
         }
     }
 
-    private fun filterByPrefix(prefix: String): MutableList<Triple<String, Task.Symbol, Double>> {
-        val enableCondition = mutableListOf<Triple<String, Task.Symbol, Double>>()
-        task.enableConditions.filter { condition -> condition.first.contains(prefix) }
+    private fun filterByPrefix(prefix: String): MutableList<Task.Condition> {
+        val enableCondition = mutableListOf<Task.Condition>()
+        task.enableConditions.filter { condition -> condition.statusCode.contains(prefix) }
             .forEach {
                 enableCondition.add(
-                    Triple(
-                        it.first.replace(prefix, ""),
-                        it.second,
-                        it.third
+                    Task.Condition(
+                        it.statusCode.replace(prefix, ""),
+                        it.symbol,
+                        it.statusValue
                     )
                 )
             }

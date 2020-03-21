@@ -7,4 +7,6 @@ interface IScenarioInteractor {
     fun update(scenario: Scenario)
 
     fun get(): Observable<Scenario>
+
+    fun value(): Scenario
 }

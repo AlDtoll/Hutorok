@@ -81,6 +81,7 @@ class WorkersScreen : Fragment() {
                 workerAdapter.task = it
                 if (isOrder) {
                     changeToolbarTitle(it.name)
+                    (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
                 changeExecuteButtonText(it.type)
             }
@@ -97,9 +98,12 @@ class WorkersScreen : Fragment() {
                 workerAdapter.generalDisableConditions = it
             }
         })
+
+        workersViewModel.executeTaskDataResponse().observe(viewLifecycleOwner, Observer { })
     }
 
     private fun initToolbar() {
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         (activity as AppCompatActivity).title = getString(R.string.workers_screen_toolbar_title)
     }
 

@@ -24,4 +24,5 @@ interface IWorkersViewModel {
 
     fun generalDisableStatus(): LiveData<List<Triple<String, Task.Symbol, Double>>>
 
+    fun executeTaskDataResponse(): LiveData<Unit>
 }

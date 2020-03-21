@@ -56,6 +56,8 @@ class QuestScreen : Fragment() {
             }
         })
 
+        questViewModel.executeTaskDataResponse().observe(viewLifecycleOwner, Observer { })
+
         initRecyclerView()
     }
 

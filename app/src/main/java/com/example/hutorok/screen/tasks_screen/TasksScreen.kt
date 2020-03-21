@@ -10,6 +10,9 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.hutorok.App
+import com.example.hutorok.App.Companion.ALREADY_LOADED
+import com.example.hutorok.MainActivity
 import com.example.hutorok.R
 import com.example.hutorok.domain.model.Task
 import com.example.hutorok.ext.addTextWatcher
@@ -36,7 +39,26 @@ class TasksScreen : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        loadAdventure()
+
         initUi()
+    }
+
+    private fun loadAdventure() {
+        val prefs = App.instance.getSharedPreferences(
+            MainActivity.APP_PREFERENCES,
+            AppCompatActivity.MODE_PRIVATE
+        )
+        prefs?.run {
+            this.getString(MainActivity.PATH, App.CURRENT_ADVENTURE)?.run {
+                App.CURRENT_ADVENTURE = this
+                if (!ALREADY_LOADED && App.CURRENT_ADVENTURE != App.ADVENTURE_DEFAULT) {
+                    tasksViewModel.loadAdventure()
+                    ALREADY_LOADED = true
+                }
+            }
+        }
     }
 
     private fun initUi() {
@@ -75,10 +97,13 @@ class TasksScreen : Fragment() {
             tasksViewModel.clickClearButton()
         }
 
+        tasksViewModel.endTurnDataResponse().observe(viewLifecycleOwner, Observer { })
+
         initRecyclerView()
     }
 
     private fun initToolbar() {
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         (activity as AppCompatActivity).title = getString(R.string.tasks_screen_toolbar_title)
     }
 

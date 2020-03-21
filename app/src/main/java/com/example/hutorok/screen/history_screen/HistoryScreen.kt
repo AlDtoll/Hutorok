@@ -108,6 +108,7 @@ class HistoryScreen : Fragment() {
     }
 
     private fun initToolbar() {
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         (activity as AppCompatActivity).title = getString(R.string.history_screen_toolbar_title)
     }
 

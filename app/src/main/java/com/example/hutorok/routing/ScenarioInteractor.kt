@@ -13,4 +13,6 @@ class ScenarioInteractor : IScenarioInteractor {
 
     override fun get(): Observable<Scenario> = value
 
+    override fun value(): Scenario = value.value ?: Scenario.SPEAK
+
 }

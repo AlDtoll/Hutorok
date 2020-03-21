@@ -2,7 +2,7 @@ package com.example.hutorok.domain.storage
 
 import io.reactivex.Observable
 
-interface INavigationBarVisibilityInteractor {
+interface INavigationElementsVisibilityInteractor {
 
     fun get(): Observable<Boolean>
 }

@@ -2,6 +2,7 @@ package com.example.hutorok
 
 import com.example.hutorok.domain.*
 import com.example.hutorok.domain.storage.*
+import com.example.hutorok.network.ApiProvider
 import com.example.hutorok.routing.*
 import com.example.hutorok.screen.builds_screen.BuildsViewModel
 import com.example.hutorok.screen.builds_screen.IBuildsViewModel
@@ -53,7 +54,8 @@ val appModule = module {
     single { OnBackPressedInteractor(get()) }
 
     single {
-        MockLoadDataInteractor(
+        LoadDataInteractor(
+            get(),
             get(),
             get(),
             get(),
@@ -74,6 +76,7 @@ val appModule = module {
             get(),
             get(),
             get(),
+            get(),
             get()
         ) as IExecuteTaskInteractor
     }
@@ -85,13 +88,15 @@ val appModule = module {
             get(),
             get(),
             get(),
+            get(),
             get()
         ) as IEndTurnInteractor
     }
 
-    single { StartViewModel(get(), get(), get(), get(), get(), get()) as IStartViewModel }
+    single { StartViewModel(get(), get(), get(), get()) as IStartViewModel }
     single {
         WorkersViewModel(
+            get(),
             get(),
             get(),
             get(),
@@ -103,24 +108,42 @@ val appModule = module {
         ) as IWorkersViewModel
     }
     single { WorkerInfoViewModel(get(), get()) as IWorkerInfoViewModel }
-    single { TasksViewModel(get(), get(), get(), get(), get()) as ITasksViewModel }
+    single { TasksViewModel(get(), get(), get(), get(), get(), get()) as ITasksViewModel }
     single { BuildsViewModel(get()) as IBuildsViewModel }
     single { HistoryViewModel(get()) as IHistoryViewModel }
-    single { QuestViewModel(get(), get(), get(), get(), get(), get()) as IQuestViewModel }
+    single {
+        QuestViewModel(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        ) as IQuestViewModel
+    }
     single { FinishViewModel(get(), get()) as IFinishViewModel }
 
     single { WorkersListInteractor(get()) as IWorkersListInteractor }
     single { WorkerInteractor() as IWorkerInteractor }
     single { TasksListInteractor() as ITasksListInteractor }
     single { TaskInteractor() as ITaskInteractor }
-    single { HutorStatusesListInteractor() as IHutorStatusesListInteractor }
+    single { BuildsListInteractor() as IBuildsListInteractor }
     single { MessageInteractor(get()) as IMessageInteractor }
     single { ImportantStatusNamesListInteractor() as IImportantStatusNamesListInteractor }
     single { EndTasksListInteractor() as IEndTasksListInteractor }
     single { HistoryInteractor() as IHistoryInteractor }
-    single { TurnNumberInteractor(get(), get(), get()) as ITurnNumberInteractor }
+    single { TurnNumberInteractor(get()) as ITurnNumberInteractor }
     single { InvisibleStatusNamesListInteractor(get()) as IInvisibleStatusNamesListInteractor }
-    single { QuestInteractor() as IQuestInteractor }
+    single { StartQuestInteractor() as IStartQuestInteractor }
+    single { AdventuresListInteractor() as IAdventuresListInteractor }
     single { GeneralDisableStatusListInteractor() as IGeneralDisableStatusListInteractor }
-    single { NavigationBarVisibilityInteractor(get()) as INavigationBarVisibilityInteractor }
+    single { QuestInteractor() as IQuestInteractor }
+
+    single { NavigationElementsVisibilityInteractor(get()) as INavigationElementsVisibilityInteractor }
+
+    single { ApiProvider() }
+    single { ApiProvider.get() }
 }

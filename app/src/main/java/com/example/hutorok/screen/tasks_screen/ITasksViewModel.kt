@@ -17,4 +17,7 @@ interface ITasksViewModel {
 
     fun clickClearButton()
 
+    fun endTurnDataResponse(): LiveData<Unit>
+
+    fun loadAdventure()
 }

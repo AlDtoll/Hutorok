@@ -1,49 +1,54 @@
 package com.example.hutorok.screen.start_screen
 
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
-import com.example.hutorok.domain.IEndTurnInteractor
-import com.example.hutorok.domain.storage.ITurnNumberInteractor
-import com.example.hutorok.routing.RouteToBuildsScreenInteractor
-import com.example.hutorok.routing.RouteToHistoryScreenInteractor
-import com.example.hutorok.routing.RouteToTasksScreenInteractor
-import com.example.hutorok.routing.RouteToWorkersScreenInteractor
+import com.example.hutorok.App
+import com.example.hutorok.MainActivity
+import com.example.hutorok.domain.ILoadDataInteractor
+import com.example.hutorok.domain.model.Adventure
+import com.example.hutorok.domain.storage.IAdventuresListInteractor
+import com.example.hutorok.network.ApiHutorok
+import com.example.hutorok.routing.RouteToQuestScreenInteractor
 import io.reactivex.BackpressureStrategy
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 class StartViewModel(
-    private val routeToWorkersScreenInteractor: RouteToWorkersScreenInteractor,
-    private val routeToBuildsScreenInteractor: RouteToBuildsScreenInteractor,
-    private val routeToTasksScreenInteractor: RouteToTasksScreenInteractor,
-    private val routeToHistoryScreenInteractor: RouteToHistoryScreenInteractor,
-    private val endTurnInteractor: IEndTurnInteractor,
-    private val turnNumberInteractor: ITurnNumberInteractor
+    private val adventuresListInteractor: IAdventuresListInteractor,
+    private val routeToQuestScreenInteractor: RouteToQuestScreenInteractor,
+    private val apiHutorok: ApiHutorok,
+    private val loadDataInteractor: ILoadDataInteractor
 ) : IStartViewModel {
 
-    override fun clickWorkersButton() {
-        routeToWorkersScreenInteractor.execute()
+    override fun clickAdventure(adventure: Adventure) {
+        App.CURRENT_ADVENTURE = adventure.code
+        val prefs = App.instance.getSharedPreferences(
+            MainActivity.APP_PREFERENCES,
+            AppCompatActivity.MODE_PRIVATE
+        )
+        prefs?.run {
+            this.edit().putString(MainActivity.PATH, App.CURRENT_ADVENTURE).apply()
+        }
+        routeToQuestScreenInteractor.execute()
+        loadDataInteractor.execute()
     }
 
-    override fun clickBuildsButton() {
-        routeToBuildsScreenInteractor.execute()
-    }
-
-    override fun clickTasksButton() {
-        routeToTasksScreenInteractor.execute()
-    }
-
-    override fun clickHistoryButton() {
-        routeToHistoryScreenInteractor.execute()
-    }
-
-    override fun clickEndTurnButton() {
-        endTurnInteractor.execute()
-    }
-
-    override fun turnNumberData(): LiveData<Int> =
+    override fun adventuresData(): LiveData<List<Adventure>> =
         LiveDataReactiveStreams.fromPublisher(
-            turnNumberInteractor.get()
+            adventuresListInteractor.get()
                 .toFlowable(BackpressureStrategy.LATEST)
         )
 
+    override fun loadAdventuresData(): LiveData<Unit> {
+        val observable = apiHutorok.adventures(App.CURRENT_ADVENTURE)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .map {
+                adventuresListInteractor.update(it)
+            }
+        return LiveDataReactiveStreams
+            .fromPublisher(observable.toFlowable(BackpressureStrategy.LATEST))
+    }
 
 }

@@ -1,11 +1,10 @@
 package com.example.hutorok.domain.storage
 
-import com.example.hutorok.domain.model.Quest
 import io.reactivex.Observable
 
 interface IQuestInteractor {
 
-    fun update(quest: Quest)
+    fun update(isQuest: Boolean)
 
-    fun get(): Observable<Quest>
+    fun get(): Observable<Boolean>
 }

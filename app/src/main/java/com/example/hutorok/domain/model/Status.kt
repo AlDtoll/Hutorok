@@ -3,8 +3,8 @@ package com.example.hutorok.domain.model
 import org.json.JSONObject
 
 class Status(
-    val code: String,
-    val name: String,
+    val code: String = "",
+    val name: String = "",
     var description: String = "",
     var value: Double = 0.0,
     val visible: Boolean = false,

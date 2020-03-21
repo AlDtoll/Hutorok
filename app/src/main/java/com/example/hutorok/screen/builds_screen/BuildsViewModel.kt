@@ -4,20 +4,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import com.example.hutorok.BuildConfig
 import com.example.hutorok.domain.model.Status
-import com.example.hutorok.domain.storage.IHutorStatusesListInteractor
+import com.example.hutorok.domain.storage.IBuildsListInteractor
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 
 class BuildsViewModel(
-    private val hutorStatusesListInteractor: IHutorStatusesListInteractor
+    private val buildsListInteractor: IBuildsListInteractor
 ) : IBuildsViewModel {
 
     private var search = PublishSubject.create<String>()
 
     override fun statusesData(): LiveData<List<Status>> {
-        val observable = hutorStatusesListInteractor.get().map {
+        val observable = buildsListInteractor.get().map {
             if (BuildConfig.DEBUG) {
                 it
             } else {

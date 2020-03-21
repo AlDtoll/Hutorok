@@ -13,4 +13,6 @@ interface IQuestViewModel {
     fun clickEndButton()
 
     fun previousSelectResultData(): LiveData<String>
+
+    fun executeTaskDataResponse(): LiveData<Unit>
 }

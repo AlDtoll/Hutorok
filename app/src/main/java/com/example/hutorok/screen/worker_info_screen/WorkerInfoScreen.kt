@@ -108,6 +108,7 @@ class WorkerInfoScreen : Fragment(), View.OnTouchListener {
     }
 
     private fun initToolbar() {
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         workerInfoViewModel.workerData().observe(this, Observer {
             it?.run {
                 (activity as AppCompatActivity).title =

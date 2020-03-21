@@ -6,9 +6,9 @@ import java.util.*
 import kotlin.random.Random
 
 class Worker(
-    val name: String,
+    val name: String = "",
     var nickname: String? = "",
-    var age: Age,
+    var age: Age = Age.ADULT,
     var statuses: MutableList<Status> = mutableListOf(),
     var isSelected: Boolean = false,
     var isInvisible: Boolean = false,

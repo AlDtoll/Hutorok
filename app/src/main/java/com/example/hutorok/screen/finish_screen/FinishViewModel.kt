@@ -6,12 +6,12 @@ import androidx.lifecycle.LiveDataReactiveStreams
 import com.example.hutorok.App
 import com.example.hutorok.MainActivity
 import com.example.hutorok.domain.model.Status
-import com.example.hutorok.domain.storage.IHutorStatusesListInteractor
+import com.example.hutorok.domain.storage.IBuildsListInteractor
 import com.example.hutorok.routing.OnBackPressedInteractor
 import io.reactivex.BackpressureStrategy
 
 class FinishViewModel(
-    private val hutorStatusesListInteractor: IHutorStatusesListInteractor,
+    private val buildsListInteractor: IBuildsListInteractor,
     private val onBackPressedInteractor: OnBackPressedInteractor
 ) : IFinishViewModel {
 
@@ -28,7 +28,7 @@ class FinishViewModel(
     }
 
     override fun finishData(): LiveData<Status> {
-        val observable = hutorStatusesListInteractor.get()
+        val observable = buildsListInteractor.get()
             .map {
                 it.find { status -> status.code == "DEFEAT" || status.code == "VICTORY" } ?: Status(
                     "DEFEAT",

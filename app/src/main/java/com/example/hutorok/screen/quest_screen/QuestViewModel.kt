@@ -6,11 +6,9 @@ import androidx.lifecycle.LiveDataReactiveStreams
 import com.example.hutorok.App
 import com.example.hutorok.MainActivity
 import com.example.hutorok.domain.IExecuteTaskInteractor
+import com.example.hutorok.domain.ILoadDataInteractor
 import com.example.hutorok.domain.model.*
-import com.example.hutorok.domain.storage.IHutorStatusesListInteractor
-import com.example.hutorok.domain.storage.IMessageInteractor
-import com.example.hutorok.domain.storage.IQuestInteractor
-import com.example.hutorok.domain.storage.ITaskInteractor
+import com.example.hutorok.domain.storage.*
 import com.example.hutorok.routing.RouteToTasksScreenInteractor
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
@@ -18,27 +16,36 @@ import io.reactivex.functions.Function3
 import io.reactivex.subjects.BehaviorSubject
 
 class QuestViewModel(
-    private val questInteractor: IQuestInteractor,
+    private val startQuestInteractor: IStartQuestInteractor,
     private val routeToTasksScreenInteractor: RouteToTasksScreenInteractor,
     private val taskInteractor: ITaskInteractor,
     private val executeTaskInteractor: IExecuteTaskInteractor,
-    private val hutorStatusesListInteractor: IHutorStatusesListInteractor,
-    private val messageInteractor: IMessageInteractor
+    private val buildsListInteractor: IBuildsListInteractor,
+    private val messageInteractor: IMessageInteractor,
+    private val questInteractor: IQuestInteractor,
+    private val loadDataInteractor: ILoadDataInteractor,
+    private val turnNumberInteractor: ITurnNumberInteractor
 ) : IQuestViewModel {
 
     private var sceneCode = BehaviorSubject.create<String>()
 
     override fun clickSelect(select: Select) {
         taskInteractor.update(select.task)
-        executeTaskInteractor.execute(true)
+        questInteractor.update(true)
+        executeTaskInteractor.execute()
         sceneCode.onNext(select.nextScene)
     }
+
+    override fun executeTaskDataResponse(): LiveData<Unit> =
+        LiveDataReactiveStreams.fromPublisher(
+            executeTaskInteractor.get().toFlowable(BackpressureStrategy.LATEST)
+        )
 
     override fun sceneData(): LiveData<Scene> {
         val observable = Observable.combineLatest(
             sceneCode.startWith(""),
-            questInteractor.get(),
-            hutorStatusesListInteractor.get(),
+            startQuestInteractor.get(),
+            buildsListInteractor.get(),
             Function3 { sceneCode: String, quest: Quest, statusesList: List<Status> ->
                 val scenes = quest.scenes
                 if (scenes.isEmpty()) {
@@ -95,6 +102,8 @@ class QuestViewModel(
                 this.edit().putBoolean(MainActivity.FIRST_RUN, false).apply()
             }
         }
+        turnNumberInteractor.increment()
+        loadDataInteractor.saveResult()
         routeToTasksScreenInteractor.execute()
     }
 

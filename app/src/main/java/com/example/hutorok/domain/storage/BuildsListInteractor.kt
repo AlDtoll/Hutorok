@@ -4,7 +4,7 @@ import com.example.hutorok.domain.model.Status
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
-class HutorStatusesListInteractor : IHutorStatusesListInteractor {
+class BuildsListInteractor : IBuildsListInteractor {
 
     private val list = BehaviorSubject.create<MutableList<Status>>()
 

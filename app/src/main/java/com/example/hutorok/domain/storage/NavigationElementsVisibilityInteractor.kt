@@ -4,13 +4,13 @@ import com.example.hutorok.NowScreen
 import com.example.hutorok.routing.IGetNowScreenInteractor
 import io.reactivex.Observable
 
-class NavigationBarVisibilityInteractor(
+class NavigationElementsVisibilityInteractor(
     private val nowScreenInteractor: IGetNowScreenInteractor
-) : INavigationBarVisibilityInteractor {
+) : INavigationElementsVisibilityInteractor {
 
     override fun get(): Observable<Boolean> {
         return nowScreenInteractor.execute().map {
-            it != NowScreen.QUEST_SCREEN && it != NowScreen.FINISH_SCREEN
+            it != NowScreen.QUEST_SCREEN && it != NowScreen.FINISH_SCREEN && it != NowScreen.START_SCREEN
         }
     }
 

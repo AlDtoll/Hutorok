@@ -21,7 +21,8 @@ class WorkersViewModel(
     private val executeTaskInteractor: IExecuteTaskInteractor,
     private val importantStatusNamesListInteractor: IImportantStatusNamesListInteractor,
     private val taskInteractor: ITaskInteractor,
-    private val generalDisableStatusListInteractor: IGeneralDisableStatusListInteractor
+    private val generalDisableStatusListInteractor: IGeneralDisableStatusListInteractor,
+    private val questInteractor: IQuestInteractor
 ) : IWorkersViewModel {
 
     override fun workersData(): LiveData<MutableList<Worker>> {
@@ -45,8 +46,14 @@ class WorkersViewModel(
     }
 
     override fun clickExecute() {
-        executeTaskInteractor.execute(false)
+        questInteractor.update(false)
+        executeTaskInteractor.execute()
     }
+
+    override fun executeTaskDataResponse(): LiveData<Unit> =
+        LiveDataReactiveStreams.fromPublisher(
+            executeTaskInteractor.get().toFlowable(BackpressureStrategy.LATEST)
+        )
 
     override fun importantStatusesData(): LiveData<List<String>> {
         return LiveDataReactiveStreams.fromPublisher(
@@ -56,7 +63,7 @@ class WorkersViewModel(
 
     override fun taskData(): LiveData<Task> =
         LiveDataReactiveStreams.fromPublisher(
-            taskInteractor.get().map { it }.toFlowable(BackpressureStrategy.LATEST)
+            taskInteractor.get().toFlowable(BackpressureStrategy.LATEST)
         )
 
     override fun isExecuteTaskButtonEnable(): LiveData<Boolean> {

@@ -1,16 +1,11 @@
 package com.example.hutorok
 
-import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.example.hutorok.domain.model.Quest
-import com.example.hutorok.domain.model.Status
-import com.example.hutorok.domain.model.Task
-import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.ext.replaceFragment
 import com.example.hutorok.screen.builds_screen.BuildsScreen
 import com.example.hutorok.screen.finish_screen.FinishScreen
@@ -21,9 +16,7 @@ import com.example.hutorok.screen.tasks_screen.TasksScreen
 import com.example.hutorok.screen.worker_info_screen.WorkerInfoScreen
 import com.example.hutorok.screen.workers_screen.WorkersScreen
 import kotlinx.android.synthetic.main.activity_main.*
-import org.json.JSONObject
 import org.koin.android.ext.android.inject
-import java.io.File
 
 
 class MainActivity : AppCompatActivity() {
@@ -31,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val FIRST_RUN = "first_run"
         const val APP_PREFERENCES = "mysettings"
+        const val PATH = "path"
     }
 
     private val mainViewModel: IMainViewModel by inject()
@@ -45,10 +39,7 @@ class MainActivity : AppCompatActivity() {
                 NowScreen.BUILDS_SCREEN -> showBuildsScreen()
                 NowScreen.TASKS_SCREEN -> showTasksScreen()
                 NowScreen.WORKERS_SCREEN -> showWorkersScreen()
-                NowScreen.CLOSE_SCREEN -> {
-                    mainViewModel.onClose()
-                    finish()
-                }
+                NowScreen.CLOSE_SCREEN -> closeAll()
                 NowScreen.WORKER_INFO_SCREEN -> showWorkerInfoScreen()
                 NowScreen.HISTORY_SCREEN -> showHistoryScreen()
                 NowScreen.QUEST_SCREEN -> showQuestScreen()
@@ -56,7 +47,14 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        loadFromResources()
+        mainViewModel.loadDataResponse().observe(this, Observer { })
+
+        val prefs = App.instance.getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE)
+        prefs?.run {
+            if (this.getBoolean(FIRST_RUN, true)) {
+                mainViewModel.showAdventures()
+            }
+        }
 
         mainViewModel.messageData().observe(this, Observer {
             it?.run {
@@ -74,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         //todo можно ли так оставить?
-        mainViewModel.getNavigationBarVisibility().observe(this, Observer {
+        mainViewModel.getNavigationElementsVisibility().observe(this, Observer {
             turnNumber.visibility =
                 if (it) {
                     View.VISIBLE
@@ -82,19 +80,10 @@ class MainActivity : AppCompatActivity() {
                     View.GONE
                 }
         })
-
-        val prefs = App.instance.getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE)
-        prefs?.run {
-            if (this.getBoolean(FIRST_RUN, true)) {
-                mainViewModel.startQuest()
-            }
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            mainViewModel.onBackPressed()
-        }
+        mainViewModel.clickAction(item)
         return super.onOptionsItemSelected(item)
     }
 
@@ -109,7 +98,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        mainViewModel.getNavigationBarVisibility().observe(this, Observer {
+        mainViewModel.getNavigationElementsVisibility().observe(this, Observer {
             bottom_navigation.visibility =
                 if (it) {
                     View.VISIBLE
@@ -151,96 +140,9 @@ class MainActivity : AppCompatActivity() {
         replaceFragment(FinishScreen.newInstance())
     }
 
-    private fun loadFromResources() {
-        val isWorkersFilePresent = isFilePresent(this, "currentworkers.json")
-        val workersText = if (isWorkersFilePresent) {
-            read("currentworkers.json")
-        } else {
-            resources.openRawResource(R.raw.mortaworkers)
-                .bufferedReader().use { it.readText() }
-        }
-        val workers = mutableListOf<Worker>()
-        val workersObject = JSONObject(workersText)
-        val workersArray = workersObject.getJSONArray("workers")
-        for (i in 0 until workersArray.length()) {
-            workers.add(Worker(workersArray.getJSONObject(i)))
-        }
-
-        val tasksText = resources.openRawResource(R.raw.mortatasks)
-            .bufferedReader().use { it.readText() }
-        val tasks = mutableListOf<Task>()
-        val tasksObject = JSONObject(tasksText)
-        val tasksArray = tasksObject.getJSONArray("tasks")
-        for (i in 0 until tasksArray.length()) {
-            tasks.add(Task(tasksArray.getJSONObject(i)))
-        }
-
-        val isHutorFilePresent = isFilePresent(this, "currenthutorok.json")
-
-        val hutorokText = if (isHutorFilePresent) {
-            read("currenthutorok.json")
-        } else {
-            resources.openRawResource(R.raw.mortahutorok)
-                .bufferedReader().use { it.readText() }
-        }
-        val hutorokStatuses = mutableListOf<Status>()
-        val hutorokStatusObject = JSONObject(hutorokText)
-        val statusArray = hutorokStatusObject.getJSONArray("statuses")
-        for (i in 0 until statusArray.length()) {
-            hutorokStatuses.add(Status(statusArray.getJSONObject(i)))
-        }
-
-        val endTaskText = resources.openRawResource(R.raw.mortaendtasks)
-            .bufferedReader().use { it.readText() }
-        val endTasks = mutableListOf<Task>()
-        val endTasksObject = JSONObject(endTaskText)
-        val endTasksArray = endTasksObject.getJSONArray("tasks")
-        for (i in 0 until endTasksArray.length()) {
-            endTasks.add(Task(endTasksArray.getJSONObject(i)))
-        }
-
-        val isHistoryFilePresent = isFilePresent(this, "history.json")
-        val historyText = if (isHistoryFilePresent) {
-            read("history.json")
-        } else {
-            resources.openRawResource(R.raw.start)
-                .bufferedReader().use { it.readText() }
-        }
-        val events = mutableListOf<String>()
-        val historyObject = JSONObject(
-            if (historyText.isEmpty()) {
-                resources.openRawResource(R.raw.start)
-                    .bufferedReader().use { it.readText() }
-            } else {
-                historyText
-            })
-        val eventsArray = historyObject.getJSONArray("events")
-        val turn = historyObject.getInt("turn")
-        for (i in 0 until eventsArray.length()) {
-            events.add(eventsArray.getString(i))
-        }
-
-        val startQuestText = resources.openRawResource(R.raw.startquest)
-            .bufferedReader().use { it.readText() }
-        val questObject = JSONObject(startQuestText)
-        val startQuest = Quest(questObject)
-
-        mainViewModel.loadData(workers, tasks, hutorokStatuses, endTasks, events, turn, startQuest)
-    }
-
-    private fun isFilePresent(context: Context, fileName: String): Boolean {
-        val path = context.filesDir.absolutePath + "/" + fileName
-        val file = File(path)
-        return file.exists()
-    }
-
-    private fun read(fileName: String): String {
-        var string = ""
-        val path = App.instance.filesDir.absolutePath + "/" + fileName
-        File(path).bufferedReader().readLines().forEach {
-            string += it
-        }
-        return string
+    private fun closeAll() {
+        mainViewModel.onClose()
+        finish()
     }
 
 }

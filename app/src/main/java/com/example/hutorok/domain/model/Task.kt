@@ -1,56 +1,39 @@
 package com.example.hutorok.domain.model
 
-import org.json.JSONArray
-import org.json.JSONObject
-
 class Task(
-    val code: String,
-    val name: String,
-    val description: String,
-    val results: List<TaskResult>,
-    val permissiveConditions: List<Triple<String, Symbol, Double>> = emptyList(),
+    val code: String = "",
+    val name: String = "",
+    val description: String = "",
+    val results: List<TaskResult> = emptyList(),
+    val permissiveConditions: List<Condition> = emptyList(),
     val type: Type = Type.WORK,
-    val enableConditions: List<Triple<String, Symbol, Double>> = emptyList()
+    val enableConditions: List<Condition> = emptyList()
 ) {
-
-    constructor(jsonObject: JSONObject) : this(
-        code = jsonObject.optString("code"),
-        name = jsonObject.optString("name"),
-        description = jsonObject.optString("description"),
-        results = parseTaskResults(jsonObject.optJSONArray("results")),
-        permissiveConditions = parseConditions(jsonObject.optJSONArray("permissiveConditions")),
-        type = if (jsonObject.optString("type").isNotEmpty()) {
-            Type.valueOf(jsonObject.optString("type"))
-        } else {
-            Type.WORK
-        },
-        enableConditions = parseConditions(jsonObject.optJSONArray("enableConditions"))
-    )
 
     companion object {
         fun allConditionsIsComplete(
-            conditions: List<Triple<String, Symbol, Double>>,
+            conditions: List<Condition>,
             statusesList: List<Status>
         ): Boolean {
             if (conditions.isEmpty()) {
                 return true
             }
             conditions.forEach { condition ->
-                val find = statusesList.find { it.isCoincide(condition.first) }
+                val find = statusesList.find { it.isCoincide(condition.statusCode) }
                 val findValue = find?.value ?: 0.0
-                when (condition.second) {
+                when (condition.symbol) {
                     Symbol.MORE -> {
-                        if (findValue <= condition.third) {
+                        if (findValue <= condition.statusValue) {
                             return false
                         }
                     }
                     Symbol.LESS -> {
-                        if (findValue >= condition.third) {
+                        if (findValue >= condition.statusValue) {
                             return false
                         }
                     }
                     Symbol.EQUALS -> {
-                        if (findValue != condition.third) {
+                        if (findValue != condition.statusValue) {
                             return false
                         }
                     }
@@ -90,38 +73,9 @@ class Task(
             return false
         }
 
-        fun parseTaskResults(jsonArray: JSONArray?): MutableList<TaskResult> {
-            jsonArray?.run {
-                val taskResults = mutableListOf<TaskResult>()
-                for (i in 0 until jsonArray.length()) {
-                    taskResults.add(TaskResult(jsonArray.getJSONObject(i)))
-                }
-                return taskResults
-            }
-            return mutableListOf()
-        }
-
-        fun parseConditions(jsonArray: JSONArray?): List<Triple<String, Task.Symbol, Double>> {
-            jsonArray?.run {
-                val conditions = mutableListOf<Triple<String, Task.Symbol, Double>>()
-                for (i in 0 until jsonArray.length()) {
-                    val jsonObject = jsonArray.getJSONObject(i)
-                    conditions.add(
-                        Triple(
-                            jsonObject.optString("statusCode"),
-                            Symbol.valueOf(jsonObject.optString("symbol")),
-                            jsonObject.optDouble("statusValue")
-                        )
-                    )
-                }
-                return conditions
-            }
-            return mutableListOf()
-        }
-
         fun selectAll(
             workers: List<Worker>,
-            enableConditions: List<Triple<String, Symbol, Double>>
+            enableConditions: List<Condition>
         ) {
             workers.forEach { worker ->
                 if (!worker.isInvisible && allConditionsIsComplete(
@@ -154,5 +108,17 @@ class Task(
         MORE,
         LESS,
         EQUALS
+    }
+
+    class Condition(
+        val statusCode: String = "",
+        val symbol: Symbol = Symbol.MORE,
+        val statusValue: Double = 0.0
+    ) {
+        constructor(taskResultCondition: TaskResult.TaskResultCondition) : this(
+            statusCode = taskResultCondition.statusCode,
+            symbol = taskResultCondition.symbol,
+            statusValue = taskResultCondition.statusValue
+        )
     }
 }

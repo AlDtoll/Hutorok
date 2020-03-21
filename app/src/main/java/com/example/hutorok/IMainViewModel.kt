@@ -2,10 +2,6 @@ package com.example.hutorok
 
 import android.view.MenuItem
 import androidx.lifecycle.LiveData
-import com.example.hutorok.domain.model.Quest
-import com.example.hutorok.domain.model.Status
-import com.example.hutorok.domain.model.Task
-import com.example.hutorok.domain.model.Worker
 
 interface IMainViewModel {
 
@@ -13,26 +9,18 @@ interface IMainViewModel {
 
     fun onBackPressed()
 
-    fun loadData(
-        workers: MutableList<Worker>,
-        tasks: MutableList<Task>,
-        hutorokStatuses: MutableList<Status>,
-        endTasks: MutableList<Task>,
-        events: MutableList<String>,
-        turnNumber: Int,
-        startQuest: Quest
-    )
-
     fun messageData(): LiveData<String>
 
-    fun startQuest()
+    fun showAdventures()
 
     fun clickAction(menuItem: MenuItem)
 
     fun turnNumberData(): LiveData<Int>
 
-    fun getNavigationBarVisibility(): LiveData<Boolean>
+    fun getNavigationElementsVisibility(): LiveData<Boolean>
 
     fun onClose()
+
+    fun loadDataResponse(): LiveData<Unit>
 
 }

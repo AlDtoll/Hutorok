@@ -8,7 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.hutorok.R
-import com.example.hutorok.ext.onClick
+import com.example.hutorok.domain.model.Adventure
+import com.example.hutorok.screen.AdventureAdapter
 import kotlinx.android.synthetic.main.fragment_start.*
 import org.koin.android.ext.android.inject
 
@@ -34,37 +35,38 @@ class StartScreen : Fragment() {
     }
 
     private fun initUi() {
+        startViewModel.loadAdventuresData().observe(viewLifecycleOwner, Observer { })
+
         initToolbar()
 
-        startViewModel.turnNumberData().observe(this, Observer {
-            it?.run {
-                (activity as AppCompatActivity).title = "Ход: $it"
-            }
-        })
-
-        workersButton.onClick {
-            startViewModel.clickWorkersButton()
-        }
-
-        buildsButton.onClick {
-            startViewModel.clickBuildsButton()
-        }
-
-        tasksButton.onClick {
-            startViewModel.clickTasksButton()
-        }
-
-        historyButton.onClick {
-            startViewModel.clickHistoryButton()
-        }
-
-        endTurnButton.onClick {
-            startViewModel.clickEndTurnButton()
-        }
+        initRecyclerView()
     }
 
     private fun initToolbar() {
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         (activity as AppCompatActivity).title = ""
+    }
+
+    private lateinit var adventureAdapter: AdventureAdapter
+
+    private val callback = object : AdventureAdapter.Callback {
+
+        override fun clickAdventure(adventure: Adventure) {
+            startViewModel.clickAdventure(adventure)
+        }
+    }
+
+    private fun initRecyclerView() {
+        startViewModel.adventuresData().observe(this, Observer {
+            it?.run {
+                showData(it)
+            }
+        })
+        adventureAdapter = AdventureAdapter(callback)
+        questsList.adapter = adventureAdapter
+    }
+
+    private fun showData(quests: List<Adventure>) {
+        adventureAdapter.items = ArrayList(quests)
     }
 }

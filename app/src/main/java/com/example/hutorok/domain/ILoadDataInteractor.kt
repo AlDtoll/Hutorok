@@ -1,19 +1,12 @@
 package com.example.hutorok.domain
 
-import com.example.hutorok.domain.model.Quest
-import com.example.hutorok.domain.model.Status
-import com.example.hutorok.domain.model.Task
-import com.example.hutorok.domain.model.Worker
+import io.reactivex.Observable
 
 interface ILoadDataInteractor {
 
-    fun update(
-        workers: MutableList<Worker>,
-        tasks: MutableList<Task>,
-        hutorokStatuses: MutableList<Status>,
-        endTasks: MutableList<Task>,
-        events: MutableList<String>,
-        turnNumber: Int,
-        startQuest: Quest
-    )
+    fun get(): Observable<Unit>
+
+    fun execute()
+
+    fun saveResult()
 }
