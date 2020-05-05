@@ -1,7 +1,9 @@
 package com.example.hutorok.domain
 
 import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
 import com.example.hutorok.App
+import com.example.hutorok.MainActivity
 import com.example.hutorok.R
 import com.example.hutorok.domain.model.Quest
 import com.example.hutorok.domain.model.Status
@@ -9,6 +11,7 @@ import com.example.hutorok.domain.model.Task
 import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.domain.storage.*
 import com.example.hutorok.network.ApiHutorok
+import com.example.hutorok.routing.RouteToStartScreenInteractor
 import com.google.gson.Gson
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -29,6 +32,7 @@ class LoadDataInteractor(
     private val historyInteractor: IHistoryInteractor,
     private val startQuestInteractor: IStartQuestInteractor,
     private val generalDisableStatusListInteractor: IGeneralDisableStatusListInteractor,
+    private val routeToStartScreenInteractor: RouteToStartScreenInteractor,
     private val apiHutorok: ApiHutorok
 ) : ILoadDataInteractor {
 
@@ -43,6 +47,20 @@ class LoadDataInteractor(
 
     override fun execute() {
         event.onNext(Unit)
+    }
+
+    override fun restart() {
+        deleteFile(BUILDS)
+        deleteFile(WORKERS)
+        deleteFile(HISTORY)
+        val prefs = App.instance.getSharedPreferences(
+            MainActivity.APP_PREFERENCES,
+            AppCompatActivity.MODE_PRIVATE
+        )
+        prefs?.run {
+            this.edit().putBoolean(MainActivity.FIRST_RUN, true).apply()
+        }
+        routeToStartScreenInteractor.execute()
     }
 
     private fun updateStaticData(
@@ -326,6 +344,13 @@ class LoadDataInteractor(
             e.printStackTrace()
         } catch (e: IOException) {
             e.printStackTrace()
+        }
+    }
+
+    private fun deleteFile(fileName: String) {
+        val myFile = File(App.instance.filesDir.absolutePath + "/" + fileName)
+        if (myFile.exists()) {
+            myFile.delete()
         }
     }
 

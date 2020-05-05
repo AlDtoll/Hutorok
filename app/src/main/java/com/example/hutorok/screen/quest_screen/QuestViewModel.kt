@@ -104,6 +104,7 @@ class QuestViewModel(
         }
         turnNumberInteractor.increment()
         loadDataInteractor.saveResult()
+        sceneCode.onNext("")
         routeToTasksScreenInteractor.execute()
     }
 

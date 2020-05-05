@@ -51,6 +51,7 @@ class MainViewModel(
             R.id.action_builds -> routeToBuildsScreenInteractor.execute()
             R.id.action_tasks -> routeToTasksScreenInteractor.execute()
             R.id.action_history -> routeToHistoryScreenInteractor.execute()
+            R.id.action_restart -> loadDataInteractor.restart()
             android.R.id.home -> onBackPressed()
         }
     }

@@ -16,4 +16,6 @@
     <string name="execute_task_button_text_for_two_worker">Пусть один работник сделает с другим</string>
     <string name="end_quest">Завершить квест</string>
     <string name="end_game">Завершить игру</string>
+
+    <string name="menu_action_restart">Перезапустить игру</string>
 </resources>

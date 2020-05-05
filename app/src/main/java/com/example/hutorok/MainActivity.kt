@@ -1,6 +1,7 @@
 package com.example.hutorok
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -89,6 +90,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         mainViewModel.onBackPressed()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.game_menu, menu)
+        return true
     }
 
     private fun createBottomNavigationMenu() {

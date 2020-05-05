@@ -9,4 +9,6 @@ interface ILoadDataInteractor {
     fun execute()
 
     fun saveResult()
+
+    fun restart()
 }
