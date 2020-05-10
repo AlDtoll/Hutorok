@@ -62,11 +62,14 @@ class WorkersScreen : Fragment() {
                     workerAdapter.isOrder = false
                     executeTaskButton.visibility = View.GONE
                 }
+                workersViewModel.checkExecuteButton()
             }
         })
 
         executeTaskButton.onClick {
             workersViewModel.clickExecute()
+            //todo crunch на самом деле нужно определять доступность кнопки, не через callback
+//            activity?.onBackPressed()
             workerAdapter.notifyDataSetChanged()
         }
 
@@ -99,6 +102,10 @@ class WorkersScreen : Fragment() {
             }
         })
 
+        workersViewModel.isExecuteButtonHintVisible().observe(viewLifecycleOwner, Observer {
+            workersScreenExecuteButtonHint.visibility = if (it) View.VISIBLE else View.GONE
+        })
+
         workersViewModel.executeTaskDataResponse().observe(viewLifecycleOwner, Observer { })
     }
 
@@ -119,13 +126,8 @@ class WorkersScreen : Fragment() {
             workersViewModel.clickWorker(worker)
         }
 
-        override fun isExecuteTaskButtonEnable(isEnable: Boolean) {
-            executeTaskButton.isEnabled = isEnable
-        }
-
-        override fun selectWorker(worker: Worker) {
-            worker.isSelected = !worker.isSelected
-            workersViewModel.clickCheckbox(worker)
+        override fun selectWorker() {
+            workersViewModel.checkExecuteButton()
         }
     }
 

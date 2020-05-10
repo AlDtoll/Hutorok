@@ -20,9 +20,11 @@ interface IWorkersViewModel {
 
     fun isExecuteTaskButtonEnable(): LiveData<Boolean>
 
-    fun clickCheckbox(worker: Worker)
+    fun checkExecuteButton()
 
     fun generalDisableStatus(): LiveData<List<Triple<String, Task.Symbol, Double>>>
 
     fun executeTaskDataResponse(): LiveData<Unit>
+
+    fun isExecuteButtonHintVisible(): LiveData<Boolean>
 }

@@ -17,6 +17,8 @@ class WorkerAdapter(
 
     companion object {
         var MASTER_ALREADY_SELECTED = false
+        const val MASTER_PREFIX = "MASTER_"
+        const val SLAVE_PREFIX = "SLAVE_"
     }
 
     var items = ArrayList<Worker>()
@@ -84,7 +86,7 @@ class WorkerAdapter(
                 }
                 if (task.type == Task.Type.MASTER_SLAVE_JOB &&
                     !MASTER_ALREADY_SELECTED &&
-                    Task.allConditionsIsComplete(filterByPrefix("MASTER_"), item.statuses)
+                    Task.allConditionsIsComplete(filterByPrefix(MASTER_PREFIX), item.statuses)
                 ) {
                     item.isMaster = isChecked
                     MASTER_ALREADY_SELECTED = isChecked
@@ -94,7 +96,7 @@ class WorkerAdapter(
                         this.setCardBackgroundColor(resources.getColor(R.color.white))
                     }
                 }
-                callback.isExecuteTaskButtonEnable(isExecuteTaskButtonEnable())
+                callback.selectWorker()
             }
             var importantStatusesText = ""
             item.statuses.forEach { workerStatuses ->
@@ -150,8 +152,8 @@ class WorkerAdapter(
 
     private fun isTaskEnableConditionsInComplete(worker: Worker): Boolean {
         return if (task.type == Task.Type.MASTER_SLAVE_JOB) {
-            val masterEnableConditions = filterByPrefix("MASTER_")
-            val slaveEnableConditions = filterByPrefix("SLAVE_")
+            val masterEnableConditions = filterByPrefix(MASTER_PREFIX)
+            val slaveEnableConditions = filterByPrefix(SLAVE_PREFIX)
 
             return if (items.none { worker -> worker.isSelected }) {
                 Task.allConditionsIsComplete(masterEnableConditions, worker.statuses)
@@ -181,11 +183,10 @@ class WorkerAdapter(
     class WorkerHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     interface Callback {
+
         fun clickWorker(worker: Worker)
 
-        fun isExecuteTaskButtonEnable(isEnable: Boolean)
-
-        fun selectWorker(worker: Worker)
+        fun selectWorker()
     }
 }
 

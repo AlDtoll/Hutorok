@@ -3,6 +3,7 @@ package com.example.hutorok.screen.workers_screen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import com.example.hutorok.domain.IExecuteTaskInteractor
+import com.example.hutorok.domain.model.Status
 import com.example.hutorok.domain.model.Task
 import com.example.hutorok.domain.model.Worker
 import com.example.hutorok.domain.storage.*
@@ -10,8 +11,9 @@ import com.example.hutorok.routing.IScenarioInteractor
 import com.example.hutorok.routing.RouteToWorkerInfoScreenInteractor
 import com.example.hutorok.routing.Scenario
 import io.reactivex.BackpressureStrategy
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function3
+import io.reactivex.functions.Function4
+import io.reactivex.subjects.PublishSubject
 
 class WorkersViewModel(
     private val workersListInteractor: IWorkersListInteractor,
@@ -22,8 +24,11 @@ class WorkersViewModel(
     private val importantStatusNamesListInteractor: IImportantStatusNamesListInteractor,
     private val taskInteractor: ITaskInteractor,
     private val generalDisableStatusListInteractor: IGeneralDisableStatusListInteractor,
-    private val questInteractor: IQuestInteractor
+    private val questInteractor: IQuestInteractor,
+    private val buildsListInteractor: IBuildsListInteractor
 ) : IWorkersViewModel {
+
+    private val event = PublishSubject.create<Unit>()
 
     override fun workersData(): LiveData<MutableList<Worker>> {
         val visibleWorkers = workersListInteractor.get()
@@ -48,6 +53,7 @@ class WorkersViewModel(
     override fun clickExecute() {
         questInteractor.update(false)
         executeTaskInteractor.execute()
+        event.onNext(Unit)
     }
 
     override fun executeTaskDataResponse(): LiveData<Unit> =
@@ -67,38 +73,62 @@ class WorkersViewModel(
         )
 
     override fun isExecuteTaskButtonEnable(): LiveData<Boolean> {
-        val observable = Observable.combineLatest(
+        val observable = event.withLatestFrom(
             taskInteractor.get(),
             workersListInteractor.get(),
-            BiFunction { task: Task, workers: List<Worker> ->
-                val filteredWorkers = workers.filter { worker -> worker.isSelected }
-                if (task.type == Task.Type.BUILD) {
-                    return@BiFunction true
-                }
-                if (task.type == Task.Type.MASTER_SLAVE_JOB) {
-                    return@BiFunction filteredWorkers.size == 2
-                }
-                if (task.type == Task.Type.PERSON || task.type == Task.Type.PERSONAL_JOB) {
-                    return@BiFunction filteredWorkers.size == 1
+            buildsListInteractor.get(),
+            Function4 { _: Unit, task: Task, workers: List<Worker>, builds: List<Status> ->
+                if (Task.allConditionsIsComplete(task.permissiveConditions, builds)) {
+                    return@Function4 isSomeWorkerSelected(workers, task)
                 } else {
-                    return@BiFunction workers.any { worker -> worker.isSelected }
+                    return@Function4 false
                 }
-
             }
         )
         return LiveDataReactiveStreams.fromPublisher(
-            observable.toFlowable(BackpressureStrategy.LATEST)
+            observable.toFlowable(BackpressureStrategy.BUFFER)
         )
     }
 
-    override fun clickCheckbox(worker: Worker) {
-        workersListInteractor.refresh()
+    override fun checkExecuteButton() {
+        event.onNext(Unit)
     }
 
     override fun generalDisableStatus(): LiveData<List<Triple<String, Task.Symbol, Double>>> {
         return LiveDataReactiveStreams.fromPublisher(
             generalDisableStatusListInteractor.get().toFlowable(BackpressureStrategy.LATEST)
         )
+    }
+
+    override fun isExecuteButtonHintVisible(): LiveData<Boolean> {
+        val observable = event.withLatestFrom(
+            taskInteractor.get(),
+            buildsListInteractor.get(),
+            Function3 { _: Unit, task: Task, builds: List<Status> ->
+                return@Function3 !Task.allConditionsIsComplete(task.permissiveConditions, builds)
+            }
+        )
+        return LiveDataReactiveStreams.fromPublisher(
+            observable.toFlowable(BackpressureStrategy.BUFFER)
+        )
+    }
+
+    private fun isSomeWorkerSelected(
+        workers: List<Worker>,
+        task: Task
+    ): Boolean {
+        val filteredWorkers = workers.filter { worker -> worker.isSelected }
+        if (task.type == Task.Type.BUILD) {
+            return true
+        }
+        if (task.type == Task.Type.MASTER_SLAVE_JOB) {
+            return filteredWorkers.size == 2
+        }
+        return if (task.type == Task.Type.PERSON || task.type == Task.Type.PERSONAL_JOB) {
+            filteredWorkers.size == 1
+        } else {
+            workers.any { worker -> worker.isSelected }
+        }
     }
 
 }
