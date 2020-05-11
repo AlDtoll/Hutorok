@@ -17,7 +17,8 @@ class ExecuteTaskInteractor(
     private val messageInteractor: IMessageInteractor,
     private val invisibleStatusNamesListInteractor: IInvisibleStatusNamesListInteractor,
     private val routeToFinishScreenInteractor: RouteToFinishScreenInteractor,
-    private val questInteractor: IQuestInteractor
+    private val questInteractor: IQuestInteractor,
+    private val afterWorkTaskInteractor: IAfterWorkTaskInteractor
 ) : IExecuteTaskInteractor {
 
     companion object {
@@ -32,14 +33,13 @@ class ExecuteTaskInteractor(
 
     override fun get(): Observable<Unit> {
         val observable = event.withLatestFrom(
-            questInteractor.get(),
             workersListInteractor.get(),
             taskInteractor.get(),
             buildsListInteractor.get(),
-            Function5 { _: Unit, isQuest: Boolean, workersList: MutableList<Worker>, task: Task, hutorStatusesList: MutableList<Status> ->
-                val selectedWorkers = workersList.filter { it.isSelected }
-
+            afterWorkTaskInteractor.get(),
+            Function5 { _: Unit, workersList: MutableList<Worker>, task: Task, hutorStatusesList: MutableList<Status>, afterWorkTask: Task ->
                 var message = ""
+                val isQuest = questInteractor.value()
                 task.results.forEach { taskResult ->
                     message += taskResult.makeAction(hutorStatusesList, workersList)
                 }
@@ -48,9 +48,15 @@ class ExecuteTaskInteractor(
                     routeToFinishScreenInteractor.execute()
                 }
 
+                //todo selectedWorkers or workersList?
+                val selectedWorkers = workersList.filter { it.isSelected }
                 if (!isQuest && task.type != Task.Type.PERSON) {
-                    message += makeFineForWorkers(selectedWorkers)
-                    message += markWorkersAsWorked(selectedWorkers)
+                    afterWorkTask.results.forEach { taskResult ->
+                        message += taskResult.makeAction(
+                            hutorStatusesList,
+                            selectedWorkers as MutableList<Worker>
+                        )
+                    }
                 }
 
                 if (!isQuest) {
@@ -64,22 +70,6 @@ class ExecuteTaskInteractor(
             }
         )
         return observable
-    }
-
-    private fun makeFineForWorkers(workers: List<Worker>): String {
-        var message = ""
-        workers.forEach { worker ->
-            message += worker.fine()
-        }
-        return message
-    }
-
-    private fun markWorkersAsWorked(workers: List<Worker>): String {
-        var message = ""
-        workers.forEach { worker ->
-            message += worker.markAsWorked()
-        }
-        return message
     }
 
 }

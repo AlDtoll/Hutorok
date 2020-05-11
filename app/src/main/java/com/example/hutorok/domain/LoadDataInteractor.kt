@@ -33,6 +33,7 @@ class LoadDataInteractor(
     private val startQuestInteractor: IStartQuestInteractor,
     private val generalDisableStatusListInteractor: IGeneralDisableStatusListInteractor,
     private val routeToStartScreenInteractor: RouteToStartScreenInteractor,
+    private val afterWorkTaskInteractor: IAfterWorkTaskInteractor,
     private val apiHutorok: ApiHutorok
 ) : ILoadDataInteractor {
 
@@ -145,6 +146,12 @@ class LoadDataInteractor(
                     loadEndTasks(it)
                 }
         }
+        val afterWorkTaskObservable = event.switchMap {
+            afterWorkTaskData()
+                .map {
+                    loadAfterWorkTask(it)
+                }
+        }
         val observableStatic = Observable.merge(
             startQuestObservable,
             buildsObservable,
@@ -152,8 +159,10 @@ class LoadDataInteractor(
         )
         val observableTask = Observable.merge(
             tasksObservable,
-            endTasksObservable
+            endTasksObservable,
+            afterWorkTaskObservable
         )
+
         return Observable.merge(
             observableTask,
             observableStatic
@@ -235,6 +244,16 @@ class LoadDataInteractor(
 
     private fun loadEndTasks(tasks: List<Task>) {
         endTasksListInteractor.update(tasks)
+    }
+
+    private fun afterWorkTaskData(): Observable<Task> {
+        return apiHutorok.afterWorkTask(App.CURRENT_ADVENTURE)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    private fun loadAfterWorkTask(task: Task) {
+        afterWorkTaskInteractor.update(task)
     }
 
     private fun loadHistory() {

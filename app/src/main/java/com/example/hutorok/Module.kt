@@ -66,12 +66,14 @@ val appModule = module {
             get(),
             get(),
             get(),
+            get(),
             get()
         ) as ILoadDataInteractor
     }
     single { ScenarioInteractor() as IScenarioInteractor }
     single {
         ExecuteTaskInteractor(
+            get(),
             get(),
             get(),
             get(),
@@ -143,6 +145,7 @@ val appModule = module {
     single { AdventuresListInteractor() as IAdventuresListInteractor }
     single { GeneralDisableStatusListInteractor() as IGeneralDisableStatusListInteractor }
     single { QuestInteractor() as IQuestInteractor }
+    single { AfterWorkTaskInteractor() as IAfterWorkTaskInteractor }
 
     single { NavigationElementsVisibilityInteractor(get()) as INavigationElementsVisibilityInteractor }
 

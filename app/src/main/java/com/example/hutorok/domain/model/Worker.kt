@@ -2,8 +2,6 @@ package com.example.hutorok.domain.model
 
 import org.json.JSONArray
 import org.json.JSONObject
-import java.util.*
-import kotlin.random.Random
 
 class Worker(
     val name: String = "",
@@ -40,52 +38,6 @@ class Worker(
             }
             return mutableListOf()
         }
-    }
-
-    fun markAsWorked(): String {
-        val workedStatus = this.statuses.find { status -> status.code == "worked" }
-        if (workedStatus == null) {
-            val workerStatuses = this.statuses
-            workerStatuses.add(
-                Status(
-                    "worked",
-                    "Работал",
-                    "Больше ничего не может сделать",
-                    1.0,
-                    true
-                )
-            )
-            this.statuses = workerStatuses
-        } else {
-            workedStatus.value = workedStatus.value + 1
-        }
-        return "$name поработал\n"
-    }
-
-    fun fine(): String {
-        val findStatus = this.statuses.find { status -> status.code == "worked" }
-        if (findStatus != null) {
-            //todo переделать, сделать отдельно правило или настройку
-            val zeroOrOne = Random(Date().time).nextInt(2)
-            if (zeroOrOne == 1) {
-                val diseaseStatus = this.statuses.find { status -> status.code == "workDISEASE" }
-                if (diseaseStatus == null) {
-                    this.statuses.add(
-                        Status(
-                            "workDISEASE",
-                            "Перетрудился",
-                            "Недомогание, слабость и головная боль",
-                            1.0,
-                            true
-                        )
-                    )
-                } else {
-                    diseaseStatus.value = diseaseStatus.value + 1
-                }
-                return "$name перетрудился на работе\n"
-            }
-        }
-        return ""
     }
 }
 

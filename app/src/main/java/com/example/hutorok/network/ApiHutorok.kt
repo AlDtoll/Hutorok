@@ -22,6 +22,9 @@ interface ApiHutorok {
     @GET("hutorok/{adventure}/endtasks")
     fun endTasks(@Path("adventure") adventure: String): Observable<List<Task>>
 
+    @GET("hutorok/{adventure}/afterworktask")
+    fun afterWorkTask(@Path("adventure") adventure: String): Observable<Task>
+
     @GET("hutorok/{adventure}/adventures")
     fun adventures(@Path("adventure") adventure: String): Observable<List<Adventure>>
 

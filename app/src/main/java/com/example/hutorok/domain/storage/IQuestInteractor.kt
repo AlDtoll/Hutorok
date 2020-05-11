@@ -7,4 +7,6 @@ interface IQuestInteractor {
     fun update(isQuest: Boolean)
 
     fun get(): Observable<Boolean>
+
+    fun value(): Boolean
 }

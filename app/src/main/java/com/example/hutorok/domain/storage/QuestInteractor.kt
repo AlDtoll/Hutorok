@@ -13,4 +13,5 @@ class QuestInteractor : IQuestInteractor {
         value.onNext(isQuest)
     }
 
+    override fun value(): Boolean = value.value ?: false
 }
